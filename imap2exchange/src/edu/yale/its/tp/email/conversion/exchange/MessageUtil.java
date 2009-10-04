@@ -586,18 +586,7 @@ public class MessageUtil {
                         logger.debug("No send date, or recieved date found for message missing recieved header, using now()");
                         date = new Date(System.currentTimeMillis());
                     }
-                    // Added the following two lines to cope with messages that
-                    // have no Sent date (things like Draft messages, etc.).
-                    // Without this fix, the conversion errors out when a draft
-                    // message--or any other message without a Received header
-                    // *and* Sent date--is encountered.
-                    // -- STW, 10/2/2009
-                    Date sentDate = sourceMessage.getSentDate();
-                    if (sentDate == null) sentDate = date;
-                    // ...and, modified the following line to use the new
-                    // sentDate var instead of getting the (possibly null)
-                    // sourceMessage.getSentDate() value. --STW, 10/2/2009
-                    sb.append(getSMTPDateFormat().format(sentDate)).append("\n");	
+                    sb.append(getSMTPDateFormat().format(date)).append("\n");	
                     String rh = sb.toString();
                     logger.debug("Adding imap2Exchange ReceivedHeader: " + rh);
                     b64es.write(rh.getBytes("ASCII"));
