@@ -79,14 +79,10 @@
                 <value>deletedmessages</value>
                 <value>INBOX.Deleted Items</value>
                 <value>INBOX.Trash</value>
-                <value>INBOX.Draft</value>
-                <value>INBOX.Drafts</value>
                 <value>INBOX.Junk Mail</value>
                 <value>INBOX.Junk E-mail</value>
                 <value>Deleted Items</value>
                 <value>Trash</value>
-                <value>Draft</value>
-                <value>Drafts</value>
                 <value>Junk Mail</value>
                 <value>Junk E-mail</value>
             </list>
