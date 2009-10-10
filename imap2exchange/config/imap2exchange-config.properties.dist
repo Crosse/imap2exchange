@@ -14,6 +14,15 @@ ad.uid=
 ad.pwd=
 ad.base=
 
+# AD info to find users 
+# UPN and default email Address.
+###################################################
+ldap.uri=
+ldap.port=389
+ldap.uid=
+ldap.pwd=
+ldap.base=
+
 # Max number of conversion theads to run at 
 # once.  I recommend no more than 5 in a server
 # that can allocate only 2Gb of memory
@@ -29,21 +38,31 @@ exchangeConversionManager.maxCachedThreads=1024
 # imapservers.xml file
 ###################################################
 emailserver1.uri=
-emailserver1.port=993
-emailserver1.protocol=imaps
+emailserver1.port=143
+emailserver1.protocol=imap
 emailserver1.adminUid=
 emailserver1.adminPwd=
 emailserver1.sasl=false
+
 
 ###################################################
 # Yale Specific Configuration Items follow...
 ###################################################
 
-# Yale's User file for batch loads
+# JMU's User file for batch loads
 ###################################################
-yaleBatchLoader.userFile=config/conv-users
+jmuBatchLoader.userFile=config/conv-users.txt
 
 userSetupAction.netidAttribute=cn
 userSetupAction.upnAttribute=userPrincipalName
 userSetupAction.smtpAttribute=mail
-userSetupAction.userObject=cn=Users
+userSetupAction.userObject=
+
+###################################################
+# JMU Specific Configuration Items follow...
+###################################################
+jmuSite.mailDomain=jmu.edu
+userSetupAction.mailHostAttribute=mailHost
+userSetupAction.ldapUserObject=
+userSetupAction.ldapNetidAttribute=uid
+
