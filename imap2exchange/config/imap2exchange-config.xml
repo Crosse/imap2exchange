@@ -146,7 +146,7 @@
     <bean id="altNames"
         class="edu.yale.its.tp.email.conversion.imap.FolderAltNames"
         scope="singleton">
-        <property name="altNames">          
+        <property name="altNames">
             <list>
                 <ref local="deletedAltName"/>
                 <ref local="spamAltName"/>
@@ -155,7 +155,7 @@
         </property>
     </bean>
 
-    <bean id="deletedAltName"          
+    <bean id="deletedAltName"
         class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
         <property name="exchangeFolderName" value="Deleted Items"/>
         <property name="imapFolderNames">
@@ -166,7 +166,7 @@
         </property>
     </bean>
 
-    <bean id="spamAltName"          
+    <bean id="spamAltName"
         class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
         <property name="exchangeFolderName" value="Junk E-Mail"/>
         <property name="imapFolderNames">
@@ -177,13 +177,14 @@
         </property>
     </bean>
 
-    <bean id="sentAltName"          
+    <bean id="sentAltName"
         class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
         <property name="exchangeFolderName" value="Sent Items"/>
         <property name="imapFolderNames">
             <list>
                 <value>Sent</value>
                 <value>INBOX.Sent</value>
+                <value>INBOX.sent-mail</value>
             </list>
         </property>
     </bean>
