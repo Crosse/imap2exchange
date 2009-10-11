@@ -26,7 +26,7 @@
         </javac>
     </target>
 
-    <target name="dist" depends="jar"
+    <target name="dist" depends="compile"
         description="generate the distribution" >
         <!-- Create the distribution directories -->
         <mkdir dir="${dist}"/>
