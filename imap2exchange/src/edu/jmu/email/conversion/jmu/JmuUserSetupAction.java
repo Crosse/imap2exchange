@@ -1,11 +1,6 @@
 package edu.jmu.email.conversion.jmu;
 
 import javax.naming.NamingEnumeration;
-import javax.naming.Name;
-import javax.naming.ldap.LdapName;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
@@ -82,7 +77,7 @@ public class JmuUserSetupAction extends PluggableConversionAction {
 
         String upn = NOT_FOUND;
         String email = NOT_FOUND;
-		String mailbox = NOT_FOUND;
+//		String mailbox = NOT_FOUND;
 		
         DirContext directory = null;
 
@@ -97,7 +92,7 @@ public class JmuUserSetupAction extends PluggableConversionAction {
             cons.setSearchScope(SearchControls.SUBTREE_SCOPE);
             String[] attrs = {upnAttribute, smtpAttribute};
             cons.setReturningAttributes(attrs);
-            NamingEnumeration answer = directory.search(userObject, filterExpr, cons);
+            NamingEnumeration<SearchResult> answer = directory.search(userObject, filterExpr, cons);
             SearchResult result = null;
 
             if(answer.hasMore()){
@@ -153,7 +148,7 @@ public class JmuUserSetupAction extends PluggableConversionAction {
             cons.setSearchScope(SearchControls.SUBTREE_SCOPE);
             String[] attrs = { mailHostAttribute };
             cons.setReturningAttributes(attrs);
-            NamingEnumeration answer = directory.search(ldapUserObject, filterExpr, cons);
+            NamingEnumeration<SearchResult> answer = directory.search(ldapUserObject, filterExpr, cons);
             SearchResult result = null;
 
             if(answer.hasMore()){

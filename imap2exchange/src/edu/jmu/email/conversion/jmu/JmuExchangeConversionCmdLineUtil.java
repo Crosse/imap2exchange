@@ -9,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 import edu.yale.its.tp.email.conversion.*;
 import edu.yale.its.tp.email.conversion.event.*;
 import edu.yale.its.tp.email.conversion.imap.*;
-import edu.yale.its.tp.email.conversion.yale.*;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 /**
  * 

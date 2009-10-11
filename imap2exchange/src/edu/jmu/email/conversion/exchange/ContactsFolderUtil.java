@@ -10,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import edu.yale.its.tp.email.conversion.*;
 import edu.yale.its.tp.email.conversion.exchange.ExchangeServerPortFactory;
 import edu.yale.its.tp.email.conversion.exchange.FolderUtil;
-import edu.yale.its.tp.email.conversion.exchange.flags.*;
 import com.microsoft.schemas.exchange.services._2006.messages.*;
 import com.microsoft.schemas.exchange.services._2006.types.*;
 

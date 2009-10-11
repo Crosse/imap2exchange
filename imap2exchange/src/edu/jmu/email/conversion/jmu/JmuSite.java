@@ -1,6 +1,6 @@
 package edu.jmu.email.conversion.jmu;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 /**
  * <pre>
@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public class JmuSite {
 
-    private static Logger logger = Logger.getLogger(JmuSite.class);
+//    private static Logger logger = Logger.getLogger(JmuSite.class);
 
     private static JmuSite instance;
 

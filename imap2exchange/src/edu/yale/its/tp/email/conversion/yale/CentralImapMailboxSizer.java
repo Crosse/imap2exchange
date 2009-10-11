@@ -86,6 +86,7 @@ public class CentralImapMailboxSizer implements ImapMailboxSizer {
 		this.multiplier = multiplier;
 	}
 
+	@SuppressWarnings("deprecation")
 	protected String getSize(String uid, String po) throws HttpException { 
 	
 	    String ret = "-1";

@@ -85,7 +85,7 @@ public class GenericUserSetupAction extends PluggableConversionAction {
     		match.put(new BasicAttribute(netidAttribute, user.getUid()));
     		String[] returnAttribs = {upnAttribute, smtpAttribute};
 
-    		NamingEnumeration answer = directory.search(userObject, match, returnAttribs);
+    		NamingEnumeration<SearchResult> answer = directory.search(userObject, match, returnAttribs);
     		SearchResult result = null;
     		
     		if(answer.hasMore()){

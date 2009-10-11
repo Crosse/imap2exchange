@@ -3,11 +3,8 @@ package edu.jmu.email.conversion.jmu;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import com.novell.ldap.LDAPAttribute;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPException;
 import com.novell.ldap.LDAPLocalException;
@@ -17,7 +14,6 @@ import com.novell.ldap.util.LDIFReader;
 import com.microsoft.schemas.exchange.services._2006.types.*;
 
 import edu.yale.its.tp.email.conversion.*;
-import edu.yale.its.tp.email.conversion.imap.*;
 import edu.jmu.email.conversion.exchange.ContactsFolderUtil;
 
 /**
@@ -45,8 +41,9 @@ import edu.jmu.email.conversion.exchange.ContactsFolderUtil;
  */
 public class JmuPostConversionActionMirapointAddressBookImporter extends PluggableConversionAction {
 
-    private static Log logger = LogFactory.getLog(JmuPostConversionActionMirapointAddressBookImporter.class);
-    private final String importedContactsFolderName = "Imported Contacts";
+//    private static Log logger = LogFactory.getLog(JmuPostConversionActionMirapointAddressBookImporter.class);
+    private static final String importedContactsFolderName = "Imported Contacts";
+    private static final int version = 1;
 
     @Override
         public boolean perform (ExchangeConversion conv) {
@@ -75,8 +72,6 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     protected LDIFReader exportAddressBookFromMirapoint(User user) {
         // Do stuff here.  Magic happens.
         LDIFReader reader = null;
-        int version = 1;
-
         // The following just imports an address book from a file called
         // "addrbook.ldif" in the current directory.  This code will get
         // replaced with the real code once I get the Miraoint API.

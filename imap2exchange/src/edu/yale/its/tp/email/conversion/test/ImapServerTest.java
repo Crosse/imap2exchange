@@ -131,6 +131,7 @@ public class ImapServerTest {
 	}
 	
 	public static void wireSpring(){
+		@SuppressWarnings("unused")
 		FileSystemXmlApplicationContext springContext = new FileSystemXmlApplicationContext(new String[]{"/config/imap2exchange-config.xml"
         		                                                        ,"/config/imap2exchange-yale-config.xml"
         		                                                        ,"/config/imapservers.xml"});
