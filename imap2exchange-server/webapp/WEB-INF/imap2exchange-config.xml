@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:utils="http://www.chariotsolutions.com/spring/schema/utils"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- Property Overrider
+        ==========================================================-->
+    <bean id="propertyOverrideConfigurer" 
+        class="edu.yale.its.tp.email.conversion.spring.MyPropertyOverrideConfigurer">
+        <property name="location" value="/WEB-INF/imap2exchange-config.properties"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <!-- JMU-specific values
+        These values are set in imap2Exchange-config.properties
+        for ease of use.
+        ==========================================================-->
+    <bean id="jmuSite" 
+        class="edu.jmu.email.conversion.jmu.JmuSite"
+        scope="singleton"/>
+
+    <!-- Exchange Conversion Manager
+        Each Conversion is its own thread, so this is a Thread Manager
+        ==========================================================-->
+    <bean id="exchangeConversionManager"
+        class="edu.yale.its.tp.email.conversion.ExchangeConversionManager"
+        scope="singleton">
+        <property name="maxCachedThreads" value="1024" />
+        <property name="maxRunningThreads" value="3" />
+    </bean>
+	
+    <!-- Exchange Server Port Factory
+        These values are set in imap2Exchange-config.properties
+        for ease of use.
+        ==========================================================-->
+    <bean id="exchangeServer" 
+        class="edu.yale.its.tp.email.conversion.yale.YaleExchangeServerPortFactory"
+        scope="singleton"/>
+ 
+    <!-- Exchange Conversion Factory
+        ==========================================================-->
+    <bean id="exchangeConversionFactory"
+        class="edu.yale.its.tp.email.conversion.ExchangeConversionFactory"
+        scope="singleton">
+        <property name="maxMessageGrpSize" value="5242880" />
+        <property name="maxMessageSize" value="20971520" />
+        <property name="pluggableConversionActions">
+            <map>
+                <entry key="userSetupAction">
+                    <ref bean="userSetupAction"/>
+                </entry>
+            </map>          
+        </property>
+
+        <!-- The list of IMAP folder to exclude from migration. -->
+        <property name="excludedImapFolders">
+            <list>
+                <value>deletedmessages</value>
+                <value>Deleted Items</value>
+                <value>Trash</value>
+                <value>Draft</value>
+                <value>Drafts</value>
+                <value>Junk Mail</value>
+                <value>Junk E-mail</value>
+            </list>
+        </property>
+
+        <!-- Merge IMAP folders with Exchange folders.  Define the folders
+            to merge below, in the "altNames" bean. -->
+        <property name="altNames" ref="altNames"/>
+    </bean>
+
+    <!-- Pluggable Conversion Actions
+        ==========================================================-->
+    <bean name="userSetupAction"
+        class="edu.jmu.email.conversion.jmu.JmuUserSetupAction"
+        scope="singleton" />
+
+    <!--
+    <bean id="preConversionAction"
+        class="edu.yale.its.tp.email.conversion.yale.YalePreConversionAction"
+        scope="singleton" />
+
+    <bean id="postConversionAction"
+        class="edu.yale.its.tp.email.conversion.yale.YalePostConversionActionACSUpdater"
+        scope="singleton">
+        <property name="datasource" ref="acsDatasource" />
+    </bean>
+    -->
+
+    <!-- User Factory
+        ==========================================================-->
+    <bean id="userFactory"
+        class="edu.yale.its.tp.email.conversion.yale.YaleUserFactory"
+        scope="singleton"/>
+          
+    <!-- AD Factory and Pool
+        These values are set in imap2Exchange-config.properties
+        for ease of use.
+        ==========================================================-->
+    <bean id="ad" 
+        class="edu.jmu.email.conversion.jmu.JmuAD"
+        scope="singleton" />
+    
+    <!-- AD Factory and Pool
+        These values are set in imap2Exchange-config.properties
+        for ease of use.
+        ==========================================================-->
+    <bean id="ldap" 
+        class="edu.jmu.email.conversion.jmu.JmuLdap"
+        scope="singleton" />
+    
+    <!-- Folder Alt Names
+        This section is used to define imap folders that are to be merged
+        into Exchange system folders.
+        ==========================================================-->
+    <bean id="altNames"
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltNames"
+        scope="singleton">
+        <property name="altNames">          
+            <list>
+                <ref local="deletedAltName"/>
+                <ref local="spamAltName"/>
+                <ref local="sentAltName"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="deletedAltName"          
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Deleted Items"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Trash</value>
+                <value>INBOX.Trash</value>
+            </list>
+        </property>
+    </bean>
+	
+    <bean id="spamAltName"          
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Junk E-Mail"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Junk Mail</value>
+                <value>INBOX.Junk Mail</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="sentAltName"          
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Sent Items"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Sent</value>
+                <value>INBOX.Sent</value>
+            </list>
+        </property>
+    </bean>
+</beans>
