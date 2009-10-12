@@ -65,11 +65,11 @@
                 <entry key="preConversionAction">
                     <ref bean="preConversionAction"/>
                 </entry>
+                -->
 
                 <entry key="postConversionAction">
                     <ref bean="postConversionAction"/>
                 </entry>
-                -->
             </map>          
         </property>
 
@@ -109,13 +109,13 @@
     <bean id="preConversionAction"
         class="edu.yale.its.tp.email.conversion.yale.YalePreConversionAction"
         scope="singleton" />
+        -->
 
     <bean id="postConversionAction"
-        class="edu.yale.its.tp.email.conversion.yale.YalePostConversionActionACSUpdater"
+        class="edu.jmu.email.conversion.jmu.JmuPostConversionActionMirapointAddressBookImporter"
         scope="singleton">
-        <property name="datasource" ref="acsDatasource" />
+        <property name="importedContactsFolderName" value="Imported Contacts" />
     </bean>
-    -->
 
     <!-- User Factory
     ==========================================================-->

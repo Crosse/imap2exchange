@@ -1,0 +1,62 @@
+version: 1
+dn: cn=Mark Wright
+cn: Mark Wright
+category: Professional
+sn: Wright
+givenname: Mark
+mail: mark@crosse.org
+xmozillanickname: Dad
+displayname: Mark Wright
+objectclass: top
+objectclass: person
+
+dn: cn=Sara Wright
+cn: Sara Wright
+category: Personal
+sn: Wright
+givenname: Sara
+mail: sara
+displayname: Sara Wright
+objectclass: top
+objectclass: person
+
+dn: cn=Seth Wright
+cn: Seth Wright
+category: Personal
+sn: Wright
+givenname: Seth
+mail: wrightst@jmu.edu
+o: James Madison University
+ou: Technical Services
+title: Operator
+description: Notes field
+postaladdress: 1031 S. Main St.
+l: Harrisonburg
+st: VA
+postalcode: 22807
+c: USA
+primaryphone: telephonenumber
+telephonenumber: 540-568-2912
+homephone: 540-908-2274
+mobile: 540-246-1717
+pager: 540-810-0000
+facsimiletelephonenumber: 540-568-1234
+xmozillanickname: Seth
+homeurl: http://www.jmu.edu
+displayname: Seth Wright
+anniversaryyear: 2007
+anniversarymonth: 10
+anniversaryday: 6
+birthyear: 1980
+birthmonth: 3
+birthday: 12
+objectclass: top
+objectclass: person
+
+dn: cn=asdf
+cn: asdf
+objectclass: top
+objectclass: groupofnames
+member: cn=Mark Wright,mail=mark@crosse.org
+member: cn=Seth Wright,mail=wrightst@jmu.edu
+
