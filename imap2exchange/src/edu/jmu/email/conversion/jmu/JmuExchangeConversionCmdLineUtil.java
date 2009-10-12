@@ -2,14 +2,20 @@
 package edu.jmu.email.conversion.jmu;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import edu.yale.its.tp.email.conversion.*;
-import edu.yale.its.tp.email.conversion.event.*;
-import edu.yale.its.tp.email.conversion.imap.*;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import edu.yale.its.tp.email.conversion.ExchangeConversion;
+import edu.yale.its.tp.email.conversion.ExchangeConversionFactory;
+import edu.yale.its.tp.email.conversion.ExchangeConversionManager;
+import edu.yale.its.tp.email.conversion.User;
+import edu.yale.its.tp.email.conversion.UserFactory;
+import edu.yale.its.tp.email.conversion.event.NoMoreConversionsListener;
+import edu.yale.its.tp.email.conversion.imap.FolderAltNames;
 /**
  * 
  * <pre>

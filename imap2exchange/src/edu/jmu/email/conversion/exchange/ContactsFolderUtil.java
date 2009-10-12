@@ -2,16 +2,33 @@ package edu.jmu.email.conversion.exchange;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBElement;
 import javax.xml.ws.Holder;
-import javax.xml.bind.*;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.yale.its.tp.email.conversion.*;
+import com.microsoft.schemas.exchange.services._2006.messages.CreateFolderResponseType;
+import com.microsoft.schemas.exchange.services._2006.messages.CreateFolderType;
+import com.microsoft.schemas.exchange.services._2006.messages.ExchangeServicePortType;
+import com.microsoft.schemas.exchange.services._2006.messages.FolderInfoResponseMessageType;
+import com.microsoft.schemas.exchange.services._2006.messages.ResponseMessageType;
+import com.microsoft.schemas.exchange.services._2006.types.BaseFolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.BaseFolderType;
+import com.microsoft.schemas.exchange.services._2006.types.ContactsFolderType;
+import com.microsoft.schemas.exchange.services._2006.types.DistinguishedFolderIdNameType;
+import com.microsoft.schemas.exchange.services._2006.types.DistinguishedFolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.FolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfFoldersType;
+import com.microsoft.schemas.exchange.services._2006.types.ResponseClassType;
+import com.microsoft.schemas.exchange.services._2006.types.ServerVersionInfo;
+import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
+
+import edu.yale.its.tp.email.conversion.Report;
+import edu.yale.its.tp.email.conversion.User;
 import edu.yale.its.tp.email.conversion.exchange.ExchangeServerPortFactory;
 import edu.yale.its.tp.email.conversion.exchange.FolderUtil;
-import com.microsoft.schemas.exchange.services._2006.messages.*;
-import com.microsoft.schemas.exchange.services._2006.types.*;
 
 /**
  * <pre>

@@ -4,10 +4,13 @@ import javax.naming.NamingEnumeration;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.yale.its.tp.email.conversion.*;
+import edu.yale.its.tp.email.conversion.ExchangeConversion;
+import edu.yale.its.tp.email.conversion.PluggableConversionAction;
+import edu.yale.its.tp.email.conversion.User;
 
 /**
  * 

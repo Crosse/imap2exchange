@@ -4,7 +4,9 @@ import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.naming.directory.*;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -95,7 +95,7 @@
     <bean name="userSetupAction"
         class="edu.yale.its.tp.email.conversion.yale.YaleUserSetupAction"
         scope="singleton" />
-    -->	     
+    -->
     <!--
     <bean name="userSetupAction"
         class="edu.yale.its.tp.email.conversion.util.GenericUserSetupAction"
@@ -115,6 +115,8 @@
         class="edu.jmu.email.conversion.jmu.JmuPostConversionActionMirapointAddressBookImporter"
         scope="singleton">
         <property name="importedContactsFolderName" value="Imported Contacts" />
+        <property name="loginUrl" value="/mc/xml/v1/login.xml" />
+        <property name="addrBookUrl" value="/cgi-bin/addrbook.cgi/xab/v1/export.xml" />
     </bean>
 
     <!-- User Factory

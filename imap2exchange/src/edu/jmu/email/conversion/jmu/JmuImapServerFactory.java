@@ -1,14 +1,18 @@
 package edu.jmu.email.conversion.jmu;
 
-import java.util.*;
-import javax.mail.*;
-import java.security.*;
+import java.security.Security;
+import java.util.Properties;
+
+import javax.mail.Session;
+import javax.mail.Store;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.yale.its.tp.email.conversion.*;
-import edu.yale.its.tp.email.conversion.imap.*;
-import edu.yale.its.tp.email.conversion.trust.*;
+import edu.yale.its.tp.email.conversion.User;
+import edu.yale.its.tp.email.conversion.imap.ImapServer;
+import edu.yale.its.tp.email.conversion.imap.ImapServerFactory;
+import edu.yale.its.tp.email.conversion.trust.AllTrustingSocketFactory;
 
 /**
  * 
