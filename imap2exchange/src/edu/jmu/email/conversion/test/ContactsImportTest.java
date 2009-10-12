@@ -27,11 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import com.microsoft.schemas.exchange.services._2006.types.ContactsFolderType;
-import com.microsoft.schemas.exchange.services._2006.types.DistinguishedFolderIdNameType;
-import com.microsoft.schemas.exchange.services._2006.types.DistinguishedFolderIdType;
-
-import edu.jmu.email.conversion.exchange.ContactsFolderUtil;
 import edu.yale.its.tp.email.conversion.ExchangeConversionFactory;
 import edu.yale.its.tp.email.conversion.Report;
 import edu.yale.its.tp.email.conversion.User;
@@ -42,11 +37,11 @@ import edu.yale.its.tp.email.conversion.yale.YaleUser;
  *
  */
 public class ContactsImportTest {
-    private static final Log logger = LogFactory.getLog(ContactsImportTest.class);
+	private static final Log logger = LogFactory.getLog(ContactsImportTest.class);
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		wireSpring();
-		
+
 		User user = new YaleUser();
 		user.setUid("miguser");
 		user.setSourceImapPo("mpmail3.jmu.edu");
@@ -54,22 +49,10 @@ public class ContactsImportTest {
 		user.getConversion().setReport(new Report());
 		user.setUPN("miguser@ad.jmu.edu");
 		user.setPrimarySMTPAddress("miguser@jmu.edu");
-		
-		String folderName = "Imported Contacts";
-		
+
 		logger.debug(String.format("User: %s@%s", user.getUid(), user.getSourceImapPo()));
-		
-		DistinguishedFolderIdType parentFolderId = new DistinguishedFolderIdType();
-		parentFolderId.setId(DistinguishedFolderIdNameType.CONTACTS);
-		
-		logger.debug(String.format("Attempting to create folder \"%s\" in Contacts folder", folderName));
-		ContactsFolderType folder = ContactsFolderUtil.createFolder(user, folderName, parentFolderId);
-		if (folder == null) {
-			logger.warn("Could not create folder");
-			return;
-		}
-		logger.debug(String.format("Created folder", folder.getDisplayName()));
-		
+
+		user.getConversion().performPostConversionAction();
 	}
 	public static void wireSpring(){
 		@SuppressWarnings("unused")

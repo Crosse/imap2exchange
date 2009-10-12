@@ -46,15 +46,32 @@ public class ContactsFolderUtil {
     }
 
     public static boolean folderExists(User user, String folderName, BaseFolderIdType parentFolderId) {
-        List<BaseFolderType> childFolders = FolderUtil.getChildFolders(user, parentFolderId);
         boolean exists = false;
-        for (BaseFolderType folder : childFolders) {
-            if (folder.getDisplayName() == folderName) {
-                exists = true;
-                break;
-            }
+        if (getFolder(user, folderName, parentFolderId) != null) {
+        	exists = true;
         }
         return exists;
+    }
+    
+    public static ContactsFolderType getFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
+    	ContactsFolderType folder = null;
+    
+//    	logger.debug(String.format("Searching for folder \"%s\"", folderName));
+    	List<BaseFolderType> childFolders = FolderUtil.getChildFolders(user, parentFolderId);
+        for (BaseFolderType bFolder : childFolders) {
+//        	logger.debug(String.format("Found folder \"%s\"", bFolder.getDisplayName()));
+            if (folderName.equalsIgnoreCase(bFolder.getDisplayName())) {
+            	logger.debug(String.format("Found requested folder \"%s\"", bFolder.getDisplayName()));
+            	folder = (ContactsFolderType) bFolder;
+                break;
+            } else {
+//            	logger.debug(String.format("folder \"%s\" does not match \"%s\"", bFolder.getDisplayName(), folderName));
+            }
+        }
+        if (folder == null) {
+        	logger.debug(String.format("Folder \"%s\" does not exist", folderName));
+        }
+    	return folder;
     }
 
     public static ContactsFolderType createFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
