@@ -189,7 +189,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 					URLEncoder.encode(server.getAdminPwd(), "UTF-8"),
 					URLEncoder.encode("caluser", "UTF-8"), 
 					URLEncoder.encode(user.getPrimarySMTPAddress(), "UTF-8"));
-			logger.debug(String.format("loginData:  %s", loginData));
+			// logger.debug(String.format("loginData:  %s", loginData));
 		} catch (UnsupportedEncodingException e1) {
 			logger.error("Error encoding POST data for mail store logon");
 		}
@@ -276,7 +276,6 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
 				boolean isGroup = false;
 				for (String oclass : entry.getAttribute("objectclass").getStringValueArray()) {
-					//					logger.debug(String.format("entry %s is of class %s", entry.getDN(), oclass));
 					if ("groupofnames".equalsIgnoreCase(oclass)) {
 						isGroup = true;
 						break;
@@ -285,8 +284,8 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 				if (isGroup) {
 					groups.add(entry);
 				}else {
-					success = true;
-					//					success = createContact(user, entry, contactsFolder);
+					// success = true;
+					success = createContact(user, entry, contactsFolder);
 				}
 
 				if (success == false) {
@@ -301,7 +300,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 			return success;
 		}
 
-		success = processGroups(user, groups, contactsFolder);
+		// success = processGroups(user, groups, contactsFolder);
 
 		return success;
 	}
