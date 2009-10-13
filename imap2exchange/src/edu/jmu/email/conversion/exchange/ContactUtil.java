@@ -62,7 +62,7 @@ public class ContactUtil {
 	}
 
 	public static ContactItemType getContact(User user, String fileAs, ContactsFolderType contactsFolder) {
-		ItemType searchItem = null;
+		ContactItemType contact = null;
 
 		// Form the FindItem request.
 		FindItemType finder = new FindItemType();
@@ -142,7 +142,7 @@ public class ContactUtil {
 					FindItemResponseMessageType findResponse = (FindItemResponseMessageType)response;
 					for(ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()){
 						if (((ContactItemType)item).getFileAs().equalsIgnoreCase(fileAs)) {
-							searchItem = item;
+							contact = (ContactItemType)item;
 						}
 					}
 				}
@@ -156,7 +156,7 @@ public class ContactUtil {
 				user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
 		} 
 
-		return (ContactItemType)searchItem;
+		return (ContactItemType)contact;
 	}
 
 	public static List<ItemType> createDistributionList(User user, ItemType distributionList, ContactsFolderType contactsFolder) {
