@@ -45,6 +45,9 @@ public class ContactUtil {
 	public static final int PID_LID_DISTRIBUTION_LIST_NAME = 0x8053;
 	public static final int PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS = 0X8054;
 	public static final int PID_LID_DISTRIBUTION_LIST_MEMBERS = 0x8055;
+	public static final String WRAPPED_ENTRYID_FLAGS = "00000000";
+	public static final String WRAPPED_ENTRYID_PROVIDER_UID = "C091ADD3519DCF11A4A900AA0047FAA4";
+	public static final String WRAPPED_ENTRYID_TYPE_CONTACT_ENTRYID = "C3";
 
 	public static List<ItemType> createContact(User user, ContactItemType contact, ContactsFolderType contactsFolder) {
 		CreateItemType creator = new CreateItemType();
@@ -59,7 +62,7 @@ public class ContactUtil {
 	}
 
 	public static ContactItemType getContact(User user, String fileAs, ContactsFolderType contactsFolder) {
-		ContactItemType contact = null;
+		ItemType searchItem = null;
 
 		// Form the FindItem request.
 		FindItemType finder = new FindItemType();
@@ -139,12 +142,11 @@ public class ContactUtil {
 					FindItemResponseMessageType findResponse = (FindItemResponseMessageType)response;
 					for(ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()){
 						if (((ContactItemType)item).getFileAs().equalsIgnoreCase(fileAs)) {
-							contact = (ContactItemType)item;
+							searchItem = item;
 						}
 					}
 				}
 			}
-
 		} catch (Exception e){
 			throw new RuntimeException("Exception performing getContacts", e);
 		} finally {
@@ -154,7 +156,7 @@ public class ContactUtil {
 				user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
 		} 
 
-		return contact;
+		return (ContactItemType)searchItem;
 	}
 
 	public static List<ItemType> createDistributionList(User user, ItemType distributionList, ContactsFolderType contactsFolder) {

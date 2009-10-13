@@ -20,6 +20,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sun.misc.BASE64Encoder;
+
 import com.microsoft.schemas.exchange.services._2006.types.*;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPException;
@@ -105,18 +107,18 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 		// Get a session id.
 		String sid = doLogin(user);
 		logger.debug(String.format("Mirapoint Session Id (sid) is \"%s\"", sid));
-		
+
 		if (sid == "") {
 			logger.warn("Could not log on to mail store");
 			return null;
 		}
-		
+
 		return getAddressBook(user, sid);
 	}
-	
+
 	protected LDIFReader getAddressBook(User user, String sid) {
 		LDIFReader reader = null;
-		
+
 		String postData = "";
 		try {
 			postData = String.format("%s=%s&%s=%s&%s=%s",
@@ -130,15 +132,15 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 		} catch (UnsupportedEncodingException e1) {
 			logger.error("Error encoding POST data for address book ldif export");
 		}
-		
+
 		String url = String.format("https://%s%s", user.getSourceImapPo(), addrBookUrl);
-		
+
 		InputStream response = submitHttpRequest(url, postData);
 
 		// Add the "version: 1" line to the top of the response.  Dirty hack.
 		StringBuilder sb = new StringBuilder();
 		sb.append("version: 1" + "\n");
-		
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(response));
 		String line = null;
 		try {
@@ -152,10 +154,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 				response.close();
 			} catch (IOException e) { }
 		}
-		
+
 		InputStream ldifStream = new ByteArrayInputStream(sb.toString().getBytes());
-		
-		
+
+
 		try {
 			reader = new LDIFReader(ldifStream);
 		} catch (LDAPLocalException e) {
@@ -165,18 +167,18 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 			logger.error("Could not parse LDIF data:  " + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return reader;
 	}
-	
+
 	protected String doLogin(User user) {
 		String sid = "";
-		
+
 		// Use this to get the adminUid and adminPwd for the mail store.
 		ImapServer server = ImapServerFactory.getInstance().getImapServer(user.getSourceImapPo());
-		
+
 		String loginData = "";
-		
+
 		// Encode the POST string in the form:
 		// user=adminUid&password=adminPwd&caluser=migrateduser
 		try {
@@ -191,11 +193,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 		} catch (UnsupportedEncodingException e1) {
 			logger.error("Error encoding POST data for mail store logon");
 		}
-		
+
 		String url = String.format("https://%s%s", user.getSourceImapPo(), loginUrl);
-		
+
 		InputStream response = submitHttpRequest(url, loginData);
-		
+
 		BufferedReader rd = new BufferedReader(new InputStreamReader(response));
 		String line;
 		String startTag = "<sid>";
@@ -214,16 +216,16 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return sid;
 	}
-	
+
 	protected InputStream submitHttpRequest(String url, String postData) {
 		InputStream response = null;
 		URLConnection conn = null;
 		OutputStreamWriter wr = null;
 		URL requestUrl = null;
-		
+
 		// Submit the HTTP request.
 		try {
 			requestUrl = new URL(url);
@@ -246,7 +248,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 				wr.close();
 			} catch (IOException e) { }
 		}
-		
+
 		try {
 			// Get the response.
 			response = conn.getInputStream();
@@ -254,7 +256,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return response;
 	}
 
@@ -271,10 +273,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 		try {
 			while ( (msg = addrbook.readMessage()) != null) {
 				entry = ((LDAPSearchResult)msg).getEntry();
-				
+
 				boolean isGroup = false;
 				for (String oclass : entry.getAttribute("objectclass").getStringValueArray()) {
-//					logger.debug(String.format("entry %s is of class %s", entry.getDN(), oclass));
+					//					logger.debug(String.format("entry %s is of class %s", entry.getDN(), oclass));
 					if ("groupofnames".equalsIgnoreCase(oclass)) {
 						isGroup = true;
 						break;
@@ -283,8 +285,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 				if (isGroup) {
 					groups.add(entry);
 				}else {
-					success = createContact(user, entry, contactsFolder);
+					success = true;
+					//					success = createContact(user, entry, contactsFolder);
 				}
+
 				if (success == false) {
 					return success;
 				}
@@ -296,7 +300,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 			e.printStackTrace();
 			return success;
 		}
-		
+
 		success = processGroups(user, groups, contactsFolder);
 
 		return success;
@@ -304,89 +308,121 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
 	private boolean processGroups(User user, List<LDAPEntry> groups,
 			ContactsFolderType contactsFolder) {
-		
+
+		String startTag = "cn=";
+		String endTag = ",mail=";
+		String wrappedEntryIDPreamble = 
+			ContactUtil.WRAPPED_ENTRYID_FLAGS + 
+			ContactUtil.WRAPPED_ENTRYID_PROVIDER_UID + 
+			ContactUtil.WRAPPED_ENTRYID_TYPE_CONTACT_ENTRYID;
+
+		BASE64Encoder encoder = new BASE64Encoder();
+
 		for (LDAPEntry group : groups) {
-			ItemType dl = new ItemType();
-			dl.setItemClass("IPM.DistList");
+			logger.debug(String.format("Working on group %s", group.getDN()));
+			ItemType distributionList = new ItemType();
+			distributionList.setItemClass("IPM.DistList");
 			
-			ExtendedPropertyType exProp1 = new ExtendedPropertyType();
-			ExtendedPropertyType exProp2 = new ExtendedPropertyType();
-			ExtendedPropertyType exProp3 = new ExtendedPropertyType();
-			ExtendedPropertyType exProp4 = new ExtendedPropertyType();
-			ExtendedPropertyType exProp5 = new ExtendedPropertyType();
-			ExtendedPropertyType exProp6 = new ExtendedPropertyType();
+			String cn = getEntryAttribute(group, "cn");
+
+			ExtendedPropertyType nameProperty = new ExtendedPropertyType();
+			ExtendedPropertyType displaNameProperty = new ExtendedPropertyType();
+			ExtendedPropertyType fileAsProperty = new ExtendedPropertyType();
+			ExtendedPropertyType membersProperty = new ExtendedPropertyType();
+			ExtendedPropertyType oneOffMembersProperty = new ExtendedPropertyType();
+
+			PathToExtendedFieldType namePropertyType = new PathToExtendedFieldType();
+			namePropertyType.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_NAME);
+			namePropertyType.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+			namePropertyType.setPropertyType(MapiPropertyTypeType.STRING);
 			
-			PathToExtendedFieldType DLNameProp1 = new PathToExtendedFieldType();
-			DLNameProp1.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_NAME);
-			DLNameProp1.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
-			DLNameProp1.setPropertyType(MapiPropertyTypeType.STRING);
+			PathToExtendedFieldType fileAsPropertyType = new PathToExtendedFieldType();
+			fileAsPropertyType.setPropertyId(0x8005);
+			fileAsPropertyType.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+			fileAsPropertyType.setPropertyType(MapiPropertyTypeType.STRING);
 			
-			PathToExtendedFieldType DLMembers = new PathToExtendedFieldType();
-			DLMembers.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_MEMBERS);
-			DLMembers.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
-			DLMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
+			PathToExtendedFieldType displayNamePropertyType = new PathToExtendedFieldType();
+			displayNamePropertyType.setPropertyTag("0x3001");
+			displayNamePropertyType.setPropertyType(MapiPropertyTypeType.STRING);
+
+			PathToExtendedFieldType membersPropertyType = new PathToExtendedFieldType();
+			membersPropertyType.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_MEMBERS);
+			membersPropertyType.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+			membersPropertyType.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
+
+			PathToExtendedFieldType oneOffMembersPropertyType = new PathToExtendedFieldType();
+			oneOffMembersPropertyType.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS);
+			oneOffMembersPropertyType.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+			oneOffMembersPropertyType.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
+
+			NonEmptyArrayOfPropertyValuesType members = new NonEmptyArrayOfPropertyValuesType();
+			NonEmptyArrayOfPropertyValuesType oneOffMembers = new NonEmptyArrayOfPropertyValuesType();
+
+			for (String member : group.getAttribute("member").getStringValueArray()) {
+				int start = member.indexOf(startTag) + startTag.length();
+				int end = member.indexOf(endTag);
+				String membercn = member.substring(start, end);
+				String mail = member.substring(end + endTag.length());
+				if (mail.indexOf("@") < 0) {
+					mail += "@" + JmuSite.getInstance().getMailDomain();
+				}
+				String displayName = String.format("%s (%s)", membercn, mail);
+				
+
+				ContactItemType contact = ContactUtil.getContact(user, displayName, contactsFolder);
+				if (contact == null) {
+					logger.debug(String.format("Constructing a One-Off Entry for %s", displayName));
+					String oneOffMember = "00000000812B1FA4BEA310199D6E00DD010F540200000190";
+					String pad = "0000";
+					oneOffMember += convertToHex(membercn) + pad + convertToHex("SMTP") + pad + convertToHex(mail);
+					oneOffMembers.getValue().add(0, encoder.encode(oneOffMember.getBytes()));
+					members.getValue().add(0, encoder.encode(oneOffMember.getBytes()));
+				} else {
+					logger.debug(String.format("Found contact \"%s\" for member \"%s\"", contact.getDisplayName(), member));
+					String wrappedEntryId = wrappedEntryIDPreamble + contact.getItemId().getId();
+					members.getValue().add(encoder.encode(wrappedEntryId.getBytes()));
+				}
+				
+			}
+			logger.debug(String.format("Finished process members for group %s", group.getDN()));
+
+			distributionList.setSubject(cn);
+
+			nameProperty.setExtendedFieldURI(namePropertyType);
+			nameProperty.setValue(cn);
+			distributionList.getExtendedProperty().add(nameProperty);
+
+			displaNameProperty.setExtendedFieldURI(displayNamePropertyType);
+			displaNameProperty.setValue(cn);
+			distributionList.getExtendedProperty().add(displaNameProperty);
 			
-			PathToExtendedFieldType DLOneOffMembers = new PathToExtendedFieldType();
-			DLOneOffMembers.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS);
-			DLOneOffMembers.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
-			DLOneOffMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
+			fileAsProperty.setExtendedFieldURI(fileAsPropertyType);
+			fileAsProperty.setValue(cn);
+			distributionList.getExtendedProperty().add(fileAsProperty);
 			
-			String oneOffPrefix = "00000000812B1FA4BEA310199D6E00DD010F540200000190";
-			String oneOffPad = "0000";
-			String oneOffHex = oneOffPrefix + convertToHex("Freds Mail") + oneOffPad + convertToHex("SMTP") + oneOffPad + convertToHex("fred@fred.com") + oneOffPad;
-			byte[] oneOffArray = oneOffHex.getBytes();
-			String WrappedEntryIDPrefix = "00000000C091ADD3519DCF11A4A900AA0047FAA4C3";
-			String ContactEntryID = "00000000...etc";
-
-			byte[] membersArray = (WrappedEntryIDPrefix + ContactEntryID).getBytes();
-
-			NonEmptyArrayOfPropertyValuesType MembersVal = new NonEmptyArrayOfPropertyValuesType();
-			MembersVal.Items = new String[1];
-			MembersVal.Items[0] = Convert.ToBase64String(membersArray);
-			NonEmptyArrayOfPropertyValuesType OneOffMembersVal = new NonEmptyArrayOfPropertyValuesType();
-			OneOffMembersVal.Items = new String[1];
-			OneOffMembersVal.Items[0] =  Convert.ToBase64String(oneOffArray);
-
-			 
-
-			exProp1.ExtendedFieldURI = DLNameprop1;
-			exProp1.Item = DlName;
-			exProp2.ExtendedFieldURI = DLDisplayNameprop;
-			exProp2.Item = DlName;
-			exProp3.ExtendedFieldURI = DLFileAs;
-			exProp3.Item = DlName;
-			exProp4.ExtendedFieldURI = DLMembers;
-			exProp4.Item = MembersVal;
-			exProp5.ExtendedFieldURI = DLOneoffMembers;
-			exProp5.Item = OneOffMembersVal;
-
-			 
-
-			dlDL.Subject = DlName;
-
-			dlDL.ExtendedProperty = new ExtendedPropertyType[5];
-			dlDL.ExtendedProperty[0] = exProp1;
-			dlDL.ExtendedProperty[1] = exProp2;
-			dlDL.ExtendedProperty[2] = exProp3;
-			dlDL.ExtendedProperty[3] = exProp4;
-			dlDL.ExtendedProperty[4] = exProp5;
-
-			TargetFolderIdType tfTarget = new TargetFolderIdType();
-			tfTarget.Item = ditype;
-			ciCreateItem.SavedItemFolderId = tfTarget;
-			ciCreateItem.Items = new NonEmptyArrayOfAllItemsType();
-			ciCreateItem.Items.Items = new ItemType[1];
-			ciCreateItem.Items.Items[0] = dlDL;
+			if (members.getValue().size() > 0) {
+				membersProperty.setExtendedFieldURI(membersPropertyType);
+				membersProperty.setValues(members);
+				distributionList.getExtendedProperty().add(membersProperty);
+			}
 			
+			if (oneOffMembers.getValue().size() > 0) {
+				oneOffMembersProperty.setExtendedFieldURI(oneOffMembersPropertyType);
+				oneOffMembersProperty.setValues(oneOffMembers);
+				distributionList.getExtendedProperty().add(oneOffMembersProperty);
+			}
+
+			ContactUtil.createDistributionList(user, distributionList, contactsFolder);
 		}
 		return true;
 	}
-	
+
 	private static String convertToHex(String asciiString) {
 		String hex = "";
 		for (char c : asciiString.toCharArray()) {
-			hex = hex.concat(Integer.toHexString(c));
+			hex = hex.concat(Integer.toHexString(c)) + "00";
 		}
+//		logger.debug(String.format("result of Hex conversion for \"%s\" is \"%s\"", asciiString, hex));
 		return hex;
 	}
 
@@ -407,7 +443,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 		// Set the FileAs attribute to "cn (mail)".
 		contactItem.setFileAs(String.format("%s (%s)", 
 				getEntryAttribute(entry, "cn"), email));
-		
+
 		// Short-circuit really quickly:  do a search for the FileAs field
 		// to check if the contact already exists.  If so, just return that.
 		if (ContactUtil.getContact(user, contactItem.getFileAs(), contactsFolder) != null) {
@@ -440,7 +476,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 		contactItem.setDepartment(getEntryAttribute(entry, "ou"));
 		// Set the JobTitle to "title".
 		contactItem.setJobTitle(getEntryAttribute(entry, "title"));
-		
+
 		// Set the Body to "description".
 		contactItem.setBody(new BodyType());
 		contactItem.getBody().setBodyType(BodyTypeType.TEXT);
@@ -548,7 +584,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 			calendar.setSecond(0);
 			calendar.setMinute(0);
 			calendar.setHour(0);
-			
+
 			return calendar;
 		} catch (Exception e) {
 			return null;
@@ -568,7 +604,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 	public void setImportedContactsFolderName(String importedContactsFolderName) {
 		this.importedContactsFolderName = importedContactsFolderName;
 	}
-	
+
 	public String getLoginUrl() {
 		return loginUrl;
 	}
