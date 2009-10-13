@@ -31,7 +31,7 @@ if ( ((Get-WmiObject Win32_ComputerSystem).TotalPhysicalMemory)/1MB -gt 3072 ) {
 }
 $OPTS += '"-XX:ParallelGCThreads=20" "-XX:+UseConcMarkSweepGC" "-XX:+UseParNewGC" '
 $OPTS += '"-XX:SurvivorRatio=8" "-XX:TargetSurvivorRatio=90" "-XX:MaxTenuringThreshold=31" '
-$OPTS += "`"-Dlog4j.configuration=file:///$($EXCHANGE_CONVERSION_HOME)\config\log4j.properties`" "
+$OPTS += "`"-Dlog4j.configuration=file:///$($EXCHANGE_CONVERSION_HOME)\config\log4j_allConsole.properties`" "
 $OPTS += "`"-DEXCHANGE_CONVERSION_HOME=$($EXCHANGE_CONVERSION_HOME)`" "
 #$OPTS+='-Dhttp.auth.preference="basic" '
 
