@@ -111,6 +111,7 @@
         scope="singleton" />
         -->
 
+    <!--  Defined in imap2exchange-jmu-config.xml
     <bean id="postConversionAction"
         class="edu.jmu.email.conversion.jmu.JmuPostConversionActionMirapointAddressBookImporter"
         scope="singleton">
@@ -118,6 +119,7 @@
         <property name="loginUrl" value="/mc/xml/v1/login.xml" />
         <property name="addrBookUrl" value="/cgi-bin/addrbook.cgi/xab/v1/export.xml" />
     </bean>
+    -->
 
     <!-- User Factory
     ==========================================================-->
