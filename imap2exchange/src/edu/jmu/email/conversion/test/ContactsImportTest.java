@@ -56,7 +56,11 @@ public class ContactsImportTest {
 	}
 	public static void wireSpring(){
 		@SuppressWarnings("unused")
-		FileSystemXmlApplicationContext springContext = new FileSystemXmlApplicationContext(new String[]{"/config/imap2exchange-config.xml"
-				,"/config/imapservers.xml"});
+		FileSystemXmlApplicationContext springContext = 
+			new FileSystemXmlApplicationContext(
+					new String[]{
+							"/config/imap2exchange-config.xml",
+							"/config/imap2exchange-jmu-config.xml",
+							"/config/imapservers.xml"});
 	}
 }
