@@ -1,4 +1,3 @@
-
 package edu.jmu.email.conversion.jmu;
 
 import java.io.File;
@@ -16,6 +15,7 @@ import edu.yale.its.tp.email.conversion.User;
 import edu.yale.its.tp.email.conversion.UserFactory;
 import edu.yale.its.tp.email.conversion.event.NoMoreConversionsListener;
 import edu.yale.its.tp.email.conversion.imap.FolderAltNames;
+
 /**
  * 
  * <pre>
@@ -49,14 +49,14 @@ import edu.yale.its.tp.email.conversion.imap.FolderAltNames;
  * 3. The names "Yale" and "Yale University" must not be used to endorse
  * or promote products derived from this software.
  * </pre>
- *
-
- *
+ * 
+ * 
+ * 
  * Yales Exchange Conversion Command Line Util.
  */
 public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListener
-//                                             , ExchangeConversionStartListener
-//                                             , ExchangeConversionCompleteListener 
+// , ExchangeConversionStartListener
+// , ExchangeConversionCompleteListener
 {
 
     public static final Log logger = LogFactory.getLog(JmuExchangeConversionCmdLineUtil.class);
@@ -77,48 +77,47 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
 
     FolderAltNames altNames;
 
-
     /**
      * Start things up
+     * 
      * @param args
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         JmuExchangeConversionCmdLineUtil yc = new JmuExchangeConversionCmdLineUtil(args);
         yc.startConversion();
     }
 
-    /** 
+    /**
      * I want only one of these...
+     * 
      * @param args
      */
-    private JmuExchangeConversionCmdLineUtil(String[] args){
+    private JmuExchangeConversionCmdLineUtil(String[] args) {
         wireSpring();
         processArgs(args);
     }
 
-    public void wireSpring(){
-        springContext = new FileSystemXmlApplicationContext(new String[]{
-        		"/config/imap2exchange-config.xml",
-        		"/config/imap2exchange-jmu-config.xml",
-        		"/config/imapservers.xml"});
+    public void wireSpring() {
+        springContext = new FileSystemXmlApplicationContext(new String[] { "/config/imap2exchange-config.xml", "/config/imap2exchange-jmu-config.xml", "/config/imapservers.xml" });
     }
 
     /**
-     * Starts the ConversionManager and add the users defined at the command line
+     * Starts the ConversionManager and add the users defined at the command
+     * line
      * or ones that werwe batch loaded via config file defined user file.
-     *
+     * 
      */
-    public void startConversion(){
+    public void startConversion() {
 
         ExchangeConversionManager convManager = ExchangeConversionManager.getInstance();
         convManager.addNoMoreConversionsListener(this);
-        //		convManager.addExchangeConversionStartListener(this);
-        //		convManager.addExchangeConversionCompleteListener(this);
+        // convManager.addExchangeConversionStartListener(this);
+        // convManager.addExchangeConversionCompleteListener(this);
 
         ExchangeConversionFactory convFactory = ExchangeConversionFactory.getInstance();
         convFactory.setCleaner(isCleaner);
-        for(User user : getUsers()){
+        for (User user : getUsers()) {
             ExchangeConversion conv = convFactory.makeExchangeConversion(user);
             conv.setFinalRun(isFinal);
             convManager.addConversion(conv);
@@ -128,67 +127,64 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
 
     /**
      * Process the arguments and let the user know if I like them.
+     * 
      * @param argsAndFlags
      */
-    void processArgs(String[] argsAndFlags){
+    void processArgs(String[] argsAndFlags) {
 
         List<String> flags = new ArrayList<String>();
-        List<String> args =  new ArrayList<String>();
+        List<String> args = new ArrayList<String>();
 
-        for(String s : argsAndFlags){
-            if(s.startsWith("-")){
+        for (String s : argsAndFlags) {
+            if (s.startsWith("-")) {
                 flags.add(s);
             } else {
                 args.add(s);
             }
         }
 
-        for(String flag : flags){
-            if(!(   flag.equals(CLEAN_FLAG)
-                        || flag.equals(BATCH_FLAG)
-                        || flag.equals(MHOST_FLAG)
-                        || flag.equals(FINAL_FLAG)) ){
+        for (String flag : flags) {
+            if (!(flag.equals(CLEAN_FLAG) || flag.equals(BATCH_FLAG) || flag.equals(MHOST_FLAG) || flag.equals(FINAL_FLAG))) {
                 System.err.println("Invalid flag: " + flag);
                 printUsage();
-                        }
+            }
         }
 
-        if(flags.contains(CLEAN_FLAG)){
+        if (flags.contains(CLEAN_FLAG)) {
             this.isCleaner = true;
         }
 
-        if(flags.contains(FINAL_FLAG)){
+        if (flags.contains(FINAL_FLAG)) {
             this.isFinal = true;
         }
 
-        if(flags.contains(BATCH_FLAG)){
-            try{
+        if (flags.contains(BATCH_FLAG)) {
+            try {
                 batchLoadUsers();
-            } catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 e.printStackTrace();
                 printUsage();
             }
         } else {
 
             String uid = null;
-            String po = null; 
-            switch (args.size()){
-                case 1:
-                    if(args.size() == 1 && 
-                            (flags.contains(CLEAN_FLAG) || flags.contains(MHOST_FLAG))){
-                        uid= args.get(0);
-                        break;
-                    } else {
-                        printUsage();
-                        break;
-                    }
-                case 2:
+            String po = null;
+            switch (args.size()) {
+            case 1:
+                if (args.size() == 1 && (flags.contains(CLEAN_FLAG) || flags.contains(MHOST_FLAG))) {
                     uid = args.get(0);
-                    po = args.get(1);
                     break;
-                default:
+                } else {
                     printUsage();
                     break;
+                }
+            case 2:
+                uid = args.get(0);
+                po = args.get(1);
+                break;
+            default:
+                printUsage();
+                break;
 
             }
             if (flags.contains(MHOST_FLAG)) {
@@ -205,9 +201,9 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
 
     /**
      * Echo usage to Standard Error
-     *
+     * 
      */
-    static void printUsage(){
+    static void printUsage() {
         System.err.println("Usage: [" + CLEAN_FLAG + "] [" + BATCH_FLAG + "] [" + FINAL_FLAG + "] username legacyPo");
         System.err.println("       -batch - uses batch file defined in config/config.properties");
         System.err.println("       -clean - for development use only, this will HARD DELETE all mail and Non-System Folders.");
@@ -218,10 +214,10 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
 
     /**
      * batch Load users via the batchLoader
-     *
+     * 
      */
-    public void batchLoadUsers(){
-        JmuBatchLoader loader = (JmuBatchLoader)springContext.getBean("jmuBatchLoader");
+    public void batchLoadUsers() {
+        JmuBatchLoader loader = (JmuBatchLoader) springContext.getBean("jmuBatchLoader");
         logger.debug("userFile: " + loader.getUserFile());
         this.addUsers(loader.getUsers());
     }
@@ -231,32 +227,36 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
      */
     public void noMoreConversions() {
         logger.info("Caught \"NoMoreConversions\" event, exiting JmuExchangeConversion.");
-        System.exit(0);		
+        System.exit(0);
     }
 
     /**
      * ExchangeConversionStartedListener Impl.
      */
-    //	public void ExchangeConversionStarted(ExchangeConversionEvent event) {
-    //		logger.info("Conversion started for " + event.getExchangeConversion().getId());
-    //	}
+    // public void ExchangeConversionStarted(ExchangeConversionEvent event)
+    // {
+    // logger.info("Conversion started for " +
+    // event.getExchangeConversion().getId());
+    // }
 
     /**
      * ExchangeConversionCompletedListener Impl.
      */
-    //	public void ExchangeConversionCompleted(ExchangeConversionEvent event) {
-    //		logger.info("Conversion completed for " + event.getExchangeConversion().getId());
-    //	}
+    // public void ExchangeConversionCompleted(ExchangeConversionEvent
+    // event) {
+    // logger.info("Conversion completed for " +
+    // event.getExchangeConversion().getId());
+    // }
 
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return this.users;
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         this.users.add(user);
     }
 
-    public void addUsers(List<User> users){
+    public void addUsers(List<User> users) {
         this.users.addAll(users);
     }
 

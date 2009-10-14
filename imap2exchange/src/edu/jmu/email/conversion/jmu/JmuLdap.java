@@ -44,23 +44,23 @@ import edu.yale.its.tp.email.conversion.trust.AllTrustingSocketFactory;
  * 3. The names "JMU" and "James Madison University" must not be used to endorse
  * or promote products derived from this software.
  * </pre>
- *
-
- *
+ * 
+ * 
+ * 
  */
 public class JmuLdap {
 
     private static Logger logger = Logger.getLogger(JmuLdap.class);
 
-    private static final String SECURE_PORT = "636"; 
+    private static final String SECURE_PORT = "636";
 
     private static JmuLdap instance;
 
-    public JmuLdap(){
+    public JmuLdap() {
         instance = this;
     }
 
-    static public JmuLdap getInstance(){
+    static public JmuLdap getInstance() {
         return instance;
     }
 
@@ -71,8 +71,8 @@ public class JmuLdap {
     String uid;
     String pwd;
 
-    public void logConfig(){
-        if(logger.isDebugEnabled()){
+    public void logConfig() {
+        if (logger.isDebugEnabled()) {
             logger.debug("========================================");
             logger.debug("           LDAP Configuration");
             logger.debug("========================================");
@@ -83,11 +83,11 @@ public class JmuLdap {
         }
     }
 
-    void initEnv(){
+    void initEnv() {
         env = new Hashtable<String, Object>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, "ldap://" + uri + ":" + port + "/" + base);
-        if(port.equals(SECURE_PORT)){
+        if (port.equals(SECURE_PORT)) {
             env.put(Context.SECURITY_PROTOCOL, "ssl");
             env.put("java.naming.ldap.factory.socket", AllTrustingSocketFactory.class.getName());
         }
@@ -97,10 +97,11 @@ public class JmuLdap {
         env.put("com.sun.jndi.ldap.connect.pool", "true");
     }
 
-    public DirContext getLdap(){
+    public DirContext getLdap() {
         DirContext directory;
-        if(env == null)	initEnv();
-        try{
+        if (env == null)
+            initEnv();
+        try {
             directory = new InitialDirContext(env);
         } catch (NamingException ne) {
             throw new RuntimeException("Error Connecting to LDAP Server: " + uri + ":" + port, ne);

@@ -47,37 +47,35 @@ import edu.yale.its.tp.email.conversion.trust.AllTrustingSocketFactory;
  * 3. The names "JMU" and "James Madison University" must not be used to endorse
  * or promote products derived from this software.
  * </pre>
- *
-
- *
+ * 
+ * 
+ * 
  * I would pool this object, but that will do no good...
  * A new connection is needed every time...
  */
-public class JmuImapServerFactory  extends ImapServerFactory{
+public class JmuImapServerFactory extends ImapServerFactory {
 
-	static Log logger = LogFactory.getLog(JmuImapServerFactory.class);
-	
-	public JmuImapServerFactory(){
+    static Log logger = LogFactory.getLog(JmuImapServerFactory.class);
+
+    public JmuImapServerFactory() {
         super();
     }
 
-    /** 
+    /**
      * Get me an IMAP Store
+     * 
      * @param user
      * @return
      */
-    public Store getImapStore(User user){
+    public Store getImapStore(User user) {
 
         final ImapServer server = super.getImapServer(user.getSourceImapPo());
-        if(server == null
-                || server.getPort() == null
-                || server.getProtocol() == null
-                || server.getAdminPwd() == null) {
+        if (server == null || server.getPort() == null || server.getProtocol() == null || server.getAdminPwd() == null) {
             logger.debug("port: " + server.getPort());
             logger.debug("protocol: " + server.getProtocol());
             logger.debug("pwd: " + server.getAdminPwd());
             throw new RuntimeException("User[" + user.getUid() + "]'s sourcePo[" + user.getSourceImapPo() + "] is not defined in config.properties correctly.");
-                }
+        }
 
         Store imapStore = null;
 
@@ -97,23 +95,19 @@ public class JmuImapServerFactory  extends ImapServerFactory{
             javamailProps.setProperty("mail.imaps.appendbuffersize", "0");
             javamailProps.setProperty("mail.imaps.partialfetch", "false");
 
-
             String prot = server.getProtocol();
             javamailProps.setProperty("mail.store.protocol", prot);
             javamailProps.setProperty("mail." + prot + ".host", server.getUri());
             javamailProps.setProperty("mail." + prot + ".port", server.getPort());
 
-
-            if(prot.equals(ImapServer.IMAPS_PROTOCOL)){
+            if (prot.equals(ImapServer.IMAPS_PROTOCOL)) {
                 javamailProps.setProperty("mail." + prot + ".socketFactory.class", AllTrustingSocketFactory.class.getName());
                 javamailProps.setProperty("mail." + prot + ".socketFactory.fallback", "false");
                 javamailProps.setProperty("mail." + prot + ".socketFactory.port", server.getPort());
             }
 
-
-
-            // SASL stuff 
-            if(server.isSasl()){
+            // SASL stuff
+            if (server.isSasl()) {
                 javamailProps.setProperty("mail." + prot + ".sasl.enable", "true");
                 javamailProps.setProperty("mail." + prot + ".sasl.mechanisms", "plain");
             }
@@ -121,23 +115,26 @@ public class JmuImapServerFactory  extends ImapServerFactory{
             // Added by wrightst, 8/10/2009
             javamailProps.setProperty("mail." + prot + ".auth.login.disable", "true");
 
-
-            /* This looks weird, but this causes the nop-sasl plain auth to use use both
-             * the authorized and authenicated uid in the base64 encoded authentication string. 
-             * which is exactly what I want for UWash.*/            	
+            /*
+             * This looks weird, but this causes the nop-sasl plain auth to
+             * use use both
+             * the authorized and authenicated uid in the base64 encoded
+             * authentication string.
+             * which is exactly what I want for UWash.
+             */
 
             /* wrightst, 8/20/2009 */
             String authzId = user.getUid();
-            if (! "".equals(JmuSite.getInstance().getMailDomain())) {
+            if (!"".equals(JmuSite.getInstance().getMailDomain())) {
                 authzId += "@" + JmuSite.getInstance().getMailDomain();
             }
             /* end edits */
 
             javamailProps.setProperty("mail." + prot + ".sasl.authorizationid", authzId);
 
-            javax.mail.Authenticator adminAuth= new javax.mail.Authenticator(){
-                protected javax.mail.PasswordAuthentication  getPasswordAuthentication(){
-                    return new javax.mail.PasswordAuthentication (server.getAdminUid(), server.getAdminPwd());
+            javax.mail.Authenticator adminAuth = new javax.mail.Authenticator() {
+                protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                    return new javax.mail.PasswordAuthentication(server.getAdminUid(), server.getAdminPwd());
                 }
             };
 
@@ -153,7 +150,5 @@ public class JmuImapServerFactory  extends ImapServerFactory{
         return imapStore;
 
     }
-
-
 
 }

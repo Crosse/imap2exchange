@@ -38,11 +38,11 @@ import edu.yale.its.tp.email.conversion.exchange.FolderUtil;
  * $Rev$
  * 
  * Copyright (c) 2009 Seth Wright (wrightst@jmu.edu)
- *
+ * 
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
@@ -51,7 +51,7 @@ import edu.yale.its.tp.email.conversion.exchange.FolderUtil;
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * </pre>
- *
+ * 
  */
 public class ContactsFolderUtil {
     private static final Log logger = LogFactory.getLog(ContactsFolderUtil.class);
@@ -65,30 +65,33 @@ public class ContactsFolderUtil {
     public static boolean folderExists(User user, String folderName, BaseFolderIdType parentFolderId) {
         boolean exists = false;
         if (getFolder(user, folderName, parentFolderId) != null) {
-        	exists = true;
+            exists = true;
         }
         return exists;
     }
-    
-    public static ContactsFolderType getFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
-    	ContactsFolderType folder = null;
-    
-//    	logger.debug(String.format("Searching for folder \"%s\"", folderName));
-    	List<BaseFolderType> childFolders = FolderUtil.getChildFolders(user, parentFolderId);
+
+    public static BaseFolderIdType getRootContactsFolderId(User user) {
+        DistinguishedFolderIdType parentFolderId = new DistinguishedFolderIdType();
+        parentFolderId.setId(DistinguishedFolderIdNameType.CONTACTS);
+
+        return parentFolderId;
+    }
+
+    public static FolderIdType getFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
+        ContactsFolderType folder = null;
+
+        List<BaseFolderType> childFolders = FolderUtil.getChildFolders(user, parentFolderId);
         for (BaseFolderType bFolder : childFolders) {
-//        	logger.debug(String.format("Found folder \"%s\"", bFolder.getDisplayName()));
             if (folderName.equalsIgnoreCase(bFolder.getDisplayName())) {
-            	logger.debug(String.format("Found requested folder \"%s\"", bFolder.getDisplayName()));
-            	folder = (ContactsFolderType) bFolder;
+                logger.debug(String.format("Found requested folder \"%s\"", bFolder.getDisplayName()));
+                folder = (ContactsFolderType) bFolder;
                 break;
-            } else {
-//            	logger.debug(String.format("folder \"%s\" does not match \"%s\"", bFolder.getDisplayName(), folderName));
             }
         }
         if (folder == null) {
-        	logger.debug(String.format("Folder \"%s\" does not exist", folderName));
+            logger.debug(String.format("Folder \"%s\" does not exist", folderName));
         }
-    	return folder;
+        return folder.getFolderId();
     }
 
     public static ContactsFolderType createFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
@@ -106,10 +109,10 @@ public class ContactsFolderUtil {
         List<ContactsFolderType> returnList = new ArrayList<ContactsFolderType>();
         CreateFolderType creator = new CreateFolderType();
 
-        // Make the NonEmptyArrayOfFolders 
+        // Make the NonEmptyArrayOfFolders
         NonEmptyArrayOfFoldersType folderArray = new NonEmptyArrayOfFoldersType();
         List<BaseFolderType> folders = folderArray.getFolderOrCalendarFolderOrContactsFolder();
-        for(String folderName : folderNames){
+        for (String folderName : folderNames) {
             BaseFolderType folder = new ContactsFolderType();
             folder.setDisplayName(folderName);
             // folder.setFolderClass(EXCHANGE_MAIL_FOLDER_CLASS);
@@ -118,10 +121,10 @@ public class ContactsFolderUtil {
 
         // Make the target folder id
         TargetFolderIdType targetFolderId = new TargetFolderIdType();
-        if(parentFolderId instanceof FolderIdType){
-            targetFolderId.setFolderId((FolderIdType)parentFolderId);
-        } else if (parentFolderId instanceof DistinguishedFolderIdType){
-            targetFolderId.setDistinguishedFolderId((DistinguishedFolderIdType)parentFolderId);
+        if (parentFolderId instanceof FolderIdType) {
+            targetFolderId.setFolderId((FolderIdType) parentFolderId);
+        } else if (parentFolderId instanceof DistinguishedFolderIdType) {
+            targetFolderId.setDistinguishedFolderId((DistinguishedFolderIdType) parentFolderId);
         }
 
         creator.setFolders(folderArray);
@@ -135,39 +138,38 @@ public class ContactsFolderUtil {
         Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
 
         ExchangeServicePortType proxy = null;
-        List<JAXBElement <? extends ResponseMessageType>> responses = null;
-        try{
+        List<JAXBElement<? extends ResponseMessageType>> responses = null;
+        try {
             user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
             proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
             user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
             user.getConversion().getReport().start(Report.EXCHANGE_META);
-            proxy.createFolder(creator, user.getImpersonation() ,responseHolder, serverVersionHolder);
-            responses = responseHolder.value.getResponseMessages()
-                .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
+            proxy.createFolder(creator, user.getImpersonation(), responseHolder, serverVersionHolder);
+            responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
             user.getConversion().getReport().stop(Report.EXCHANGE_META);
 
-            for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
+            for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                 ResponseMessageType response = jaxResponse.getValue();
-                if(response.getResponseClass().equals(ResponseClassType.ERROR)){
+                if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
                     logger.warn("Create Folder Response Error: " + response.getMessageText());
                     user.getConversion().warnings++;
-                } else if(response.getResponseClass().equals(ResponseClassType.WARNING)){
+                } else if (response.getResponseClass().equals(ResponseClassType.WARNING)) {
                     logger.warn("Create Folder Response Warning: " + response.getMessageText());
                     user.getConversion().warnings++;
-                } else if(response.getResponseClass().equals(ResponseClassType.SUCCESS)){
-                    FolderInfoResponseMessageType findResponse = (FolderInfoResponseMessageType)response;
-                    List<BaseFolderType> allFolders =  findResponse.getFolders().getFolderOrCalendarFolderOrContactsFolder();
-                    for(BaseFolderType folder : allFolders){
-                        returnList.add((ContactsFolderType)folder);
+                } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
+                    FolderInfoResponseMessageType findResponse = (FolderInfoResponseMessageType) response;
+                    List<BaseFolderType> allFolders = findResponse.getFolders().getFolderOrCalendarFolderOrContactsFolder();
+                    for (BaseFolderType folder : allFolders) {
+                        returnList.add((ContactsFolderType) folder);
                     }
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Exception performing CreateFolder", e);
         } finally {
-            if(user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
+            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
                 user.getConversion().getReport().stop(Report.EXCHANGE_META);
-            if(user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
+            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
                 user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
         }
 

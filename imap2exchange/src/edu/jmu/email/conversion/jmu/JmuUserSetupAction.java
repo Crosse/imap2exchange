@@ -45,15 +45,15 @@ import edu.yale.its.tp.email.conversion.User;
  * 3. The names "JMU" and "James Madison University" must not be used to endorse
  * or promote products derived from this software.
  * </pre>
- *
-
- *
+ * 
+ * 
+ * 
  */
 public class JmuUserSetupAction extends PluggableConversionAction {
 
-	private static Log logger = LogFactory.getLog(JmuUserSetupAction.class);
+    private static Log logger = LogFactory.getLog(JmuUserSetupAction.class);
 
-	private static final String NOT_FOUND = "";
+    private static final String NOT_FOUND = "";
 
     String netidAttribute;
     String ldapNetidAttribute;
@@ -65,66 +65,69 @@ public class JmuUserSetupAction extends PluggableConversionAction {
     String somUserObject;
 
     @Override
-        public boolean perform(ExchangeConversion conv) {
-            // This populates the required Fields for the user
-            updateUser(conv.getUser());
-            return true;
-        }
+    public boolean perform(ExchangeConversion conv) {
+        // This populates the required Fields for the user
+        updateUser(conv.getUser());
+        return true;
+    }
 
     /**
      * Get the Email Address
+     * 
      * @param user
      * @return
      */
-    public void updateUser(User user){
+    public void updateUser(User user) {
 
         String upn = NOT_FOUND;
         String email = NOT_FOUND;
-//		String mailbox = NOT_FOUND;
-		
+        // String mailbox = NOT_FOUND;
+
         DirContext directory = null;
 
         try {
 
             directory = JmuAD.getInstance().getAD();
-            //Attributes match = new BasicAttributes(true); 
-            //match.put(new BasicAttribute(netidAttribute, user.getUid()));
+            // Attributes match = new BasicAttributes(true);
+            // match.put(new BasicAttribute(netidAttribute, user.getUid()));
             String filterExpr = String.format("(%s=%s)", netidAttribute, user.getUid());
 
             SearchControls cons = new SearchControls();
             cons.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            String[] attrs = {upnAttribute, smtpAttribute};
+            String[] attrs = { upnAttribute, smtpAttribute };
             cons.setReturningAttributes(attrs);
             NamingEnumeration<SearchResult> answer = directory.search(userObject, filterExpr, cons);
             SearchResult result = null;
 
-            if(answer.hasMore()){
+            if (answer.hasMore()) {
                 logger.info("Found user in JMUAD.");
-                result = (SearchResult)answer.next();
-                if(answer.hasMore()){
+                result = (SearchResult) answer.next();
+                if (answer.hasMore()) {
                     logger.warn("More than one  " + userObject + " record found for " + user.getUid());
                     user.getConversion().warnings++;
                 }
             }
 
-            if(result != null){
+            if (result != null) {
                 upn = result.getAttributes().get(upnAttribute).get().toString();
                 email = result.getAttributes().get(smtpAttribute).get().toString();
                 logger.info("UPN for " + user.getUid() + ": " + upn);
                 logger.info("SMTP for " + user.getUid() + ": " + email);
             }
 
-
         } catch (Exception e) {
-            logger.error("Error Communicating with LDAP Server for [" + user.getUid()+"]", e);
+            logger.error("Error Communicating with LDAP Server for [" + user.getUid() + "]", e);
         } finally {
-            try{ directory.close();} catch (Exception e){/*ignore*/}
+            try {
+                directory.close();
+            } catch (Exception e) {/* ignore */
+            }
         }
 
-	    if(upn == null || upn.equals(NOT_FOUND)){
-	    	throw new RuntimeException("userPrincipleName(UPN) not found for " + user.getUid());
+        if (upn == null || upn.equals(NOT_FOUND)) {
+            throw new RuntimeException("userPrincipleName(UPN) not found for " + user.getUid());
         }
-	    if(email == null || email.equals(NOT_FOUND)){
+        if (email == null || email.equals(NOT_FOUND)) {
             throw new RuntimeException("primarySMTPAddress not found for " + user.getUid());
         }
 
@@ -143,8 +146,8 @@ public class JmuUserSetupAction extends PluggableConversionAction {
         try {
 
             directory = JmuLdap.getInstance().getLdap();
-            //Attributes match = new BasicAttributes(true); 
-            //match.put(new BasicAttribute(netidAttribute, user.getUid()));
+            // Attributes match = new BasicAttributes(true);
+            // match.put(new BasicAttribute(netidAttribute, user.getUid()));
             String filterExpr = String.format("(%s=%s)", ldapNetidAttribute, user.getUid());
 
             SearchControls cons = new SearchControls();
@@ -154,27 +157,30 @@ public class JmuUserSetupAction extends PluggableConversionAction {
             NamingEnumeration<SearchResult> answer = directory.search(ldapUserObject, filterExpr, cons);
             SearchResult result = null;
 
-            if(answer.hasMore()){
+            if (answer.hasMore()) {
                 logger.info("Found user in eDirectory.");
-                result = (SearchResult)answer.next();
-                if(answer.hasMore()){
+                result = (SearchResult) answer.next();
+                if (answer.hasMore()) {
                     logger.warn("More than one  " + ldapUserObject + " record found for " + user.getUid());
                     user.getConversion().warnings++;
                 }
             }
 
-            if(result != null){
+            if (result != null) {
                 mailHost = result.getAttributes().get(mailHostAttribute).get().toString();
                 logger.info("mailHost for " + user.getUid() + ": " + mailHost);
             }
 
         } catch (Exception e) {
-            logger.error("Error Communicating with LDAP Server for [" + user.getUid()+"]", e);
+            logger.error("Error Communicating with LDAP Server for [" + user.getUid() + "]", e);
         } finally {
-            try{ directory.close();} catch (Exception e){/*ignore*/}
+            try {
+                directory.close();
+            } catch (Exception e) {/* ignore */
+            }
         }
 
-        if(mailHost == NOT_FOUND){
+        if (mailHost == NOT_FOUND) {
             throw new RuntimeException("mailHost not found for " + user.getUid());
         }
 

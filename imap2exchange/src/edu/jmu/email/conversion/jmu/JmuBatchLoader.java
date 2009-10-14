@@ -46,11 +46,11 @@ import edu.yale.its.tp.email.conversion.UserFactory;
  * 3. The names "Jmu" and "Jmu University" must not be used to endorse
  * or promote products derived from this software.
  * </pre>
- *
-
- *
+ * 
+ * 
+ * 
  * Batch Load Users.
- */ 
+ */
 public class JmuBatchLoader {
 
     public static final Log logger = LogFactory.getLog(JmuBatchLoader.class);
@@ -59,25 +59,26 @@ public class JmuBatchLoader {
 
     /**
      * Get the users from the config defined user file.
+     * 
      * @return
      */
-    public List<User> getUsers(){
+    public List<User> getUsers() {
 
         List<User> users = new ArrayList<User>();
 
-        try{
+        try {
             // Get users from current run file
             logger.debug("userFile: " + userFile);
             BufferedReader fileReader = new BufferedReader(new FileReader(new File(userFile)));
 
             String line = "";
-            while(null != (line = fileReader.readLine())){
+            while (null != (line = fileReader.readLine())) {
 
                 line = line.trim();
 
                 // don't process comments or empty lines...
-                if(   line.startsWith("#")
-                        || line.length() == 0) continue;
+                if (line.startsWith("#") || line.length() == 0)
+                    continue;
 
                 logger.debug("line: " + line);
                 // Create Users
@@ -85,7 +86,7 @@ public class JmuBatchLoader {
 
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             logger.error("Error Reading Jmu User File", e);
             System.exit(-1);
         }
@@ -95,13 +96,14 @@ public class JmuBatchLoader {
     /**
      * defines the format of each line...
      * in our case:
-     *    uid, sourcePo
+     * uid, sourcePo
+     * 
      * @param values
      * @return
      */
-    protected User getUser(String[] values){
+    protected User getUser(String[] values) {
 
-        if(values.length != 1)
+        if (values.length != 1)
             throw new RuntimeException("Jmu user file must the following format: uid");
 
         // Create Users
