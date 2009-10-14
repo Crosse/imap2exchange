@@ -9,39 +9,6 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * <pre>
- * Copyright (c) 2000-2003 Yale University. All rights reserved.
- * 
- * THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ARE EXPRESSLY
- * DISCLAIMED. IN NO EVENT SHALL YALE UNIVERSITY OR ITS EMPLOYEES BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED, THE COSTS OF
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED IN ADVANCE OF THE POSSIBILITY OF SUCH
- * DAMAGE.
- * 
- * Redistribution and use of this software in source or binary forms,
- * with or without modification, are permitted, provided that the
- * following conditions are met:
- * 
- * 1. Any redistribution must include the above copyright notice and
- * disclaimer and this list of conditions in any related documentation
- * and, if feasible, in the redistributed software.
- * 
- * 2. Any redistribution must include the acknowledgment, "This product
- * includes software developed by Yale University," in any related
- * documentation and, if feasible, in the redistributed software.
- * 
- * 3. The names "Yale" and "Yale University" must not be used to endorse
- * or promote products derived from this software.
- * </pre>
- *
  * <p>Java class for BaseResponseMessageType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
@@ -65,33 +32,34 @@ import javax.xml.bind.annotation.XmlType;
     "responseMessages"
 })
 @XmlSeeAlso({
-    MoveFolderResponseType.class,
-    CreateAttachmentResponseType.class,
-    DeleteFolderResponseType.class,
-    SendNotificationResponseType.class,
-    UnsubscribeResponseType.class,
-    SubscribeResponseType.class,
-    SendItemResponseType.class,
-    GetItemResponseType.class,
-    GetAttachmentResponseType.class,
-    GetEventsResponseType.class,
-    CreateManagedFolderResponseType.class,
-    SyncFolderHierarchyResponseType.class,
-    UpdateItemResponseType.class,
-    FindItemResponseType.class,
-    CopyItemResponseType.class,
-    SyncFolderItemsResponseType.class,
-    CopyFolderResponseType.class,
-    UpdateFolderResponseType.class,
-    MoveItemResponseType.class,
-    CreateItemResponseType.class,
-    GetFolderResponseType.class,
+    FindFolderResponseType.class,
     DeleteAttachmentResponseType.class,
-    CreateFolderResponseType.class,
-    ExpandDLResponseType.class,
+    MoveItemResponseType.class,
+    CopyItemResponseType.class,
+    SendItemResponseType.class,
+    UpdateItemResponseType.class,
+    CreateManagedFolderResponseType.class,
+    ConvertIdResponseType.class,
+    GetEventsResponseType.class,
+    GetFolderResponseType.class,
+    SubscribeResponseType.class,
     DeleteItemResponseType.class,
+    GetItemResponseType.class,
+    UpdateFolderResponseType.class,
+    UnsubscribeResponseType.class,
+    CreateFolderResponseType.class,
+    SendNotificationResponseType.class,
+    SyncFolderHierarchyResponseType.class,
+    SyncFolderItemsResponseType.class,
+    CreateItemResponseType.class,
+    ExpandDLResponseType.class,
+    FindItemResponseType.class,
+    GetAttachmentResponseType.class,
     ResolveNamesResponseType.class,
-    FindFolderResponseType.class
+    CopyFolderResponseType.class,
+    DeleteFolderResponseType.class,
+    MoveFolderResponseType.class,
+    CreateAttachmentResponseType.class
 })
 public class BaseResponseMessageType {
 

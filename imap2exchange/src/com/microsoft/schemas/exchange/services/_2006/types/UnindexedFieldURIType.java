@@ -7,41 +7,6 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- * <pre>
- * Copyright (c) 2000-2003 Yale University. All rights reserved.
- * 
- * THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ARE EXPRESSLY
- * DISCLAIMED. IN NO EVENT SHALL YALE UNIVERSITY OR ITS EMPLOYEES BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED, THE COSTS OF
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED IN ADVANCE OF THE POSSIBILITY OF SUCH
- * DAMAGE.
- * 
- * Redistribution and use of this software in source or binary forms,
- * with or without modification, are permitted, provided that the
- * following conditions are met:
- * 
- * 1. Any redistribution must include the above copyright notice and
- * disclaimer and this list of conditions in any related documentation
- * and, if feasible, in the redistributed software.
- * 
- * 2. Any redistribution must include the acknowledgment, "This product
- * includes software developed by Yale University," in any related
- * documentation and, if feasible, in the redistributed software.
- * 
- * 3. The names "Yale" and "Yale University" must not be used to endorse
- * or promote products derived from this software.
- * </pre>
- *
-
- * 
  * <p>Java class for UnindexedFieldURIType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
@@ -58,6 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="folder:FolderClass"/>
  *     &lt;enumeration value="folder:SearchParameters"/>
  *     &lt;enumeration value="folder:ManagedFolderInformation"/>
+ *     &lt;enumeration value="folder:PermissionSet"/>
+ *     &lt;enumeration value="folder:EffectiveRights"/>
  *     &lt;enumeration value="item:ItemId"/>
  *     &lt;enumeration value="item:ParentFolderId"/>
  *     &lt;enumeration value="item:ItemClass"/>
@@ -87,6 +54,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="item:DisplayTo"/>
  *     &lt;enumeration value="item:DisplayCc"/>
  *     &lt;enumeration value="item:Culture"/>
+ *     &lt;enumeration value="item:EffectiveRights"/>
+ *     &lt;enumeration value="item:LastModifiedName"/>
+ *     &lt;enumeration value="item:LastModifiedTime"/>
  *     &lt;enumeration value="message:ConversationIndex"/>
  *     &lt;enumeration value="message:ConversationTopic"/>
  *     &lt;enumeration value="message:InternetMessageId"/>
@@ -94,6 +64,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="message:IsResponseRequested"/>
  *     &lt;enumeration value="message:IsReadReceiptRequested"/>
  *     &lt;enumeration value="message:IsDeliveryReceiptRequested"/>
+ *     &lt;enumeration value="message:ReceivedBy"/>
+ *     &lt;enumeration value="message:ReceivedRepresenting"/>
  *     &lt;enumeration value="message:References"/>
  *     &lt;enumeration value="message:ReplyTo"/>
  *     &lt;enumeration value="message:From"/>
@@ -146,6 +118,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="calendar:IsOnlineMeeting"/>
  *     &lt;enumeration value="calendar:MeetingWorkspaceUrl"/>
  *     &lt;enumeration value="calendar:NetShowUrl"/>
+ *     &lt;enumeration value="calendar:UID"/>
+ *     &lt;enumeration value="calendar:RecurrenceId"/>
+ *     &lt;enumeration value="calendar:DateTimeStamp"/>
  *     &lt;enumeration value="task:ActualWork"/>
  *     &lt;enumeration value="task:AssignedTime"/>
  *     &lt;enumeration value="task:BillingInformation"/>
@@ -199,6 +174,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="contacts:SpouseName"/>
  *     &lt;enumeration value="contacts:Surname"/>
  *     &lt;enumeration value="contacts:WeddingAnniversary"/>
+ *     &lt;enumeration value="postitem:PostedTime"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -208,10 +184,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum UnindexedFieldURIType {
 
-	/* Added by jjv6 */
-    @XmlEnumValue("folder:Status")
-    FOLDER_STATUS("folder:Status"),
-    /* end add */
     @XmlEnumValue("folder:FolderId")
     FOLDER_FOLDER_ID("folder:FolderId"),
     @XmlEnumValue("folder:ParentFolderId")
@@ -230,6 +202,10 @@ public enum UnindexedFieldURIType {
     FOLDER_SEARCH_PARAMETERS("folder:SearchParameters"),
     @XmlEnumValue("folder:ManagedFolderInformation")
     FOLDER_MANAGED_FOLDER_INFORMATION("folder:ManagedFolderInformation"),
+    @XmlEnumValue("folder:PermissionSet")
+    FOLDER_PERMISSION_SET("folder:PermissionSet"),
+    @XmlEnumValue("folder:EffectiveRights")
+    FOLDER_EFFECTIVE_RIGHTS("folder:EffectiveRights"),
     @XmlEnumValue("item:ItemId")
     ITEM_ITEM_ID("item:ItemId"),
     @XmlEnumValue("item:ParentFolderId")
@@ -288,6 +264,12 @@ public enum UnindexedFieldURIType {
     ITEM_DISPLAY_CC("item:DisplayCc"),
     @XmlEnumValue("item:Culture")
     ITEM_CULTURE("item:Culture"),
+    @XmlEnumValue("item:EffectiveRights")
+    ITEM_EFFECTIVE_RIGHTS("item:EffectiveRights"),
+    @XmlEnumValue("item:LastModifiedName")
+    ITEM_LAST_MODIFIED_NAME("item:LastModifiedName"),
+    @XmlEnumValue("item:LastModifiedTime")
+    ITEM_LAST_MODIFIED_TIME("item:LastModifiedTime"),
     @XmlEnumValue("message:ConversationIndex")
     MESSAGE_CONVERSATION_INDEX("message:ConversationIndex"),
     @XmlEnumValue("message:ConversationTopic")
@@ -302,6 +284,10 @@ public enum UnindexedFieldURIType {
     MESSAGE_IS_READ_RECEIPT_REQUESTED("message:IsReadReceiptRequested"),
     @XmlEnumValue("message:IsDeliveryReceiptRequested")
     MESSAGE_IS_DELIVERY_RECEIPT_REQUESTED("message:IsDeliveryReceiptRequested"),
+    @XmlEnumValue("message:ReceivedBy")
+    MESSAGE_RECEIVED_BY("message:ReceivedBy"),
+    @XmlEnumValue("message:ReceivedRepresenting")
+    MESSAGE_RECEIVED_REPRESENTING("message:ReceivedRepresenting"),
     @XmlEnumValue("message:References")
     MESSAGE_REFERENCES("message:References"),
     @XmlEnumValue("message:ReplyTo")
@@ -406,6 +392,12 @@ public enum UnindexedFieldURIType {
     CALENDAR_MEETING_WORKSPACE_URL("calendar:MeetingWorkspaceUrl"),
     @XmlEnumValue("calendar:NetShowUrl")
     CALENDAR_NET_SHOW_URL("calendar:NetShowUrl"),
+    @XmlEnumValue("calendar:UID")
+    CALENDAR_UID("calendar:UID"),
+    @XmlEnumValue("calendar:RecurrenceId")
+    CALENDAR_RECURRENCE_ID("calendar:RecurrenceId"),
+    @XmlEnumValue("calendar:DateTimeStamp")
+    CALENDAR_DATE_TIME_STAMP("calendar:DateTimeStamp"),
     @XmlEnumValue("task:ActualWork")
     TASK_ACTUAL_WORK("task:ActualWork"),
     @XmlEnumValue("task:AssignedTime")
@@ -511,7 +503,9 @@ public enum UnindexedFieldURIType {
     @XmlEnumValue("contacts:Surname")
     CONTACTS_SURNAME("contacts:Surname"),
     @XmlEnumValue("contacts:WeddingAnniversary")
-    CONTACTS_WEDDING_ANNIVERSARY("contacts:WeddingAnniversary");
+    CONTACTS_WEDDING_ANNIVERSARY("contacts:WeddingAnniversary"),
+    @XmlEnumValue("postitem:PostedTime")
+    POSTITEM_POSTED_TIME("postitem:PostedTime");
     private final String value;
 
     UnindexedFieldURIType(String v) {
