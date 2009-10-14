@@ -1,6 +1,8 @@
 package edu.yale.its.tp.email.conversion.yale;
 
 import java.net.*;
+
+import javax.xml.namespace.QName;
 //import org.apache.log4j.*;
 import edu.yale.its.tp.email.conversion.exchange.*;
 import edu.yale.its.tp.email.conversion.trust.*;
@@ -90,7 +92,12 @@ public class YaleExchangeServerPortFactory extends ExchangeServerPortFactory {
 	
 	protected ExchangeServices getExchangeServices() throws Exception{
 		setupAuthenticator();
-		if(service == null) service = new ExchangeServices(new URL(uri));
+//		if(service == null) service = new ExchangeServices(new URL(uri));
+		if (service == null) {
+			service = new ExchangeServices(new URL(uri), 
+					new QName("http://schemas.microsoft.com/exchange/services/2006/messages", 
+							"ExchangeServices"));
+		}
 		return service;
 	}
 
