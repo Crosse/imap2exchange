@@ -98,9 +98,10 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
     }
 
     public void wireSpring(){
-        springContext = new FileSystemXmlApplicationContext(new String[]{"/config/imap2exchange-config.xml"
-            ,"/config/imap2exchange-yale-config.xml"
-            ,"/config/imapservers.xml"});
+        springContext = new FileSystemXmlApplicationContext(new String[]{
+        		"/config/imap2exchange-config.xml",
+        		"/config/imap2exchange-jmu-config.xml",
+        		"/config/imapservers.xml"});
     }
 
     /**
