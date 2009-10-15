@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -20,12 +19,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import sun.misc.BASE64Encoder;
-
 import com.microsoft.schemas.exchange.services._2006.types.*;
 import com.novell.ldap.LDAPEntry;
-import com.novell.ldap.LDAPException;
-import com.novell.ldap.LDAPLocalException;
 import com.novell.ldap.LDAPMessage;
 import com.novell.ldap.LDAPSearchResult;
 import com.novell.ldap.util.LDIFReader;
@@ -74,13 +69,15 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         LDIFReader addrbook = exportAddressBookFromMirapoint(user);
         if (addrbook == null) {
-            return false;
+            return true;
         }
 
         BaseFolderIdType contactsFolderId = createOrGetImportFolder(user);
-        logger.info(String.format("Using folder \"%s\" as the Contacts import folder", importedContactsFolderName));
+        logger.debug(String.format("Using folder \"%s\" as the Contacts import folder", importedContactsFolderName));
 
-        return importAddressBook(user, addrbook, contactsFolderId);
+        importAddressBook(user, addrbook, contactsFolderId);
+        
+        return true;
     }
 
     protected BaseFolderIdType createOrGetImportFolder(User user) {
@@ -161,14 +158,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         try {
             reader = new LDIFReader(ldifStream);
-        } catch (LDAPLocalException e) {
-            logger.error("Could not parse LDIF data:  " + e.getLDAPErrorMessage());
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("Could not parse LDIF data:  " + e.getMessage());
             e.printStackTrace();
         }
-
+        
         return reader;
     }
 
@@ -199,7 +193,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         String endTag = "</sid>";
         try {
             while ((line = rd.readLine()) != null) {
-                logger.debug(String.format("Response: %s", line));
+                // logger.debug(String.format("Response: %s", line));
                 if (line.contains((CharSequence) "<sid>")) {
                     int start = line.indexOf(startTag) + startTag.length();
                     int end = line.indexOf(endTag);
@@ -208,8 +202,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Could not log in to mail store", e);
         }
 
         return sid;
@@ -232,12 +225,8 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 wr.write(postData);
                 wr.flush();
             }
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException("Error submitting HTTP request", e);
         } finally {
             try {
                 wr.close();
@@ -249,17 +238,16 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             // Get the response.
             response = conn.getInputStream();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Error getting response from server");
         }
 
         return response;
     }
 
-    protected boolean importAddressBook(User user, LDIFReader addrbook, BaseFolderIdType contactsFolderId) {
-        boolean success = false;
+    protected void importAddressBook(User user, LDIFReader addrbook, BaseFolderIdType contactsFolderId) {
         if (addrbook == null) {
-            return success;
+            logger.warn("addrbook was null");
+            return;
         }
 
         LDAPMessage msg = null;
@@ -278,158 +266,67 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                     }
                 }
                 if (isGroup) {
+                    // Groups will be processed last.
                     groups.add(entry);
                 } else {
-                    // success = true;
-                    success = createContact(user, entry, contactsFolderId);
+                    boolean created = createContact(user, entry, contactsFolderId);
+                    if (!created) {
+                        user.getConversion().warnings++;
+                    }
                 }
 
-                if (success == false) {
-                    return success;
+            }
+            
+            if (groups.size() > 0) {
+                processGroups(user, groups, contactsFolderId);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+//            throw new RuntimeException("Error importing Address Book");
+        }
+
+    }
+
+    
+    private boolean processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
+        String tag = ",mail=";
+        
+        for (LDAPEntry group : groups) {
+            String cn = getEntryAttribute(group, "cn");
+            List<ContactItemType> members = new ArrayList<ContactItemType>();
+            
+            for (String member : group.getAttribute("member").getStringValueArray()) {
+                int mailTag = member.indexOf(tag);
+                String mail = member.substring(mailTag + tag.length());
+                if (mail.indexOf("@") < 0) {
+                    mail += "@" + JmuSite.getInstance().getMailDomain();
+                }
+
+                ContactItemType contact = ContactUtil.getContact(user, mail, contactsFolderId);
+                if (contact == null) {
+                    // For Mirapoint this should never happen, since groups 
+                    // may only contain items in the address book.
+                    // ...but, log it just in case.
+                    logger.warn(String.format("Group %s contains %s, but it could not be found", cn, mail));
+                    continue;
+                } else {
+                    members.add(contact);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return success;
-        } catch (LDAPException e) {
-            e.printStackTrace();
-            return success;
+            
+            ItemType dl = ContactUtil.createDistributionList(user, cn, members, contactsFolderId);
+            if (dl != null) { 
+                logger.info(String.format("DL CREATE: [ %s ]", cn));
+            } else {
+                logger.warn("Could not create distribution list " + cn);
+            }
+            
         }
 
-        // success = processGroups(user, groups, contactsFolder);
-
-        return success;
+        return true;
     }
-
-    /*
-     * private boolean processGroups(User user, List<LDAPEntry> groups,
-     * ContactsFolderType contactsFolder) {
-     * String startTag = "cn=";
-     * String endTag = ",mail=";
-     * String wrappedEntryIDPreamble =
-     * ContactUtil.WRAPPED_ENTRYID_FLAGS +
-     * ContactUtil.WRAPPED_ENTRYID_PROVIDER_UID +
-     * ContactUtil.WRAPPED_ENTRYID_TYPE_CONTACT_ENTRYID;
-     * BASE64Encoder encoder = new BASE64Encoder();
-     * for (LDAPEntry group : groups) {
-     * logger.debug(String.format("Working on group %s", group.getDN()));
-     * ItemType distributionList = new ItemType();
-     * distributionList.setItemClass("IPM.DistList");
-     * String cn = getEntryAttribute(group, "cn");
-     * ExtendedPropertyType nameProperty = new ExtendedPropertyType();
-     * ExtendedPropertyType displaNameProperty = new ExtendedPropertyType();
-     * ExtendedPropertyType fileAsProperty = new ExtendedPropertyType();
-     * ExtendedPropertyType membersProperty = new ExtendedPropertyType();
-     * ExtendedPropertyType oneOffMembersProperty = new
-     * ExtendedPropertyType();
-     * PathToExtendedFieldType namePropertyType = new
-     * PathToExtendedFieldType();
-     * 
-     * namePropertyType.setPropertyId(ContactUtil.PID_LID_DISTRIBUTION_LIST_NAME
-     * );
-     * namePropertyType.setDistinguishedPropertySetId(
-     * DistinguishedPropertySetType.ADDRESS);
-     * namePropertyType.setPropertyType(MapiPropertyTypeType.STRING);
-     * PathToExtendedFieldType fileAsPropertyType = new
-     * PathToExtendedFieldType();
-     * fileAsPropertyType.setPropertyId(0x8005);
-     * fileAsPropertyType.setDistinguishedPropertySetId(
-     * DistinguishedPropertySetType.ADDRESS);
-     * fileAsPropertyType.setPropertyType(MapiPropertyTypeType.STRING);
-     * PathToExtendedFieldType displayNamePropertyType = new
-     * PathToExtendedFieldType();
-     * displayNamePropertyType.setPropertyTag("0x3001");
-     * displayNamePropertyType.setPropertyType(MapiPropertyTypeType.STRING);
-     * PathToExtendedFieldType membersPropertyType = new
-     * PathToExtendedFieldType();
-     * membersPropertyType.setPropertyId(ContactUtil.
-     * PID_LID_DISTRIBUTION_LIST_MEMBERS);
-     * membersPropertyType.setDistinguishedPropertySetId(
-     * DistinguishedPropertySetType.ADDRESS);
-     * 
-     * membersPropertyType.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY)
-     * ;
-     * PathToExtendedFieldType oneOffMembersPropertyType = new
-     * PathToExtendedFieldType();
-     * oneOffMembersPropertyType.setPropertyId(ContactUtil.
-     * PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS);
-     * oneOffMembersPropertyType.setDistinguishedPropertySetId(
-     * DistinguishedPropertySetType.ADDRESS);
-     * oneOffMembersPropertyType.setPropertyType(MapiPropertyTypeType.
-     * BINARY_ARRAY);
-     * NonEmptyArrayOfPropertyValuesType members = new
-     * NonEmptyArrayOfPropertyValuesType();
-     * NonEmptyArrayOfPropertyValuesType oneOffMembers = new
-     * NonEmptyArrayOfPropertyValuesType();
-     * for (String member :
-     * group.getAttribute("member").getStringValueArray()) {
-     * int start = member.indexOf(startTag) + startTag.length();
-     * int end = member.indexOf(endTag);
-     * String membercn = member.substring(start, end);
-     * String mail = member.substring(end + endTag.length());
-     * if (mail.indexOf("@") < 0) {
-     * mail += "@" + JmuSite.getInstance().getMailDomain();
-     * }
-     * String displayName = String.format("%s (%s)", membercn, mail);
-     * ContactItemType contact = ContactUtil.getContact(user, displayName,
-     * contactsFolder);
-     * if (contact == null) {
-     * logger.debug(String.format("Constructing a One-Off Entry for %s",
-     * displayName));
-     * String oneOffMember =
-     * "00000000812B1FA4BEA310199D6E00DD010F540200000190";
-     * String pad = "0000";
-     * oneOffMember += convertToHex(membercn) + pad + convertToHex("SMTP") +
-     * pad + convertToHex(mail);
-     * oneOffMembers.getValue().add(0,
-     * encoder.encode(oneOffMember.getBytes()));
-     * members.getValue().add(0, encoder.encode(oneOffMember.getBytes()));
-     * } else {
-     * logger.debug(String.format("Found contact \"%s\" for member \"%s\"",
-     * contact.getDisplayName(), member));
-     * String wrappedEntryId = wrappedEntryIDPreamble +
-     * contact.getItemId().getId();
-     * members.getValue().add(encoder.encode(wrappedEntryId.getBytes()));
-     * }
-     * }
-     * logger.debug(String.format("Finished process members for group %s",
-     * group.getDN()));
-     * distributionList.setSubject(cn);
-     * nameProperty.setExtendedFieldURI(namePropertyType);
-     * nameProperty.setValue(cn);
-     * distributionList.getExtendedProperty().add(nameProperty);
-     * displaNameProperty.setExtendedFieldURI(displayNamePropertyType);
-     * displaNameProperty.setValue(cn);
-     * distributionList.getExtendedProperty().add(displaNameProperty);
-     * fileAsProperty.setExtendedFieldURI(fileAsPropertyType);
-     * fileAsProperty.setValue(cn);
-     * distributionList.getExtendedProperty().add(fileAsProperty);
-     * if (members.getValue().size() > 0) {
-     * membersProperty.setExtendedFieldURI(membersPropertyType);
-     * membersProperty.setValues(members);
-     * distributionList.getExtendedProperty().add(membersProperty);
-     * }
-     * if (oneOffMembers.getValue().size() > 0) {
-     * oneOffMembersProperty.setExtendedFieldURI(oneOffMembersPropertyType);
-     * oneOffMembersProperty.setValues(oneOffMembers);
-     * distributionList.getExtendedProperty().add(oneOffMembersProperty);
-     * }
-     * ContactUtil.createDistributionList(user, distributionList,
-     * contactsFolder);
-     * }
-     * return true;
-     * }
-     */
-
-    private static String convertToHex(String asciiString) {
-        String hex = "";
-        for (char c : asciiString.toCharArray()) {
-            hex = hex.concat(Integer.toHexString(c)) + "00";
-        }
-        // logger.debug(String.format("result of Hex conversion for \"%s\" is \"%s\"",
-        // asciiString, hex));
-        return hex;
-    }
+     
 
     protected boolean createContact(User user, LDAPEntry entry, BaseFolderIdType contactsFolderId) {
         boolean success = false;
@@ -451,7 +348,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Short-circuit really quickly: do a search for the FileAs field
         // to check if the contact already exists. If so, just return that.
         if (ContactUtil.getContact(user, email, contactsFolderId) != null) {
-            logger.debug(String.format("Contact \"%s\" already exists.  Skipping", contactItem.getFileAs()));
+            logger.info(String.format("%-6s CONTACT: [ %16s already exists ]", "SKIP", email));
             success = true;
             return success;
         }
@@ -549,11 +446,12 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             contactItem.setBirthday(birthdate);
         }
 
-        logger.debug(String.format("Creating contact %s", entry.getDN()));
+        logger.info(String.format("CREATE CONTACT: [ %16s ]", email));
         if (ContactUtil.createContact(user, contactItem, contactsFolderId) != null) {
             success = true;
         } else {
             logger.warn(String.format("Error creating contact %s", entry.getDN()));
+            user.getConversion().warnings++;
             success = false;
         }
 

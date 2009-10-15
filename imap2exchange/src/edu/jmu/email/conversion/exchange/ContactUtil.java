@@ -9,8 +9,50 @@ import javax.xml.ws.Holder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.microsoft.schemas.exchange.services._2006.messages.*;
-import com.microsoft.schemas.exchange.services._2006.types.*;
+import com.microsoft.schemas.exchange.services._2006.messages.ConvertIdResponseMessageType;
+import com.microsoft.schemas.exchange.services._2006.messages.ConvertIdResponseType;
+import com.microsoft.schemas.exchange.services._2006.messages.ConvertIdType;
+import com.microsoft.schemas.exchange.services._2006.messages.CreateItemResponseType;
+import com.microsoft.schemas.exchange.services._2006.messages.CreateItemType;
+import com.microsoft.schemas.exchange.services._2006.messages.ExchangeServicePortType;
+import com.microsoft.schemas.exchange.services._2006.messages.FindItemResponseMessageType;
+import com.microsoft.schemas.exchange.services._2006.messages.FindItemResponseType;
+import com.microsoft.schemas.exchange.services._2006.messages.FindItemType;
+import com.microsoft.schemas.exchange.services._2006.messages.ItemInfoResponseMessageType;
+import com.microsoft.schemas.exchange.services._2006.messages.ResponseMessageType;
+import com.microsoft.schemas.exchange.services._2006.types.AlternateIdType;
+import com.microsoft.schemas.exchange.services._2006.types.BaseFolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.BodyType;
+import com.microsoft.schemas.exchange.services._2006.types.BodyTypeType;
+import com.microsoft.schemas.exchange.services._2006.types.ConstantValueType;
+import com.microsoft.schemas.exchange.services._2006.types.ContactItemType;
+import com.microsoft.schemas.exchange.services._2006.types.DefaultShapeNamesType;
+import com.microsoft.schemas.exchange.services._2006.types.DictionaryURIType;
+import com.microsoft.schemas.exchange.services._2006.types.DistinguishedFolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.DistinguishedPropertySetType;
+import com.microsoft.schemas.exchange.services._2006.types.EmailAddressDictionaryEntryType;
+import com.microsoft.schemas.exchange.services._2006.types.ExchangeVersionType;
+import com.microsoft.schemas.exchange.services._2006.types.ExtendedPropertyType;
+import com.microsoft.schemas.exchange.services._2006.types.FieldURIOrConstantType;
+import com.microsoft.schemas.exchange.services._2006.types.FolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.IdFormatType;
+import com.microsoft.schemas.exchange.services._2006.types.IsEqualToType;
+import com.microsoft.schemas.exchange.services._2006.types.ItemQueryTraversalType;
+import com.microsoft.schemas.exchange.services._2006.types.ItemResponseShapeType;
+import com.microsoft.schemas.exchange.services._2006.types.ItemType;
+import com.microsoft.schemas.exchange.services._2006.types.MapiPropertyTypeType;
+import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfAllItemsType;
+import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfAlternateIdsType;
+import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfBaseFolderIdsType;
+import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfPropertyValuesType;
+import com.microsoft.schemas.exchange.services._2006.types.PathToExtendedFieldType;
+import com.microsoft.schemas.exchange.services._2006.types.PathToIndexedFieldType;
+import com.microsoft.schemas.exchange.services._2006.types.RequestServerVersion;
+import com.microsoft.schemas.exchange.services._2006.types.ResponseClassType;
+import com.microsoft.schemas.exchange.services._2006.types.RestrictionType;
+import com.microsoft.schemas.exchange.services._2006.types.ServerVersionInfo;
+import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
+import com.novell.ldap.util.Base64;
 
 import edu.yale.its.tp.email.conversion.Report;
 import edu.yale.its.tp.email.conversion.User;
@@ -46,9 +88,40 @@ public class ContactUtil {
     public static final int PID_LID_DISTRIBUTION_LIST_NAME = 0x8053;
     public static final int PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS = 0X8054;
     public static final int PID_LID_DISTRIBUTION_LIST_MEMBERS = 0x8055;
-    public static final String WRAPPED_ENTRYID_FLAGS = "00000000";
+    public static final String ENTRYID_FLAGS = "00000000";
+    public static final String WRAPPED_ENTRYID_PAD = "00000000";
     public static final String WRAPPED_ENTRYID_PROVIDER_UID = "C091ADD3519DCF11A4A900AA0047FAA4";
     public static final String WRAPPED_ENTRYID_TYPE_CONTACT_ENTRYID = "C3";
+    public static final String ONEOFF_ENTRYID_PROVIDER_UID = "812B1FA4BEA310199D6E00DD010F5402";
+    public static final String ONEOFF_ENTRYID_VERSION = "0000";
+    public static final String ONEOFF_ENTRYID_FLAGS = "0190";
+    public static final String ONEOFF_ENTRYID_PAD = "0000";
+    public static final PathToExtendedFieldType ptefDisplayName = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefDistributionListName = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefFileUnder = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefMembers = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefOneOffMembers = new PathToExtendedFieldType();
+    
+    static {
+        ptefDisplayName.setPropertyTag("0x3001");
+        ptefDisplayName.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefDistributionListName.setPropertyId(PID_LID_DISTRIBUTION_LIST_NAME);
+        ptefDistributionListName.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefDistributionListName.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefFileUnder.setPropertyId(PID_LID_FILE_UNDER);
+        ptefFileUnder.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefFileUnder.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefMembers.setPropertyId(PID_LID_DISTRIBUTION_LIST_MEMBERS);
+        ptefMembers.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
+        
+        ptefOneOffMembers.setPropertyId(PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS);
+        ptefOneOffMembers.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefOneOffMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
+    }
 
     public static List<ItemType> createContact(User user, ContactItemType contact, BaseFolderIdType contactsFolderId) {
         CreateItemType creator = getCreator(contactsFolderId);
@@ -67,19 +140,18 @@ public class ContactUtil {
     private static CreateItemType getCreator(BaseFolderIdType contactsFolderId) {
         CreateItemType creator = new CreateItemType();
         creator.setSavedItemFolderId(new TargetFolderIdType());
+        creator.setItems(new NonEmptyArrayOfAllItemsType());
+
         if (contactsFolderId instanceof DistinguishedFolderIdType) {
             creator.getSavedItemFolderId().setDistinguishedFolderId((DistinguishedFolderIdType) contactsFolderId);
         } else {
             creator.getSavedItemFolderId().setFolderId((FolderIdType) contactsFolderId);
         }
 
-        creator.setItems(new NonEmptyArrayOfAllItemsType());
-
         return creator;
     }
 
     public static ContactItemType getContact(User user, String emailAddress, BaseFolderIdType contactsFolderId) {
-        logger.debug("emailAddress is " + emailAddress);
         ContactItemType contact = null;
 
         // Form the FindItem request.
@@ -124,7 +196,7 @@ public class ContactUtil {
         restriction.setSearchExpression(typesObjectFactory.createIsEqualTo(equalsExpression));
 
         // Add the restriction to the request.
-        finder.setRestriction(restriction);
+        // finder.setRestriction(restriction);
 
         // define response Objects and their holders
         FindItemResponseType findItemResponse = new FindItemResponseType();
@@ -158,10 +230,8 @@ public class ContactUtil {
                         if (item instanceof ContactItemType) {
                             ContactItemType cTmp = (ContactItemType) item;
                             for (EmailAddressDictionaryEntryType e : cTmp.getEmailAddresses().getEntry()) {
-                                // logger.debug("Found " + e.getValue());
-                                if (e.getValue() == emailAddress) {
+                                if (e.getValue().equalsIgnoreCase(emailAddress)) {
                                     contact = (ContactItemType) item;
-                                    logger.debug(String.format("Found contact %s", contact.getDisplayName()));
                                     break;
                                 }
                             }
@@ -182,18 +252,189 @@ public class ContactUtil {
         return contact;
     }
 
-    public static List<ItemType> createDistributionList(User user, ItemType distributionList, ContactsFolderType contactsFolder) {
-        CreateItemType creator = new CreateItemType();
-        creator.setSavedItemFolderId(new TargetFolderIdType());
-        creator.getSavedItemFolderId().setFolderId(contactsFolder.getFolderId());
+    public static ItemType createDistributionList(User user, String dlName, List<ContactItemType> members, BaseFolderIdType contactsFolderId) {
+        ItemType list = new ItemType();
+        
+        list.setItemClass("IPM.DistList");
+        list.setSubject(dlName);
+        list.setBody(new BodyType());
+        list.getBody().setValue("");
+        list.getBody().setBodyType(BodyTypeType.TEXT);
+        
+        NonEmptyArrayOfPropertyValuesType wrappedEntryIds = new NonEmptyArrayOfPropertyValuesType();
+        // NonEmptyArrayOfPropertyValuesType oneOffEntryIds = new NonEmptyArrayOfPropertyValuesType();
+        
+        for (ContactItemType member : members) {
+            String entryId = createWrappedEntryId(user, member);
+            logger.info(String.format("ADD: [ %-16s ] to group [ %s ]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
+            wrappedEntryIds.getValue().add(entryId);
+            
+            /*
+            String oneoffEntryId = createOneOffMemberEntryId(member);
+            oneOffEntryIds.getValue().add(oneoffEntryId);
+            wrappedEntryIds.getValue().add(oneoffEntryId);
+            */
+        }
+        
+        List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
+        
+        ExtendedPropertyType displayName = new ExtendedPropertyType();
+        displayName.setExtendedFieldURI(ptefDisplayName);
+        displayName.setValue(dlName);
+        props.add(displayName);
+        
+        ExtendedPropertyType distributionListName = new ExtendedPropertyType();
+        distributionListName.setExtendedFieldURI(ptefDistributionListName);
+        distributionListName.setValue(dlName);
+        props.add(distributionListName);
+        
+        ExtendedPropertyType fileUnder = new ExtendedPropertyType();
+        fileUnder.setExtendedFieldURI(ptefFileUnder);
+        fileUnder.setValue(dlName);
+        props.add(fileUnder);
+        
+        ExtendedPropertyType dlMembers = new ExtendedPropertyType();
+        dlMembers.setExtendedFieldURI(ptefMembers);
+        dlMembers.setValues(wrappedEntryIds);
+        props.add(dlMembers);
+        
+        /*
+        ExtendedPropertyType dlOneOffMembers = new ExtendedPropertyType();
+        dlOneOffMembers.setExtendedFieldURI(ptefOneOffMembers);
+        dlOneOffMembers.setValues(oneOffEntryIds);
+        props.add(dlOneOffMembers);
+        */
+        
+        list.getExtendedProperty().addAll(props);
+        
+        CreateItemType creator = getCreator(contactsFolderId);
+        creator.getItems().getItemOrMessageOrCalendarItem().add(list);
 
-        creator.setItems(new NonEmptyArrayOfAllItemsType());
-
-        creator.getItems().getItemOrMessageOrCalendarItem().add(distributionList);
-
-        return getResponse(user, creator);
+        return getResponse(user, creator).get(0);
+    }
+    
+    private static String createWrappedEntryId(User user, ItemType entry) {
+        String retval = "";
+        String wrappedEntryIDPreamble = 
+            ContactUtil.ENTRYID_FLAGS + 
+            ContactUtil.WRAPPED_ENTRYID_PROVIDER_UID + 
+            ContactUtil.WRAPPED_ENTRYID_TYPE_CONTACT_ENTRYID;
+        
+        ConvertIdType convertReq = new ConvertIdType();
+        convertReq.setDestinationFormat(IdFormatType.HEX_ENTRY_ID);
+        convertReq.setSourceIds(new NonEmptyArrayOfAlternateIdsType());
+        
+        AlternateIdType altId = new AlternateIdType();
+        altId.setFormat(IdFormatType.ENTRY_ID);
+        altId.setId(entry.getItemId().getId());
+        altId.setMailbox(user.getPrimarySMTPAddress());
+        
+        convertReq.getSourceIds().getAlternateIdOrAlternatePublicFolderIdOrAlternatePublicFolderItemId().add(altId);
+        
+        try {
+            ConvertIdResponseType convertIdResponse = new ConvertIdResponseType();
+            Holder<ConvertIdResponseType> responseHolder = new Holder<ConvertIdResponseType>(convertIdResponse);
+            
+            ServerVersionInfo serverVersion = new ServerVersionInfo();
+            Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
+            
+            RequestServerVersion requestVersion = new RequestServerVersion();
+            requestVersion.setVersion(ExchangeVersionType.EXCHANGE_2007_SP_1);
+            
+            ExchangeServicePortType proxy = null;
+            List<JAXBElement<? extends ResponseMessageType>> responses = null;
+            try {
+                user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+                proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
+                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+                user.getConversion().getReport().start(Report.EXCHANGE_MIME);
+                proxy.convertId(convertReq, requestVersion, responseHolder, serverVersionHolder);
+                // proxy.convertId(convertReq, responseHolder, serverVersionHolder);
+                responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
+                user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
+                for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
+                    ResponseMessageType response = jaxResponse.getValue();
+                    if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
+                        try {
+                            logger.warn("ConvertId Response Error [" + response.getMessageText() + "]");
+                            user.getConversion().warnings++;
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                            logger.warn("ConvertId In Exchange Response Error - unable to determine source message.");
+                            user.getConversion().warnings++;
+                        }
+                    } else if (response.getResponseClass().equals(ResponseClassType.WARNING)) {
+                        logger.warn("ConvertId In Exchange Response Warning: " + response.getMessageText());
+                        user.getConversion().warnings++;
+                    } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
+                        ConvertIdResponseMessageType cirmt = (ConvertIdResponseMessageType) response;
+                        AlternateIdType myId = (AlternateIdType) cirmt.getAlternateId();
+                        if (myId != null) {
+                            //logger.debug(((ContactItemType)entry).getDisplayName() + " = " + myId.getId());
+                            //logger.debug(myId.getId().substring(44));
+                            //logger.debug(myId.getId().substring(44).length());
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(wrappedEntryIDPreamble);
+                            //sb.append(WRAPPED_ENTRYID_PAD);
+                            //sb.append(myId.getId().substring(14, 84));
+                            sb.append(myId.getId().substring(44));
+                            //sb.append(myId.getId().substring(100, myId.getId().length() - 196));
+                            //sb.append(myId.getId().substring(100));
+                            //logger.debug("WrappedEntryId:  " + sb.toString());
+                            retval = sb.toString();
+                        }
+                    }
+                } 
+            } catch (Exception e) {
+                logger.warn(e.getMessage());
+                //throw new RuntimeException("Exception calling ConvertId on Exchange Server: " + e.getMessage(), e);
+            } finally {
+                if (user.getConversion().getReport().isStarted(Report.EXCHANGE_MIME))
+                    user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
+                if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+            }
+        } catch (Exception e) {
+            logger.warn("Could not create WrappedEntryId: " + e.getMessage());
+        }
+        
+        return Base64.encode(hexStringToByteArray(retval));
     }
 
+    
+    private static String createOneOffMemberEntryId(ContactItemType entry) {
+        StringBuilder sb = new StringBuilder();
+        
+        String emailAddress = entry.getEmailAddresses().getEntry().get(0).getValue();
+        String first = entry.getDisplayName();
+        String middle = "SMTP";
+        String last = emailAddress;
+        
+        sb.append(ENTRYID_FLAGS);
+        sb.append(ONEOFF_ENTRYID_PROVIDER_UID);
+        sb.append(ONEOFF_ENTRYID_VERSION);
+        sb.append(ONEOFF_ENTRYID_FLAGS);
+        sb.append(convertToHexString(first));
+        sb.append(ONEOFF_ENTRYID_PAD);
+        sb.append(convertToHexString(middle));
+        sb.append(ONEOFF_ENTRYID_PAD);
+        sb.append(convertToHexString(last));
+        sb.append(ONEOFF_ENTRYID_PAD);
+        
+        //logger.debug(sb.toString());
+        return Base64.encode(hexStringToByteArray(sb.toString()));
+    }
+    
+    
+    private static String convertToHexString(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            sb.append(Integer.toHexString(c));
+            sb.append("00");
+        }
+        return sb.toString();
+    }
+    
     public static List<ItemType> getResponse(User user, CreateItemType creator) {
         List<ItemType> items = new ArrayList<ItemType>();
         // define response Objects and their holders
@@ -246,5 +487,16 @@ public class ContactUtil {
         }
 
         return items;
+    }
+    
+    private static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte [len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte)(
+                    (Character.digit(s.charAt(i), 16) << 4) + 
+                     Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 }
