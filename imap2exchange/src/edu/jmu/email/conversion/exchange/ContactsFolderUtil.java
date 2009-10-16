@@ -57,6 +57,8 @@ public class ContactsFolderUtil {
     private static final Log logger = LogFactory.getLog(ContactsFolderUtil.class);
 
     public static boolean folderExists(User user, String folderName) {
+        folderName = sanitizeString(folderName);
+
         DistinguishedFolderIdType contacts = new DistinguishedFolderIdType();
         contacts.setId(DistinguishedFolderIdNameType.CONTACTS);
         return folderExists(user, folderName, contacts);
@@ -64,6 +66,7 @@ public class ContactsFolderUtil {
 
     public static boolean folderExists(User user, String folderName, BaseFolderIdType parentFolderId) {
         boolean exists = false;
+        folderName = sanitizeString(folderName);
         if (getFolder(user, folderName, parentFolderId) != null) {
             exists = true;
         }
@@ -79,6 +82,8 @@ public class ContactsFolderUtil {
 
     public static FolderIdType getFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
         ContactsFolderType folder = null;
+        folderName = sanitizeString(folderName);
+
 
         List<BaseFolderType> childFolders = FolderUtil.getChildFolders(user, parentFolderId);
         for (BaseFolderType bFolder : childFolders) {
@@ -95,6 +100,8 @@ public class ContactsFolderUtil {
     }
 
     public static ContactsFolderType createFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
+        folderName = sanitizeString(folderName);
+
         List<String> folderNames = new ArrayList<String>();
         folderNames.add(folderName);
         List<ContactsFolderType> folders = createFolders(user, folderNames, parentFolderId);
@@ -113,6 +120,8 @@ public class ContactsFolderUtil {
         NonEmptyArrayOfFoldersType folderArray = new NonEmptyArrayOfFoldersType();
         List<BaseFolderType> folders = folderArray.getFolderOrCalendarFolderOrContactsFolder();
         for (String folderName : folderNames) {
+            folderName = sanitizeString(folderName);
+
             BaseFolderType folder = new ContactsFolderType();
             folder.setDisplayName(folderName);
             // folder.setFolderClass(EXCHANGE_MAIL_FOLDER_CLASS);
@@ -174,5 +183,9 @@ public class ContactsFolderUtil {
         }
 
         return returnList;
+    }
+    
+    private static String sanitizeString(String s) {
+        return s.trim();
     }
 }

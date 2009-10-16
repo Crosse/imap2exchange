@@ -153,6 +153,7 @@ public class ContactUtil {
 
     public static ContactItemType getContact(User user, String emailAddress, BaseFolderIdType contactsFolderId) {
         ContactItemType contact = null;
+        emailAddress = sanitizeString(emailAddress);
 
         // Form the FindItem request.
         FindItemType finder = new FindItemType();
@@ -253,6 +254,8 @@ public class ContactUtil {
     }
 
     public static ItemType createDistributionList(User user, String dlName, List<ContactItemType> members, BaseFolderIdType contactsFolderId) {
+        dlName = sanitizeString(dlName);
+        
         ItemType list = new ItemType();
         
         list.setItemClass("IPM.DistList");
@@ -370,17 +373,9 @@ public class ContactUtil {
                         ConvertIdResponseMessageType cirmt = (ConvertIdResponseMessageType) response;
                         AlternateIdType myId = (AlternateIdType) cirmt.getAlternateId();
                         if (myId != null) {
-                            //logger.debug(((ContactItemType)entry).getDisplayName() + " = " + myId.getId());
-                            //logger.debug(myId.getId().substring(44));
-                            //logger.debug(myId.getId().substring(44).length());
                             StringBuilder sb = new StringBuilder();
                             sb.append(wrappedEntryIDPreamble);
-                            //sb.append(WRAPPED_ENTRYID_PAD);
-                            //sb.append(myId.getId().substring(14, 84));
                             sb.append(myId.getId().substring(44));
-                            //sb.append(myId.getId().substring(100, myId.getId().length() - 196));
-                            //sb.append(myId.getId().substring(100));
-                            //logger.debug("WrappedEntryId:  " + sb.toString());
                             retval = sb.toString();
                         }
                     }
@@ -405,8 +400,8 @@ public class ContactUtil {
     private static String createOneOffMemberEntryId(ContactItemType entry) {
         StringBuilder sb = new StringBuilder();
         
-        String emailAddress = entry.getEmailAddresses().getEntry().get(0).getValue();
-        String first = entry.getDisplayName();
+        String emailAddress = sanitizeString(entry.getEmailAddresses().getEntry().get(0).getValue());
+        String first = sanitizeString(entry.getDisplayName());
         String middle = "SMTP";
         String last = emailAddress;
         
@@ -499,4 +494,9 @@ public class ContactUtil {
         }
         return data;
     }
+    
+    private static String sanitizeString(String s) {
+        return s.trim();
+    }
+
 }

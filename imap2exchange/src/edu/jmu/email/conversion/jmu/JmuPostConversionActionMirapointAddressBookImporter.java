@@ -149,6 +149,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             e.printStackTrace();
         } finally {
             try {
+                br.close();
                 response.close();
             } catch (IOException e) {
             }
@@ -203,6 +204,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             }
         } catch (IOException e) {
             throw new RuntimeException("Could not log in to mail store", e);
+        } finally {
+            try {
+                rd.close();
+                response.close();
+            } catch (Exception e) { }
         }
 
         return sid;
@@ -282,8 +288,8 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-//            throw new RuntimeException("Error importing Address Book");
+            logger.warn("Could not import user's address book");
+            user.getConversion().warnings++;
         }
 
     }
@@ -295,6 +301,8 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         for (LDAPEntry group : groups) {
             String cn = getEntryAttribute(group, "cn");
             List<ContactItemType> members = new ArrayList<ContactItemType>();
+            
+            logger.info(String.format("DL CREATE: [ %s ]", cn));
             
             for (String member : group.getAttribute("member").getStringValueArray()) {
                 int mailTag = member.indexOf(tag);
@@ -317,9 +325,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             
             ItemType dl = ContactUtil.createDistributionList(user, cn, members, contactsFolderId);
             if (dl != null) { 
-                logger.info(String.format("DL CREATE: [ %s ]", cn));
+                logger.info("DL CREATE: success");
             } else {
-                logger.warn("Could not create distribution list " + cn);
+                logger.warn("DL ERROR:  could not create distribution list " + cn);
+                user.getConversion().warnings++;
             }
             
         }
@@ -348,7 +357,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Short-circuit really quickly: do a search for the FileAs field
         // to check if the contact already exists. If so, just return that.
         if (ContactUtil.getContact(user, email, contactsFolderId) != null) {
-            logger.info(String.format("%-6s CONTACT: [ %16s already exists ]", "SKIP", email));
+            logger.info(String.format("%-6s CONTACT: [ %16s ]: already exists", "SKIP", email));
             success = true;
             return success;
         }
@@ -460,7 +469,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
     protected String getEntryAttribute(LDAPEntry entry, String attribute) {
         if (entry.getAttribute(attribute) != null) {
-            return entry.getAttribute(attribute).getStringValue();
+            return entry.getAttribute(attribute).getStringValue().trim();
         } else {
             return "";
         }
