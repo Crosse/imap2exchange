@@ -84,10 +84,16 @@ import edu.yale.its.tp.email.conversion.exchange.ExchangeServerPortFactory;
 public class ContactUtil {
     private static final Log logger = LogFactory.getLog(ContactUtil.class);
     public static final com.microsoft.schemas.exchange.services._2006.types.ObjectFactory typesObjectFactory = new com.microsoft.schemas.exchange.services._2006.types.ObjectFactory();
+
     public static final int PID_LID_FILE_UNDER = 0x8005;
     public static final int PID_LID_DISTRIBUTION_LIST_NAME = 0x8053;
     public static final int PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS = 0X8054;
     public static final int PID_LID_DISTRIBUTION_LIST_MEMBERS = 0x8055;
+    public static final int PID_LID_EMAIL1_DISPLAY_NAME = 0x8080;
+    public static final int PID_LID_EMAIL1_ADDRESS_TYPE = 0x8082;
+    public static final int PID_LID_EMAIL1_EMAIL_ADDRESS = 0x8083;
+    public static final int PID_LID_EMAIL1_ORIGINAL_DISPLAY_NAME = 0x8084;
+    public static final int PID_LID_EMAIL1_ORIGINAL_ENTRY_ID = 0x8085;
     public static final String ENTRYID_FLAGS = "00000000";
     public static final String WRAPPED_ENTRYID_PAD = "00000000";
     public static final String WRAPPED_ENTRYID_PROVIDER_UID = "C091ADD3519DCF11A4A900AA0047FAA4";
@@ -96,13 +102,38 @@ public class ContactUtil {
     public static final String ONEOFF_ENTRYID_VERSION = "0000";
     public static final String ONEOFF_ENTRYID_FLAGS = "0190";
     public static final String ONEOFF_ENTRYID_PAD = "0000";
+    public static final PathToExtendedFieldType ptefEmail1DisplayName = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefEmail1AddressType = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefEmail1EmailAddress = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefEmail1OriginalDisplayName = new PathToExtendedFieldType();
+    public static final PathToExtendedFieldType ptefEmail1OriginalEntryID = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefDisplayName = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefDistributionListName = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefFileUnder = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefMembers = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefOneOffMembers = new PathToExtendedFieldType();
-    
+
     static {
+        ptefEmail1DisplayName.setPropertyId(PID_LID_EMAIL1_DISPLAY_NAME);
+        ptefEmail1DisplayName.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefEmail1DisplayName.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefEmail1AddressType.setPropertyId(PID_LID_EMAIL1_ADDRESS_TYPE);
+        ptefEmail1AddressType.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefEmail1AddressType.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefEmail1EmailAddress.setPropertyId(PID_LID_EMAIL1_EMAIL_ADDRESS);
+        ptefEmail1EmailAddress.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefEmail1EmailAddress.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefEmail1OriginalDisplayName.setPropertyId(PID_LID_EMAIL1_ORIGINAL_DISPLAY_NAME);
+        ptefEmail1OriginalDisplayName.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefEmail1OriginalDisplayName.setPropertyType(MapiPropertyTypeType.STRING);
+        
+        ptefEmail1OriginalEntryID.setPropertyId(PID_LID_EMAIL1_ORIGINAL_ENTRY_ID);
+        ptefEmail1OriginalEntryID.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
+        ptefEmail1OriginalEntryID.setPropertyType(MapiPropertyTypeType.BINARY);
+        
         ptefDisplayName.setPropertyTag("0x3001");
         ptefDisplayName.setPropertyType(MapiPropertyTypeType.STRING);
         
@@ -316,7 +347,7 @@ public class ContactUtil {
         return getResponse(user, creator).get(0);
     }
     
-    private static String createWrappedEntryId(User user, ItemType entry) {
+    public static String createWrappedEntryId(User user, ItemType entry) {
         String retval = "";
         String wrappedEntryIDPreamble = 
             ContactUtil.ENTRYID_FLAGS + 
@@ -397,11 +428,11 @@ public class ContactUtil {
     }
 
     
-    private static String createOneOffMemberEntryId(ContactItemType entry) {
+    public static String createOneOffEntryId(String displayName, String emailAddress) {
         StringBuilder sb = new StringBuilder();
         
-        String emailAddress = sanitizeString(entry.getEmailAddresses().getEntry().get(0).getValue());
-        String first = sanitizeString(entry.getDisplayName());
+        emailAddress = sanitizeString(emailAddress);
+        String first = sanitizeString(displayName);
         String middle = "SMTP";
         String last = emailAddress;
         
@@ -418,6 +449,12 @@ public class ContactUtil {
         
         //logger.debug(sb.toString());
         return Base64.encode(hexStringToByteArray(sb.toString()));
+    }
+    public static String createOneOffEntryId(ContactItemType entry) {
+        String emailAddress = sanitizeString(entry.getEmailAddresses().getEntry().get(0).getValue());
+        String displayName = sanitizeString(entry.getDisplayName());
+        
+        return createOneOffEntryId(displayName, emailAddress);
     }
     
     
