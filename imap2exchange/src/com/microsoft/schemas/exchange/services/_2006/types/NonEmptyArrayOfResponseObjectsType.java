@@ -45,15 +45,15 @@ import javax.xml.bind.annotation.XmlType;
 public class NonEmptyArrayOfResponseObjectsType {
 
     @XmlElements({
-        @XmlElement(name = "DeclineItem", type = DeclineItemType.class),
-        @XmlElement(name = "TentativelyAcceptItem", type = TentativelyAcceptItemType.class),
         @XmlElement(name = "PostReplyItem", type = PostReplyItemType.class),
-        @XmlElement(name = "SuppressReadReceipt", type = SuppressReadReceiptType.class),
-        @XmlElement(name = "AcceptItem", type = AcceptItemType.class),
         @XmlElement(name = "ReplyAllToItem", type = ReplyAllToItemType.class),
-        @XmlElement(name = "CancelCalendarItem", type = CancelCalendarItemType.class),
+        @XmlElement(name = "DeclineItem", type = DeclineItemType.class),
         @XmlElement(name = "ForwardItem", type = ForwardItemType.class),
+        @XmlElement(name = "SuppressReadReceipt", type = SuppressReadReceiptType.class),
         @XmlElement(name = "RemoveItem", type = RemoveItemType.class),
+        @XmlElement(name = "TentativelyAcceptItem", type = TentativelyAcceptItemType.class),
+        @XmlElement(name = "AcceptItem", type = AcceptItemType.class),
+        @XmlElement(name = "CancelCalendarItem", type = CancelCalendarItemType.class),
         @XmlElement(name = "ReplyToItem", type = ReplyToItemType.class)
     })
     protected List<ResponseObjectType> acceptItemOrTentativelyAcceptItemOrDeclineItem;
@@ -76,15 +76,15 @@ public class NonEmptyArrayOfResponseObjectsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DeclineItemType }
-     * {@link TentativelyAcceptItemType }
      * {@link PostReplyItemType }
-     * {@link SuppressReadReceiptType }
-     * {@link AcceptItemType }
      * {@link ReplyAllToItemType }
-     * {@link CancelCalendarItemType }
+     * {@link DeclineItemType }
      * {@link ForwardItemType }
+     * {@link SuppressReadReceiptType }
      * {@link RemoveItemType }
+     * {@link TentativelyAcceptItemType }
+     * {@link AcceptItemType }
+     * {@link CancelCalendarItemType }
      * {@link ReplyToItemType }
      * 
      * 

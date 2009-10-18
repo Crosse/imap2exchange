@@ -64,34 +64,34 @@ import javax.xml.bind.annotation.XmlType;
 public class ArrayOfResponseMessagesType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "FindItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "DeleteFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
         @XmlElementRef(name = "CreateItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "UnsubscribeResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "MoveItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "CreateAttachmentResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "SyncFolderItemsResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "GetFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
         @XmlElementRef(name = "SubscribeResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
         @XmlElementRef(name = "GetItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "SendItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "CopyItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "DeleteAttachmentResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "SendNotificationResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "FindFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "ResolveNamesResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "GetAttachmentResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "GetEventsResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "ExpandDLResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "GetFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "SyncFolderHierarchyResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "UpdateItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "UpdateFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "CopyFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "ConvertIdResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "DeleteItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "CreateManagedFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
         @XmlElementRef(name = "MoveFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
-        @XmlElementRef(name = "CreateFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class)
+        @XmlElementRef(name = "CopyItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "MoveItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "CreateFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "UpdateItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "ResolveNamesResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "CreateManagedFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "DeleteAttachmentResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "DeleteFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "GetAttachmentResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "ConvertIdResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "FindItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "SendItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "SyncFolderHierarchyResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "DeleteItemResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "FindFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "UpdateFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "ExpandDLResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "SyncFolderItemsResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "SendNotificationResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "GetEventsResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "CreateAttachmentResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "CopyFolderResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class),
+        @XmlElementRef(name = "UnsubscribeResponseMessage", namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", type = JAXBElement.class)
     })
     protected List<JAXBElement<? extends ResponseMessageType>> createItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage;
 
@@ -113,33 +113,33 @@ public class ArrayOfResponseMessagesType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link FindItemResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link ItemInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ItemInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link AttachmentInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SyncFolderItemsResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link SubscribeResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link ItemInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link ItemInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link DeleteAttachmentResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SendNotificationResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link FindFolderResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ResolveNamesResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link AttachmentInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link GetEventsResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ExpandDLResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ItemInfoResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link UpdateItemResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ResolveNamesResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ConvertIdResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link DeleteAttachmentResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link AttachmentInfoResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ConvertIdResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link FindItemResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link FindFolderResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
-     * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ExpandDLResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SyncFolderItemsResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SendNotificationResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link GetEventsResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link AttachmentInfoResponseMessageType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}
      * {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}
      * 
      * 

@@ -57,6 +57,7 @@ public class ObjectFactory {
     private final static QName _IsGreaterThan_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "IsGreaterThan");
     private final static QName _Mailbox_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "Mailbox");
     private final static QName _MailboxCulture_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "MailboxCulture");
+    private final static QName _TimeZoneContext_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "TimeZoneContext");
     private final static QName _ExchangeImpersonation_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "ExchangeImpersonation");
     private final static QName _SyncFolderItemsChangesTypeDelete_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "Delete");
     private final static QName _SyncFolderItemsChangesTypeReadFlagChange_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/types", "ReadFlagChange");
@@ -78,267 +79,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeleteFolderFieldType }
+     * Create an instance of {@link ContactsFolderType }
      * 
      */
-    public DeleteFolderFieldType createDeleteFolderFieldType() {
-        return new DeleteFolderFieldType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfPropertyValuesType }
-     * 
-     */
-    public NonEmptyArrayOfPropertyValuesType createNonEmptyArrayOfPropertyValuesType() {
-        return new NonEmptyArrayOfPropertyValuesType();
-    }
-
-    /**
-     * Create an instance of {@link SmartResponseType }
-     * 
-     */
-    public SmartResponseType createSmartResponseType() {
-        return new SmartResponseType();
-    }
-
-    /**
-     * Create an instance of {@link TasksFolderType }
-     * 
-     */
-    public TasksFolderType createTasksFolderType() {
-        return new TasksFolderType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfFolderNamesType }
-     * 
-     */
-    public NonEmptyArrayOfFolderNamesType createNonEmptyArrayOfFolderNamesType() {
-        return new NonEmptyArrayOfFolderNamesType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfResolutionType }
-     * 
-     */
-    public ArrayOfResolutionType createArrayOfResolutionType() {
-        return new ArrayOfResolutionType();
-    }
-
-    /**
-     * Create an instance of {@link SingleRecipientType }
-     * 
-     */
-    public SingleRecipientType createSingleRecipientType() {
-        return new SingleRecipientType();
-    }
-
-    /**
-     * Create an instance of {@link CancelCalendarItemType }
-     * 
-     */
-    public CancelCalendarItemType createCancelCalendarItemType() {
-        return new CancelCalendarItemType();
-    }
-
-    /**
-     * Create an instance of {@link PathToUnindexedFieldType }
-     * 
-     */
-    public PathToUnindexedFieldType createPathToUnindexedFieldType() {
-        return new PathToUnindexedFieldType();
-    }
-
-    /**
-     * Create an instance of {@link CalendarViewType }
-     * 
-     */
-    public CalendarViewType createCalendarViewType() {
-        return new CalendarViewType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfBaseItemIdsType }
-     * 
-     */
-    public ArrayOfBaseItemIdsType createArrayOfBaseItemIdsType() {
-        return new ArrayOfBaseItemIdsType();
-    }
-
-    /**
-     * Create an instance of {@link AlternateIdType }
-     * 
-     */
-    public AlternateIdType createAlternateIdType() {
-        return new AlternateIdType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfFolderChangesType }
-     * 
-     */
-    public NonEmptyArrayOfFolderChangesType createNonEmptyArrayOfFolderChangesType() {
-        return new NonEmptyArrayOfFolderChangesType();
-    }
-
-    /**
-     * Create an instance of {@link GroupedItemsType }
-     * 
-     */
-    public GroupedItemsType createGroupedItemsType() {
-        return new GroupedItemsType();
-    }
-
-    /**
-     * Create an instance of {@link PhysicalAddressDictionaryType }
-     * 
-     */
-    public PhysicalAddressDictionaryType createPhysicalAddressDictionaryType() {
-        return new PhysicalAddressDictionaryType();
-    }
-
-    /**
-     * Create an instance of {@link CalendarFolderType }
-     * 
-     */
-    public CalendarFolderType createCalendarFolderType() {
-        return new CalendarFolderType();
-    }
-
-    /**
-     * Create an instance of {@link RootItemIdType }
-     * 
-     */
-    public RootItemIdType createRootItemIdType() {
-        return new RootItemIdType();
-    }
-
-    /**
-     * Create an instance of {@link IsNotEqualToType }
-     * 
-     */
-    public IsNotEqualToType createIsNotEqualToType() {
-        return new IsNotEqualToType();
-    }
-
-    /**
-     * Create an instance of {@link EffectiveRightsType }
-     * 
-     */
-    public EffectiveRightsType createEffectiveRightsType() {
-        return new EffectiveRightsType();
-    }
-
-    /**
-     * Create an instance of {@link MeetingResponseMessageType }
-     * 
-     */
-    public MeetingResponseMessageType createMeetingResponseMessageType() {
-        return new MeetingResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfRestrictedGroupIdentifiersType }
-     * 
-     */
-    public NonEmptyArrayOfRestrictedGroupIdentifiersType createNonEmptyArrayOfRestrictedGroupIdentifiersType() {
-        return new NonEmptyArrayOfRestrictedGroupIdentifiersType();
-    }
-
-    /**
-     * Create an instance of {@link SuppressReadReceiptType }
-     * 
-     */
-    public SuppressReadReceiptType createSuppressReadReceiptType() {
-        return new SuppressReadReceiptType();
-    }
-
-    /**
-     * Create an instance of {@link ContactItemType }
-     * 
-     */
-    public ContactItemType createContactItemType() {
-        return new ContactItemType();
-    }
-
-    /**
-     * Create an instance of {@link FolderIdType }
-     * 
-     */
-    public FolderIdType createFolderIdType() {
-        return new FolderIdType();
-    }
-
-    /**
-     * Create an instance of {@link TaskType }
-     * 
-     */
-    public TaskType createTaskType() {
-        return new TaskType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfItemChangesType }
-     * 
-     */
-    public NonEmptyArrayOfItemChangesType createNonEmptyArrayOfItemChangesType() {
-        return new NonEmptyArrayOfItemChangesType();
-    }
-
-    /**
-     * Create an instance of {@link ExistsType }
-     * 
-     */
-    public ExistsType createExistsType() {
-        return new ExistsType();
-    }
-
-    /**
-     * Create an instance of {@link EmailAddressType }
-     * 
-     */
-    public EmailAddressType createEmailAddressType() {
-        return new EmailAddressType();
-    }
-
-    /**
-     * Create an instance of {@link ForwardItemType }
-     * 
-     */
-    public ForwardItemType createForwardItemType() {
-        return new ForwardItemType();
-    }
-
-    /**
-     * Create an instance of {@link ExcludesType }
-     * 
-     */
-    public ExcludesType createExcludesType() {
-        return new ExcludesType();
-    }
-
-    /**
-     * Create an instance of {@link WellKnownResponseObjectType }
-     * 
-     */
-    public WellKnownResponseObjectType createWellKnownResponseObjectType() {
-        return new WellKnownResponseObjectType();
-    }
-
-    /**
-     * Create an instance of {@link IsGreaterThanType }
-     * 
-     */
-    public IsGreaterThanType createIsGreaterThanType() {
-        return new IsGreaterThanType();
-    }
-
-    /**
-     * Create an instance of {@link DailyRecurrencePatternType }
-     * 
-     */
-    public DailyRecurrencePatternType createDailyRecurrencePatternType() {
-        return new DailyRecurrencePatternType();
+    public ContactsFolderType createContactsFolderType() {
+        return new ContactsFolderType();
     }
 
     /**
@@ -350,1147 +95,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CalendarEventDetails }
-     * 
-     */
-    public CalendarEventDetails createCalendarEventDetails() {
-        return new CalendarEventDetails();
-    }
-
-    /**
-     * Create an instance of {@link SerializedSecurityContextType }
-     * 
-     */
-    public SerializedSecurityContextType createSerializedSecurityContextType() {
-        return new SerializedSecurityContextType();
-    }
-
-    /**
-     * Create an instance of {@link BaseNotificationEventType }
-     * 
-     */
-    public BaseNotificationEventType createBaseNotificationEventType() {
-        return new BaseNotificationEventType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfPermissionsType }
-     * 
-     */
-    public ArrayOfPermissionsType createArrayOfPermissionsType() {
-        return new ArrayOfPermissionsType();
-    }
-
-    /**
-     * Create an instance of {@link IsLessThanOrEqualToType }
-     * 
-     */
-    public IsLessThanOrEqualToType createIsLessThanOrEqualToType() {
-        return new IsLessThanOrEqualToType();
-    }
-
-    /**
-     * Create an instance of {@link ReplyToItemType }
-     * 
-     */
-    public ReplyToItemType createReplyToItemType() {
-        return new ReplyToItemType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfSuggestion }
-     * 
-     */
-    public ArrayOfSuggestion createArrayOfSuggestion() {
-        return new ArrayOfSuggestion();
-    }
-
-    /**
-     * Create an instance of {@link Duration }
-     * 
-     */
-    public Duration createDuration() {
-        return new Duration();
-    }
-
-    /**
-     * Create an instance of {@link ServerVersionInfo }
-     * 
-     */
-    public ServerVersionInfo createServerVersionInfo() {
-        return new ServerVersionInfo();
-    }
-
-    /**
-     * Create an instance of {@link IsGreaterThanOrEqualToType }
-     * 
-     */
-    public IsGreaterThanOrEqualToType createIsGreaterThanOrEqualToType() {
-        return new IsGreaterThanOrEqualToType();
-    }
-
-    /**
-     * Create an instance of {@link FreeBusyViewOptionsType }
-     * 
-     */
-    public FreeBusyViewOptionsType createFreeBusyViewOptionsType() {
-        return new FreeBusyViewOptionsType();
-    }
-
-    /**
-     * Create an instance of {@link ModifiedEventType }
-     * 
-     */
-    public ModifiedEventType createModifiedEventType() {
-        return new ModifiedEventType();
-    }
-
-    /**
-     * Create an instance of {@link PathToIndexedFieldType }
-     * 
-     */
-    public PathToIndexedFieldType createPathToIndexedFieldType() {
-        return new PathToIndexedFieldType();
-    }
-
-    /**
-     * Create an instance of {@link PhoneNumberDictionaryEntryType }
-     * 
-     */
-    public PhoneNumberDictionaryEntryType createPhoneNumberDictionaryEntryType() {
-        return new PhoneNumberDictionaryEntryType();
-    }
-
-    /**
-     * Create an instance of {@link SuggestionDayResult }
-     * 
-     */
-    public SuggestionDayResult createSuggestionDayResult() {
-        return new SuggestionDayResult();
-    }
-
-    /**
-     * Create an instance of {@link DeleteItemFieldType }
-     * 
-     */
-    public DeleteItemFieldType createDeleteItemFieldType() {
-        return new DeleteItemFieldType();
-    }
-
-    /**
-     * Create an instance of {@link ReplyBody }
-     * 
-     */
-    public ReplyBody createReplyBody() {
-        return new ReplyBody();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfOccurrenceInfoType }
-     * 
-     */
-    public NonEmptyArrayOfOccurrenceInfoType createNonEmptyArrayOfOccurrenceInfoType() {
-        return new NonEmptyArrayOfOccurrenceInfoType();
-    }
-
-    /**
-     * Create an instance of {@link ExchangeImpersonationType }
-     * 
-     */
-    public ExchangeImpersonationType createExchangeImpersonationType() {
-        return new ExchangeImpersonationType();
-    }
-
-    /**
-     * Create an instance of {@link FindFolderParentType }
-     * 
-     */
-    public FindFolderParentType createFindFolderParentType() {
-        return new FindFolderParentType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfAttachmentsType }
-     * 
-     */
-    public ArrayOfAttachmentsType createArrayOfAttachmentsType() {
-        return new ArrayOfAttachmentsType();
-    }
-
-    /**
-     * Create an instance of {@link IndexedPageViewType }
-     * 
-     */
-    public IndexedPageViewType createIndexedPageViewType() {
-        return new IndexedPageViewType();
-    }
-
-    /**
-     * Create an instance of {@link SetFolderFieldType }
-     * 
-     */
-    public SetFolderFieldType createSetFolderFieldType() {
-        return new SetFolderFieldType();
-    }
-
-    /**
-     * Create an instance of {@link DistributionListType }
-     * 
-     */
-    public DistributionListType createDistributionListType() {
-        return new DistributionListType();
-    }
-
-    /**
-     * Create an instance of {@link PermissionType }
-     * 
-     */
-    public PermissionType createPermissionType() {
-        return new PermissionType();
-    }
-
-    /**
-     * Create an instance of {@link PhysicalAddressDictionaryEntryType }
-     * 
-     */
-    public PhysicalAddressDictionaryEntryType createPhysicalAddressDictionaryEntryType() {
-        return new PhysicalAddressDictionaryEntryType();
-    }
-
-    /**
-     * Create an instance of {@link DistinguishedFolderIdType }
-     * 
-     */
-    public DistinguishedFolderIdType createDistinguishedFolderIdType() {
-        return new DistinguishedFolderIdType();
-    }
-
-    /**
-     * Create an instance of {@link RequestAttachmentIdType }
-     * 
-     */
-    public RequestAttachmentIdType createRequestAttachmentIdType() {
-        return new RequestAttachmentIdType();
-    }
-
-    /**
-     * Create an instance of {@link ItemChangeDescriptionType }
-     * 
-     */
-    public ItemChangeDescriptionType createItemChangeDescriptionType() {
-        return new ItemChangeDescriptionType();
-    }
-
-    /**
-     * Create an instance of {@link PullSubscriptionRequestType }
-     * 
-     */
-    public PullSubscriptionRequestType createPullSubscriptionRequestType() {
-        return new PullSubscriptionRequestType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfSuggestionDayResult }
-     * 
-     */
-    public ArrayOfSuggestionDayResult createArrayOfSuggestionDayResult() {
-        return new ArrayOfSuggestionDayResult();
-    }
-
-    /**
-     * Create an instance of {@link AggregateOnType }
-     * 
-     */
-    public AggregateOnType createAggregateOnType() {
-        return new AggregateOnType();
-    }
-
-    /**
-     * Create an instance of {@link BaseObjectChangedEventType }
-     * 
-     */
-    public BaseObjectChangedEventType createBaseObjectChangedEventType() {
-        return new BaseObjectChangedEventType();
-    }
-
-    /**
-     * Create an instance of {@link AndType }
-     * 
-     */
-    public AndType createAndType() {
-        return new AndType();
-    }
-
-    /**
-     * Create an instance of {@link RemoveItemType }
-     * 
-     */
-    public RemoveItemType createRemoveItemType() {
-        return new RemoveItemType();
-    }
-
-    /**
-     * Create an instance of {@link SerializableTimeZoneTime }
-     * 
-     */
-    public SerializableTimeZoneTime createSerializableTimeZoneTime() {
-        return new SerializableTimeZoneTime();
-    }
-
-    /**
-     * Create an instance of {@link SearchParametersType }
-     * 
-     */
-    public SearchParametersType createSearchParametersType() {
-        return new SearchParametersType();
-    }
-
-    /**
-     * Create an instance of {@link AppendToItemFieldType }
-     * 
-     */
-    public AppendToItemFieldType createAppendToItemFieldType() {
-        return new AppendToItemFieldType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderHierarchyDeleteType }
-     * 
-     */
-    public SyncFolderHierarchyDeleteType createSyncFolderHierarchyDeleteType() {
-        return new SyncFolderHierarchyDeleteType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfItemChangeDescriptionsType }
-     * 
-     */
-    public NonEmptyArrayOfItemChangeDescriptionsType createNonEmptyArrayOfItemChangeDescriptionsType() {
-        return new NonEmptyArrayOfItemChangeDescriptionsType();
-    }
-
-    /**
-     * Create an instance of {@link Suggestion }
-     * 
-     */
-    public Suggestion createSuggestion() {
-        return new Suggestion();
-    }
-
-    /**
-     * Create an instance of {@link EndDateRecurrenceRangeType }
-     * 
-     */
-    public EndDateRecurrenceRangeType createEndDateRecurrenceRangeType() {
-        return new EndDateRecurrenceRangeType();
-    }
-
-    /**
-     * Create an instance of {@link ProxySecurityContextType }
-     * 
-     */
-    public ProxySecurityContextType createProxySecurityContextType() {
-        return new ProxySecurityContextType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfAllItemsType }
-     * 
-     */
-    public NonEmptyArrayOfAllItemsType createNonEmptyArrayOfAllItemsType() {
-        return new NonEmptyArrayOfAllItemsType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderItemsReadFlagType }
-     * 
-     */
-    public SyncFolderItemsReadFlagType createSyncFolderItemsReadFlagType() {
-        return new SyncFolderItemsReadFlagType();
-    }
-
-    /**
-     * Create an instance of {@link UnknownAttendeeConflictData }
-     * 
-     */
-    public UnknownAttendeeConflictData createUnknownAttendeeConflictData() {
-        return new UnknownAttendeeConflictData();
-    }
-
-    /**
-     * Create an instance of {@link YearlyRegeneratingPatternType }
-     * 
-     */
-    public YearlyRegeneratingPatternType createYearlyRegeneratingPatternType() {
-        return new YearlyRegeneratingPatternType();
-    }
-
-    /**
-     * Create an instance of {@link EmailAddressDictionaryType }
-     * 
-     */
-    public EmailAddressDictionaryType createEmailAddressDictionaryType() {
-        return new EmailAddressDictionaryType();
-    }
-
-    /**
-     * Create an instance of {@link OrType }
-     * 
-     */
-    public OrType createOrType() {
-        return new OrType();
-    }
-
-    /**
-     * Create an instance of {@link AttachmentIdType }
-     * 
-     */
-    public AttachmentIdType createAttachmentIdType() {
-        return new AttachmentIdType();
-    }
-
-    /**
-     * Create an instance of {@link MailboxData }
-     * 
-     */
-    public MailboxData createMailboxData() {
-        return new MailboxData();
-    }
-
-    /**
-     * Create an instance of {@link FolderChangeType }
-     * 
-     */
-    public FolderChangeType createFolderChangeType() {
-        return new FolderChangeType();
-    }
-
-    /**
-     * Create an instance of {@link TargetFolderIdType }
-     * 
-     */
-    public TargetFolderIdType createTargetFolderIdType() {
-        return new TargetFolderIdType();
-    }
-
-    /**
-     * Create an instance of {@link AttachmentResponseShapeType }
-     * 
-     */
-    public AttachmentResponseShapeType createAttachmentResponseShapeType() {
-        return new AttachmentResponseShapeType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderItemsDeleteType }
-     * 
-     */
-    public SyncFolderItemsDeleteType createSyncFolderItemsDeleteType() {
-        return new SyncFolderItemsDeleteType();
-    }
-
-    /**
-     * Create an instance of {@link FindItemParentType }
-     * 
-     */
-    public FindItemParentType createFindItemParentType() {
-        return new FindItemParentType();
-    }
-
-    /**
-     * Create an instance of {@link CompleteNameType }
-     * 
-     */
-    public CompleteNameType createCompleteNameType() {
-        return new CompleteNameType();
-    }
-
-    /**
-     * Create an instance of {@link MovedCopiedEventType }
-     * 
-     */
-    public MovedCopiedEventType createMovedCopiedEventType() {
-        return new MovedCopiedEventType();
-    }
-
-    /**
-     * Create an instance of {@link TaskRecurrenceType }
-     * 
-     */
-    public TaskRecurrenceType createTaskRecurrenceType() {
-        return new TaskRecurrenceType();
-    }
-
-    /**
-     * Create an instance of {@link ItemResponseShapeType }
-     * 
-     */
-    public ItemResponseShapeType createItemResponseShapeType() {
-        return new ItemResponseShapeType();
-    }
-
-    /**
-     * Create an instance of {@link FractionalPageViewType }
-     * 
-     */
-    public FractionalPageViewType createFractionalPageViewType() {
-        return new FractionalPageViewType();
-    }
-
-    /**
-     * Create an instance of {@link NotType }
-     * 
-     */
-    public NotType createNotType() {
-        return new NotType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfCalendarPermissionsType }
-     * 
-     */
-    public ArrayOfCalendarPermissionsType createArrayOfCalendarPermissionsType() {
-        return new ArrayOfCalendarPermissionsType();
-    }
-
-    /**
-     * Create an instance of {@link MessageType }
-     * 
-     */
-    public MessageType createMessageType() {
-        return new MessageType();
-    }
-
-    /**
-     * Create an instance of {@link SearchFolderType }
-     * 
-     */
-    public SearchFolderType createSearchFolderType() {
-        return new SearchFolderType();
-    }
-
-    /**
-     * Create an instance of {@link SmartResponseBaseType }
-     * 
-     */
-    public SmartResponseBaseType createSmartResponseBaseType() {
-        return new SmartResponseBaseType();
-    }
-
-    /**
-     * Create an instance of {@link MeetingRequestMessageType }
-     * 
-     */
-    public MeetingRequestMessageType createMeetingRequestMessageType() {
-        return new MeetingRequestMessageType();
-    }
-
-    /**
-     * Create an instance of {@link ReplyAllToItemType }
-     * 
-     */
-    public ReplyAllToItemType createReplyAllToItemType() {
-        return new ReplyAllToItemType();
-    }
-
-    /**
-     * Create an instance of {@link FreeBusyView }
-     * 
-     */
-    public FreeBusyView createFreeBusyView() {
-        return new FreeBusyView();
-    }
-
-    /**
-     * Create an instance of {@link DistinguishedGroupByType }
-     * 
-     */
-    public DistinguishedGroupByType createDistinguishedGroupByType() {
-        return new DistinguishedGroupByType();
-    }
-
-    /**
-     * Create an instance of {@link Value }
-     * 
-     */
-    public Value createValue() {
-        return new Value();
-    }
-
-    /**
-     * Create an instance of {@link IsLessThanType }
-     * 
-     */
-    public IsLessThanType createIsLessThanType() {
-        return new IsLessThanType();
-    }
-
-    /**
-     * Create an instance of {@link FolderResponseShapeType }
-     * 
-     */
-    public FolderResponseShapeType createFolderResponseShapeType() {
-        return new FolderResponseShapeType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfMailboxData }
-     * 
-     */
-    public ArrayOfMailboxData createArrayOfMailboxData() {
-        return new ArrayOfMailboxData();
-    }
-
-    /**
-     * Create an instance of {@link WorkingHours }
-     * 
-     */
-    public WorkingHours createWorkingHours() {
-        return new WorkingHours();
-    }
-
-    /**
-     * Create an instance of {@link MeetingCancellationMessageType }
-     * 
-     */
-    public MeetingCancellationMessageType createMeetingCancellationMessageType() {
-        return new MeetingCancellationMessageType();
-    }
-
-    /**
-     * Create an instance of {@link PathToExtendedFieldType }
-     * 
-     */
-    public PathToExtendedFieldType createPathToExtendedFieldType() {
-        return new PathToExtendedFieldType();
-    }
-
-    /**
      * Create an instance of {@link ConnectingSIDType }
      * 
      */
     public ConnectingSIDType createConnectingSIDType() {
         return new ConnectingSIDType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfPathsToElementType }
-     * 
-     */
-    public NonEmptyArrayOfPathsToElementType createNonEmptyArrayOfPathsToElementType() {
-        return new NonEmptyArrayOfPathsToElementType();
-    }
-
-    /**
-     * Create an instance of {@link RelativeMonthlyRecurrencePatternType }
-     * 
-     */
-    public RelativeMonthlyRecurrencePatternType createRelativeMonthlyRecurrencePatternType() {
-        return new RelativeMonthlyRecurrencePatternType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfFoldersType }
-     * 
-     */
-    public NonEmptyArrayOfFoldersType createNonEmptyArrayOfFoldersType() {
-        return new NonEmptyArrayOfFoldersType();
-    }
-
-    /**
-     * Create an instance of {@link ExcludesValueType }
-     * 
-     */
-    public ExcludesValueType createExcludesValueType() {
-        return new ExcludesValueType();
-    }
-
-    /**
-     * Create an instance of {@link UserIdType }
-     * 
-     */
-    public UserIdType createUserIdType() {
-        return new UserIdType();
-    }
-
-    /**
-     * Create an instance of {@link RecurringMasterItemIdType }
-     * 
-     */
-    public RecurringMasterItemIdType createRecurringMasterItemIdType() {
-        return new RecurringMasterItemIdType();
-    }
-
-    /**
-     * Create an instance of {@link FolderChangeDescriptionType }
-     * 
-     */
-    public FolderChangeDescriptionType createFolderChangeDescriptionType() {
-        return new FolderChangeDescriptionType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfNotificationEventTypesType }
-     * 
-     */
-    public NonEmptyArrayOfNotificationEventTypesType createNonEmptyArrayOfNotificationEventTypesType() {
-        return new NonEmptyArrayOfNotificationEventTypesType();
-    }
-
-    /**
-     * Create an instance of {@link AlternatePublicFolderIdType }
-     * 
-     */
-    public AlternatePublicFolderIdType createAlternatePublicFolderIdType() {
-        return new AlternatePublicFolderIdType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfFolderChangeDescriptionsType }
-     * 
-     */
-    public NonEmptyArrayOfFolderChangeDescriptionsType createNonEmptyArrayOfFolderChangeDescriptionsType() {
-        return new NonEmptyArrayOfFolderChangeDescriptionsType();
-    }
-
-    /**
-     * Create an instance of {@link MimeContentType }
-     * 
-     */
-    public MimeContentType createMimeContentType() {
-        return new MimeContentType();
-    }
-
-    /**
-     * Create an instance of {@link ExtendedPropertyType }
-     * 
-     */
-    public ExtendedPropertyType createExtendedPropertyType() {
-        return new ExtendedPropertyType();
-    }
-
-    /**
-     * Create an instance of {@link FileAttachmentType }
-     * 
-     */
-    public FileAttachmentType createFileAttachmentType() {
-        return new FileAttachmentType();
-    }
-
-    /**
-     * Create an instance of {@link RestrictionType }
-     * 
-     */
-    public RestrictionType createRestrictionType() {
-        return new RestrictionType();
-    }
-
-    /**
-     * Create an instance of {@link NoEndRecurrenceRangeType }
-     * 
-     */
-    public NoEndRecurrenceRangeType createNoEndRecurrenceRangeType() {
-        return new NoEndRecurrenceRangeType();
-    }
-
-    /**
-     * Create an instance of {@link AttendeeType }
-     * 
-     */
-    public AttendeeType createAttendeeType() {
-        return new AttendeeType();
-    }
-
-    /**
-     * Create an instance of {@link AcceptItemType }
-     * 
-     */
-    public AcceptItemType createAcceptItemType() {
-        return new AcceptItemType();
-    }
-
-    /**
-     * Create an instance of {@link ConstantValueType }
-     * 
-     */
-    public ConstantValueType createConstantValueType() {
-        return new ConstantValueType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfDLExpansionType }
-     * 
-     */
-    public ArrayOfDLExpansionType createArrayOfDLExpansionType() {
-        return new ArrayOfDLExpansionType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfGroupedItemsType }
-     * 
-     */
-    public ArrayOfGroupedItemsType createArrayOfGroupedItemsType() {
-        return new ArrayOfGroupedItemsType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfUserIdType }
-     * 
-     */
-    public ArrayOfUserIdType createArrayOfUserIdType() {
-        return new ArrayOfUserIdType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfBaseItemIdsType }
-     * 
-     */
-    public NonEmptyArrayOfBaseItemIdsType createNonEmptyArrayOfBaseItemIdsType() {
-        return new NonEmptyArrayOfBaseItemIdsType();
-    }
-
-    /**
-     * Create an instance of {@link RequestServerVersion }
-     * 
-     */
-    public RequestServerVersion createRequestServerVersion() {
-        return new RequestServerVersion();
-    }
-
-    /**
-     * Create an instance of {@link ItemType }
-     * 
-     */
-    public ItemType createItemType() {
-        return new ItemType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderHierarchyChangesType }
-     * 
-     */
-    public SyncFolderHierarchyChangesType createSyncFolderHierarchyChangesType() {
-        return new SyncFolderHierarchyChangesType();
-    }
-
-    /**
-     * Create an instance of {@link ResolutionType }
-     * 
-     */
-    public ResolutionType createResolutionType() {
-        return new ResolutionType();
-    }
-
-    /**
-     * Create an instance of {@link AbsoluteYearlyRecurrencePatternType }
-     * 
-     */
-    public AbsoluteYearlyRecurrencePatternType createAbsoluteYearlyRecurrencePatternType() {
-        return new AbsoluteYearlyRecurrencePatternType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfBaseFolderIdsType }
-     * 
-     */
-    public NonEmptyArrayOfBaseFolderIdsType createNonEmptyArrayOfBaseFolderIdsType() {
-        return new NonEmptyArrayOfBaseFolderIdsType();
-    }
-
-    /**
-     * Create an instance of {@link ContainsExpressionType }
-     * 
-     */
-    public ContainsExpressionType createContainsExpressionType() {
-        return new ContainsExpressionType();
-    }
-
-    /**
-     * Create an instance of {@link RelativeYearlyRecurrencePatternType }
-     * 
-     */
-    public RelativeYearlyRecurrencePatternType createRelativeYearlyRecurrencePatternType() {
-        return new RelativeYearlyRecurrencePatternType();
-    }
-
-    /**
-     * Create an instance of {@link ContactsFolderType }
-     * 
-     */
-    public ContactsFolderType createContactsFolderType() {
-        return new ContactsFolderType();
-    }
-
-    /**
-     * Create an instance of {@link ItemIdType }
-     * 
-     */
-    public ItemIdType createItemIdType() {
-        return new ItemIdType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfInternetHeadersType }
-     * 
-     */
-    public NonEmptyArrayOfInternetHeadersType createNonEmptyArrayOfInternetHeadersType() {
-        return new NonEmptyArrayOfInternetHeadersType();
-    }
-
-    /**
-     * Create an instance of {@link EmailAddressDictionaryEntryType }
-     * 
-     */
-    public EmailAddressDictionaryEntryType createEmailAddressDictionaryEntryType() {
-        return new EmailAddressDictionaryEntryType();
-    }
-
-    /**
-     * Create an instance of {@link NumberedRecurrenceRangeType }
-     * 
-     */
-    public NumberedRecurrenceRangeType createNumberedRecurrenceRangeType() {
-        return new NumberedRecurrenceRangeType();
-    }
-
-    /**
-     * Create an instance of {@link FieldOrderType }
-     * 
-     */
-    public FieldOrderType createFieldOrderType() {
-        return new FieldOrderType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfAttachmentsType }
-     * 
-     */
-    public NonEmptyArrayOfAttachmentsType createNonEmptyArrayOfAttachmentsType() {
-        return new NonEmptyArrayOfAttachmentsType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfGroupIdentifiersType }
-     * 
-     */
-    public NonEmptyArrayOfGroupIdentifiersType createNonEmptyArrayOfGroupIdentifiersType() {
-        return new NonEmptyArrayOfGroupIdentifiersType();
-    }
-
-    /**
-     * Create an instance of {@link ImAddressDictionaryType }
-     * 
-     */
-    public ImAddressDictionaryType createImAddressDictionaryType() {
-        return new ImAddressDictionaryType();
-    }
-
-    /**
-     * Create an instance of {@link SuggestionsViewOptionsType }
-     * 
-     */
-    public SuggestionsViewOptionsType createSuggestionsViewOptionsType() {
-        return new SuggestionsViewOptionsType();
-    }
-
-    /**
-     * Create an instance of {@link CalendarPermissionType }
-     * 
-     */
-    public CalendarPermissionType createCalendarPermissionType() {
-        return new CalendarPermissionType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderItemsCreateOrUpdateType }
-     * 
-     */
-    public SyncFolderItemsCreateOrUpdateType createSyncFolderItemsCreateOrUpdateType() {
-        return new SyncFolderItemsCreateOrUpdateType();
-    }
-
-    /**
-     * Create an instance of {@link PermissionSetType }
-     * 
-     */
-    public PermissionSetType createPermissionSetType() {
-        return new PermissionSetType();
-    }
-
-    /**
-     * Create an instance of {@link WeeklyRegeneratingPatternType }
-     * 
-     */
-    public WeeklyRegeneratingPatternType createWeeklyRegeneratingPatternType() {
-        return new WeeklyRegeneratingPatternType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfAttendeesType }
-     * 
-     */
-    public NonEmptyArrayOfAttendeesType createNonEmptyArrayOfAttendeesType() {
-        return new NonEmptyArrayOfAttendeesType();
-    }
-
-    /**
-     * Create an instance of {@link FieldURIOrConstantType }
-     * 
-     */
-    public FieldURIOrConstantType createFieldURIOrConstantType() {
-        return new FieldURIOrConstantType();
-    }
-
-    /**
-     * Create an instance of {@link AttachmentType }
-     * 
-     */
-    public AttachmentType createAttachmentType() {
-        return new AttachmentType();
-    }
-
-    /**
-     * Create an instance of {@link SidAndAttributesType }
-     * 
-     */
-    public SidAndAttributesType createSidAndAttributesType() {
-        return new SidAndAttributesType();
-    }
-
-    /**
-     * Create an instance of {@link GroupByType }
-     * 
-     */
-    public GroupByType createGroupByType() {
-        return new GroupByType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfFieldOrdersType }
-     * 
-     */
-    public NonEmptyArrayOfFieldOrdersType createNonEmptyArrayOfFieldOrdersType() {
-        return new NonEmptyArrayOfFieldOrdersType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfResponseObjectsType }
-     * 
-     */
-    public NonEmptyArrayOfResponseObjectsType createNonEmptyArrayOfResponseObjectsType() {
-        return new NonEmptyArrayOfResponseObjectsType();
-    }
-
-    /**
-     * Create an instance of {@link AbsoluteMonthlyRecurrencePatternType }
-     * 
-     */
-    public AbsoluteMonthlyRecurrencePatternType createAbsoluteMonthlyRecurrencePatternType() {
-        return new AbsoluteMonthlyRecurrencePatternType();
-    }
-
-    /**
-     * Create an instance of {@link UserOofSettings }
-     * 
-     */
-    public UserOofSettings createUserOofSettings() {
-        return new UserOofSettings();
-    }
-
-    /**
-     * Create an instance of {@link OccurrenceItemIdType }
-     * 
-     */
-    public OccurrenceItemIdType createOccurrenceItemIdType() {
-        return new OccurrenceItemIdType();
-    }
-
-    /**
-     * Create an instance of {@link CalendarPermissionSetType }
-     * 
-     */
-    public CalendarPermissionSetType createCalendarPermissionSetType() {
-        return new CalendarPermissionSetType();
-    }
-
-    /**
-     * Create an instance of {@link FolderType }
-     * 
-     */
-    public FolderType createFolderType() {
-        return new FolderType();
-    }
-
-    /**
-     * Create an instance of {@link ManagedFolderInformationType }
-     * 
-     */
-    public ManagedFolderInformationType createManagedFolderInformationType() {
-        return new ManagedFolderInformationType();
-    }
-
-    /**
-     * Create an instance of {@link PushSubscriptionRequestType }
-     * 
-     */
-    public PushSubscriptionRequestType createPushSubscriptionRequestType() {
-        return new PushSubscriptionRequestType();
-    }
-
-    /**
-     * Create an instance of {@link PostReplyItemBaseType }
-     * 
-     */
-    public PostReplyItemBaseType createPostReplyItemBaseType() {
-        return new PostReplyItemBaseType();
-    }
-
-    /**
-     * Create an instance of {@link NonEmptyArrayOfDeletedOccurrencesType }
-     * 
-     */
-    public NonEmptyArrayOfDeletedOccurrencesType createNonEmptyArrayOfDeletedOccurrencesType() {
-        return new NonEmptyArrayOfDeletedOccurrencesType();
-    }
-
-    /**
-     * Create an instance of {@link ContactsViewType }
-     * 
-     */
-    public ContactsViewType createContactsViewType() {
-        return new ContactsViewType();
-    }
-
-    /**
-     * Create an instance of {@link AppendToFolderFieldType }
-     * 
-     */
-    public AppendToFolderFieldType createAppendToFolderFieldType() {
-        return new AppendToFolderFieldType();
-    }
-
-    /**
-     * Create an instance of {@link DeletedOccurrenceInfoType }
-     * 
-     */
-    public DeletedOccurrenceInfoType createDeletedOccurrenceInfoType() {
-        return new DeletedOccurrenceInfoType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfRecipientsType }
-     * 
-     */
-    public ArrayOfRecipientsType createArrayOfRecipientsType() {
-        return new ArrayOfRecipientsType();
-    }
-
-    /**
-     * Create an instance of {@link DailyRegeneratingPatternType }
-     * 
-     */
-    public DailyRegeneratingPatternType createDailyRegeneratingPatternType() {
-        return new DailyRegeneratingPatternType();
     }
 
     /**
@@ -1502,19 +111,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReferenceItemResponseType }
+     * Create an instance of {@link AttachmentType }
      * 
      */
-    public ReferenceItemResponseType createReferenceItemResponseType() {
-        return new ReferenceItemResponseType();
+    public AttachmentType createAttachmentType() {
+        return new AttachmentType();
     }
 
     /**
-     * Create an instance of {@link AlternatePublicFolderItemIdType }
+     * Create an instance of {@link AcceptItemType }
      * 
      */
-    public AlternatePublicFolderItemIdType createAlternatePublicFolderItemIdType() {
-        return new AlternatePublicFolderItemIdType();
+    public AcceptItemType createAcceptItemType() {
+        return new AcceptItemType();
     }
 
     /**
@@ -1526,91 +135,115 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfAttendeeConflictData }
+     * Create an instance of {@link NumberedRecurrenceRangeType }
      * 
      */
-    public ArrayOfAttendeeConflictData createArrayOfAttendeeConflictData() {
-        return new ArrayOfAttendeeConflictData();
+    public NumberedRecurrenceRangeType createNumberedRecurrenceRangeType() {
+        return new NumberedRecurrenceRangeType();
     }
 
     /**
-     * Create an instance of {@link ArrayOfUnknownEntriesType }
+     * Create an instance of {@link ConstantValueType }
      * 
      */
-    public ArrayOfUnknownEntriesType createArrayOfUnknownEntriesType() {
-        return new ArrayOfUnknownEntriesType();
+    public ConstantValueType createConstantValueType() {
+        return new ConstantValueType();
     }
 
     /**
-     * Create an instance of {@link ItemAttachmentType }
+     * Create an instance of {@link WorkingHours }
      * 
      */
-    public ItemAttachmentType createItemAttachmentType() {
-        return new ItemAttachmentType();
+    public WorkingHours createWorkingHours() {
+        return new WorkingHours();
     }
 
     /**
-     * Create an instance of {@link WeeklyRecurrencePatternType }
+     * Create an instance of {@link IsLessThanType }
      * 
      */
-    public WeeklyRecurrencePatternType createWeeklyRecurrencePatternType() {
-        return new WeeklyRecurrencePatternType();
+    public IsLessThanType createIsLessThanType() {
+        return new IsLessThanType();
     }
 
     /**
-     * Create an instance of {@link SerializableTimeZone }
+     * Create an instance of {@link FieldOrderType }
      * 
      */
-    public SerializableTimeZone createSerializableTimeZone() {
-        return new SerializableTimeZone();
+    public FieldOrderType createFieldOrderType() {
+        return new FieldOrderType();
     }
 
     /**
-     * Create an instance of {@link InternetHeaderType }
+     * Create an instance of {@link ItemIdType }
      * 
      */
-    public InternetHeaderType createInternetHeaderType() {
-        return new InternetHeaderType();
+    public ItemIdType createItemIdType() {
+        return new ItemIdType();
     }
 
     /**
-     * Create an instance of {@link ImAddressDictionaryEntryType }
+     * Create an instance of {@link IsLessThanOrEqualToType }
      * 
      */
-    public ImAddressDictionaryEntryType createImAddressDictionaryEntryType() {
-        return new ImAddressDictionaryEntryType();
+    public IsLessThanOrEqualToType createIsLessThanOrEqualToType() {
+        return new IsLessThanOrEqualToType();
     }
 
     /**
-     * Create an instance of {@link ArrayOfStringsType }
+     * Create an instance of {@link IsGreaterThanType }
      * 
      */
-    public ArrayOfStringsType createArrayOfStringsType() {
-        return new ArrayOfStringsType();
+    public IsGreaterThanType createIsGreaterThanType() {
+        return new IsGreaterThanType();
     }
 
     /**
-     * Create an instance of {@link TooBigGroupAttendeeConflictData }
+     * Create an instance of {@link SyncFolderHierarchyCreateOrUpdateType }
      * 
      */
-    public TooBigGroupAttendeeConflictData createTooBigGroupAttendeeConflictData() {
-        return new TooBigGroupAttendeeConflictData();
+    public SyncFolderHierarchyCreateOrUpdateType createSyncFolderHierarchyCreateOrUpdateType() {
+        return new SyncFolderHierarchyCreateOrUpdateType();
     }
 
     /**
-     * Create an instance of {@link TimeZoneType }
+     * Create an instance of {@link CancelCalendarItemType }
      * 
      */
-    public TimeZoneType createTimeZoneType() {
-        return new TimeZoneType();
+    public CancelCalendarItemType createCancelCalendarItemType() {
+        return new CancelCalendarItemType();
     }
 
     /**
-     * Create an instance of {@link BodyType }
+     * Create an instance of {@link NonEmptyArrayOfAttachmentsType }
      * 
      */
-    public BodyType createBodyType() {
-        return new BodyType();
+    public NonEmptyArrayOfAttachmentsType createNonEmptyArrayOfAttachmentsType() {
+        return new NonEmptyArrayOfAttachmentsType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderItemsCreateOrUpdateType }
+     * 
+     */
+    public SyncFolderItemsCreateOrUpdateType createSyncFolderItemsCreateOrUpdateType() {
+        return new SyncFolderItemsCreateOrUpdateType();
+    }
+
+    /**
+     * Create an instance of {@link BaseNotificationEventType }
+     * 
+     */
+    public BaseNotificationEventType createBaseNotificationEventType() {
+        return new BaseNotificationEventType();
+    }
+
+    /**
+     * Create an instance of {@link ModifiedEventType }
+     * 
+     */
+    public ModifiedEventType createModifiedEventType() {
+        return new ModifiedEventType();
     }
 
     /**
@@ -1622,35 +255,283 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NonEmptyArrayOfRequestAttachmentIdsType }
+     * Create an instance of {@link MessageType }
      * 
      */
-    public NonEmptyArrayOfRequestAttachmentIdsType createNonEmptyArrayOfRequestAttachmentIdsType() {
-        return new NonEmptyArrayOfRequestAttachmentIdsType();
+    public MessageType createMessageType() {
+        return new MessageType();
     }
 
     /**
-     * Create an instance of {@link BaseEmailAddressType }
+     * Create an instance of {@link WeeklyRegeneratingPatternType }
      * 
      */
-    public BaseEmailAddressType createBaseEmailAddressType() {
-        return new BaseEmailAddressType();
+    public WeeklyRegeneratingPatternType createWeeklyRegeneratingPatternType() {
+        return new WeeklyRegeneratingPatternType();
     }
 
     /**
-     * Create an instance of {@link CalendarEvent }
+     * Create an instance of {@link WorkingPeriod }
      * 
      */
-    public CalendarEvent createCalendarEvent() {
-        return new CalendarEvent();
+    public WorkingPeriod createWorkingPeriod() {
+        return new WorkingPeriod();
     }
 
     /**
-     * Create an instance of {@link DelegateUserType }
+     * Create an instance of {@link SyncFolderHierarchyChangesType }
      * 
      */
-    public DelegateUserType createDelegateUserType() {
-        return new DelegateUserType();
+    public SyncFolderHierarchyChangesType createSyncFolderHierarchyChangesType() {
+        return new SyncFolderHierarchyChangesType();
+    }
+
+    /**
+     * Create an instance of {@link AttachmentIdType }
+     * 
+     */
+    public AttachmentIdType createAttachmentIdType() {
+        return new AttachmentIdType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfMailboxData }
+     * 
+     */
+    public ArrayOfMailboxData createArrayOfMailboxData() {
+        return new ArrayOfMailboxData();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfUnknownEntriesType }
+     * 
+     */
+    public ArrayOfUnknownEntriesType createArrayOfUnknownEntriesType() {
+        return new ArrayOfUnknownEntriesType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfGroupedItemsType }
+     * 
+     */
+    public ArrayOfGroupedItemsType createArrayOfGroupedItemsType() {
+        return new ArrayOfGroupedItemsType();
+    }
+
+    /**
+     * Create an instance of {@link FolderIdType }
+     * 
+     */
+    public FolderIdType createFolderIdType() {
+        return new FolderIdType();
+    }
+
+    /**
+     * Create an instance of {@link TooBigGroupAttendeeConflictData }
+     * 
+     */
+    public TooBigGroupAttendeeConflictData createTooBigGroupAttendeeConflictData() {
+        return new TooBigGroupAttendeeConflictData();
+    }
+
+    /**
+     * Create an instance of {@link RelativeMonthlyRecurrencePatternType }
+     * 
+     */
+    public RelativeMonthlyRecurrencePatternType createRelativeMonthlyRecurrencePatternType() {
+        return new RelativeMonthlyRecurrencePatternType();
+    }
+
+    /**
+     * Create an instance of {@link RecurringMasterItemIdType }
+     * 
+     */
+    public RecurringMasterItemIdType createRecurringMasterItemIdType() {
+        return new RecurringMasterItemIdType();
+    }
+
+    /**
+     * Create an instance of {@link ReplyToItemType }
+     * 
+     */
+    public ReplyToItemType createReplyToItemType() {
+        return new ReplyToItemType();
+    }
+
+    /**
+     * Create an instance of {@link EndDateRecurrenceRangeType }
+     * 
+     */
+    public EndDateRecurrenceRangeType createEndDateRecurrenceRangeType() {
+        return new EndDateRecurrenceRangeType();
+    }
+
+    /**
+     * Create an instance of {@link TasksFolderType }
+     * 
+     */
+    public TasksFolderType createTasksFolderType() {
+        return new TasksFolderType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfAlternateIdsType }
+     * 
+     */
+    public NonEmptyArrayOfAlternateIdsType createNonEmptyArrayOfAlternateIdsType() {
+        return new NonEmptyArrayOfAlternateIdsType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfStringsType }
+     * 
+     */
+    public ArrayOfStringsType createArrayOfStringsType() {
+        return new ArrayOfStringsType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfFoldersType }
+     * 
+     */
+    public ArrayOfFoldersType createArrayOfFoldersType() {
+        return new ArrayOfFoldersType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfOccurrenceInfoType }
+     * 
+     */
+    public NonEmptyArrayOfOccurrenceInfoType createNonEmptyArrayOfOccurrenceInfoType() {
+        return new NonEmptyArrayOfOccurrenceInfoType();
+    }
+
+    /**
+     * Create an instance of {@link GroupByType }
+     * 
+     */
+    public GroupByType createGroupByType() {
+        return new GroupByType();
+    }
+
+    /**
+     * Create an instance of {@link WeeklyRecurrencePatternType }
+     * 
+     */
+    public WeeklyRecurrencePatternType createWeeklyRecurrencePatternType() {
+        return new WeeklyRecurrencePatternType();
+    }
+
+    /**
+     * Create an instance of {@link IsGreaterThanOrEqualToType }
+     * 
+     */
+    public IsGreaterThanOrEqualToType createIsGreaterThanOrEqualToType() {
+        return new IsGreaterThanOrEqualToType();
+    }
+
+    /**
+     * Create an instance of {@link TargetFolderIdType }
+     * 
+     */
+    public TargetFolderIdType createTargetFolderIdType() {
+        return new TargetFolderIdType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfItemChangeDescriptionsType }
+     * 
+     */
+    public NonEmptyArrayOfItemChangeDescriptionsType createNonEmptyArrayOfItemChangeDescriptionsType() {
+        return new NonEmptyArrayOfItemChangeDescriptionsType();
+    }
+
+    /**
+     * Create an instance of {@link UserIdType }
+     * 
+     */
+    public UserIdType createUserIdType() {
+        return new UserIdType();
+    }
+
+    /**
+     * Create an instance of {@link ExchangeImpersonationType }
+     * 
+     */
+    public ExchangeImpersonationType createExchangeImpersonationType() {
+        return new ExchangeImpersonationType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderItemsReadFlagType }
+     * 
+     */
+    public SyncFolderItemsReadFlagType createSyncFolderItemsReadFlagType() {
+        return new SyncFolderItemsReadFlagType();
+    }
+
+    /**
+     * Create an instance of {@link ContactsViewType }
+     * 
+     */
+    public ContactsViewType createContactsViewType() {
+        return new ContactsViewType();
+    }
+
+    /**
+     * Create an instance of {@link EmailAddressType }
+     * 
+     */
+    public EmailAddressType createEmailAddressType() {
+        return new EmailAddressType();
+    }
+
+    /**
+     * Create an instance of {@link ManagedFolderInformationType }
+     * 
+     */
+    public ManagedFolderInformationType createManagedFolderInformationType() {
+        return new ManagedFolderInformationType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfWorkingPeriod }
+     * 
+     */
+    public ArrayOfWorkingPeriod createArrayOfWorkingPeriod() {
+        return new ArrayOfWorkingPeriod();
+    }
+
+    /**
+     * Create an instance of {@link MeetingCancellationMessageType }
+     * 
+     */
+    public MeetingCancellationMessageType createMeetingCancellationMessageType() {
+        return new MeetingCancellationMessageType();
+    }
+
+    /**
+     * Create an instance of {@link PathToExceptionFieldType }
+     * 
+     */
+    public PathToExceptionFieldType createPathToExceptionFieldType() {
+        return new PathToExceptionFieldType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfResolutionType }
+     * 
+     */
+    public ArrayOfResolutionType createArrayOfResolutionType() {
+        return new ArrayOfResolutionType();
+    }
+
+    /**
+     * Create an instance of {@link TimeZoneContextType }
+     * 
+     */
+    public TimeZoneContextType createTimeZoneContextType() {
+        return new TimeZoneContextType();
     }
 
     /**
@@ -1662,59 +543,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeclineItemType }
+     * Create an instance of {@link ServerVersionInfo }
      * 
      */
-    public DeclineItemType createDeclineItemType() {
-        return new DeclineItemType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderItemsChangesType }
-     * 
-     */
-    public SyncFolderItemsChangesType createSyncFolderItemsChangesType() {
-        return new SyncFolderItemsChangesType();
-    }
-
-    /**
-     * Create an instance of {@link OccurrenceInfoType }
-     * 
-     */
-    public OccurrenceInfoType createOccurrenceInfoType() {
-        return new OccurrenceInfoType();
-    }
-
-    /**
-     * Create an instance of {@link NotificationType }
-     * 
-     */
-    public NotificationType createNotificationType() {
-        return new NotificationType();
-    }
-
-    /**
-     * Create an instance of {@link TentativelyAcceptItemType }
-     * 
-     */
-    public TentativelyAcceptItemType createTentativelyAcceptItemType() {
-        return new TentativelyAcceptItemType();
-    }
-
-    /**
-     * Create an instance of {@link ItemChangeType }
-     * 
-     */
-    public ItemChangeType createItemChangeType() {
-        return new ItemChangeType();
-    }
-
-    /**
-     * Create an instance of {@link RecurrenceType }
-     * 
-     */
-    public RecurrenceType createRecurrenceType() {
-        return new RecurrenceType();
+    public ServerVersionInfo createServerVersionInfo() {
+        return new ServerVersionInfo();
     }
 
     /**
@@ -1734,35 +567,203 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CalendarItemType }
+     * Create an instance of {@link ItemResponseShapeType }
      * 
      */
-    public CalendarItemType createCalendarItemType() {
-        return new CalendarItemType();
+    public ItemResponseShapeType createItemResponseShapeType() {
+        return new ItemResponseShapeType();
     }
 
     /**
-     * Create an instance of {@link PostReplyItemType }
+     * Create an instance of {@link DeletedOccurrenceInfoType }
      * 
      */
-    public PostReplyItemType createPostReplyItemType() {
-        return new PostReplyItemType();
+    public DeletedOccurrenceInfoType createDeletedOccurrenceInfoType() {
+        return new DeletedOccurrenceInfoType();
     }
 
     /**
-     * Create an instance of {@link GroupAttendeeConflictData }
+     * Create an instance of {@link OccurrenceItemIdType }
      * 
      */
-    public GroupAttendeeConflictData createGroupAttendeeConflictData() {
-        return new GroupAttendeeConflictData();
+    public OccurrenceItemIdType createOccurrenceItemIdType() {
+        return new OccurrenceItemIdType();
     }
 
     /**
-     * Create an instance of {@link SyncFolderHierarchyCreateOrUpdateType }
+     * Create an instance of {@link DistributionListType }
      * 
      */
-    public SyncFolderHierarchyCreateOrUpdateType createSyncFolderHierarchyCreateOrUpdateType() {
-        return new SyncFolderHierarchyCreateOrUpdateType();
+    public DistributionListType createDistributionListType() {
+        return new DistributionListType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderItemsDeleteType }
+     * 
+     */
+    public SyncFolderItemsDeleteType createSyncFolderItemsDeleteType() {
+        return new SyncFolderItemsDeleteType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfDLExpansionType }
+     * 
+     */
+    public ArrayOfDLExpansionType createArrayOfDLExpansionType() {
+        return new ArrayOfDLExpansionType();
+    }
+
+    /**
+     * Create an instance of {@link RemoveItemType }
+     * 
+     */
+    public RemoveItemType createRemoveItemType() {
+        return new RemoveItemType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarPermissionSetType }
+     * 
+     */
+    public CalendarPermissionSetType createCalendarPermissionSetType() {
+        return new CalendarPermissionSetType();
+    }
+
+    /**
+     * Create an instance of {@link RelativeYearlyRecurrencePatternType }
+     * 
+     */
+    public RelativeYearlyRecurrencePatternType createRelativeYearlyRecurrencePatternType() {
+        return new RelativeYearlyRecurrencePatternType();
+    }
+
+    /**
+     * Create an instance of {@link AppendToItemFieldType }
+     * 
+     */
+    public AppendToItemFieldType createAppendToItemFieldType() {
+        return new AppendToItemFieldType();
+    }
+
+    /**
+     * Create an instance of {@link AppendToFolderFieldType }
+     * 
+     */
+    public AppendToFolderFieldType createAppendToFolderFieldType() {
+        return new AppendToFolderFieldType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfPropertyValuesType }
+     * 
+     */
+    public NonEmptyArrayOfPropertyValuesType createNonEmptyArrayOfPropertyValuesType() {
+        return new NonEmptyArrayOfPropertyValuesType();
+    }
+
+    /**
+     * Create an instance of {@link ResolutionType }
+     * 
+     */
+    public ResolutionType createResolutionType() {
+        return new ResolutionType();
+    }
+
+    /**
+     * Create an instance of {@link FolderType }
+     * 
+     */
+    public FolderType createFolderType() {
+        return new FolderType();
+    }
+
+    /**
+     * Create an instance of {@link YearlyRegeneratingPatternType }
+     * 
+     */
+    public YearlyRegeneratingPatternType createYearlyRegeneratingPatternType() {
+        return new YearlyRegeneratingPatternType();
+    }
+
+    /**
+     * Create an instance of {@link Duration }
+     * 
+     */
+    public Duration createDuration() {
+        return new Duration();
+    }
+
+    /**
+     * Create an instance of {@link DailyRegeneratingPatternType }
+     * 
+     */
+    public DailyRegeneratingPatternType createDailyRegeneratingPatternType() {
+        return new DailyRegeneratingPatternType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfItemChangesType }
+     * 
+     */
+    public NonEmptyArrayOfItemChangesType createNonEmptyArrayOfItemChangesType() {
+        return new NonEmptyArrayOfItemChangesType();
+    }
+
+    /**
+     * Create an instance of {@link PhoneNumberDictionaryEntryType }
+     * 
+     */
+    public PhoneNumberDictionaryEntryType createPhoneNumberDictionaryEntryType() {
+        return new PhoneNumberDictionaryEntryType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfFieldOrdersType }
+     * 
+     */
+    public NonEmptyArrayOfFieldOrdersType createNonEmptyArrayOfFieldOrdersType() {
+        return new NonEmptyArrayOfFieldOrdersType();
+    }
+
+    /**
+     * Create an instance of {@link InternetHeaderType }
+     * 
+     */
+    public InternetHeaderType createInternetHeaderType() {
+        return new InternetHeaderType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfResponseObjectsType }
+     * 
+     */
+    public NonEmptyArrayOfResponseObjectsType createNonEmptyArrayOfResponseObjectsType() {
+        return new NonEmptyArrayOfResponseObjectsType();
+    }
+
+    /**
+     * Create an instance of {@link SerializableTimeZone }
+     * 
+     */
+    public SerializableTimeZone createSerializableTimeZone() {
+        return new SerializableTimeZone();
+    }
+
+    /**
+     * Create an instance of {@link PathToExtendedFieldType }
+     * 
+     */
+    public PathToExtendedFieldType createPathToExtendedFieldType() {
+        return new PathToExtendedFieldType();
+    }
+
+    /**
+     * Create an instance of {@link DailyRecurrencePatternType }
+     * 
+     */
+    public DailyRecurrencePatternType createDailyRecurrencePatternType() {
+        return new DailyRecurrencePatternType();
     }
 
     /**
@@ -1774,11 +775,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MeetingMessageType }
+     * Create an instance of {@link SerializedSecurityContextType }
      * 
      */
-    public MeetingMessageType createMeetingMessageType() {
-        return new MeetingMessageType();
+    public SerializedSecurityContextType createSerializedSecurityContextType() {
+        return new SerializedSecurityContextType();
+    }
+
+    /**
+     * Create an instance of {@link NotType }
+     * 
+     */
+    public NotType createNotType() {
+        return new NotType();
+    }
+
+    /**
+     * Create an instance of {@link AttachmentResponseShapeType }
+     * 
+     */
+    public AttachmentResponseShapeType createAttachmentResponseShapeType() {
+        return new AttachmentResponseShapeType();
+    }
+
+    /**
+     * Create an instance of {@link FindItemParentType }
+     * 
+     */
+    public FindItemParentType createFindItemParentType() {
+        return new FindItemParentType();
+    }
+
+    /**
+     * Create an instance of {@link RequestServerVersion }
+     * 
+     */
+    public RequestServerVersion createRequestServerVersion() {
+        return new RequestServerVersion();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfBaseItemIdsType }
+     * 
+     */
+    public ArrayOfBaseItemIdsType createArrayOfBaseItemIdsType() {
+        return new ArrayOfBaseItemIdsType();
     }
 
     /**
@@ -1790,11 +831,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PostItemType }
+     * Create an instance of {@link MovedCopiedEventType }
      * 
      */
-    public PostItemType createPostItemType() {
-        return new PostItemType();
+    public MovedCopiedEventType createMovedCopiedEventType() {
+        return new MovedCopiedEventType();
     }
 
     /**
@@ -1806,11 +847,555 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfWorkingPeriod }
+     * Create an instance of {@link DeleteFolderFieldType }
      * 
      */
-    public ArrayOfWorkingPeriod createArrayOfWorkingPeriod() {
-        return new ArrayOfWorkingPeriod();
+    public DeleteFolderFieldType createDeleteFolderFieldType() {
+        return new DeleteFolderFieldType();
+    }
+
+    /**
+     * Create an instance of {@link OrType }
+     * 
+     */
+    public OrType createOrType() {
+        return new OrType();
+    }
+
+    /**
+     * Create an instance of {@link PermissionType }
+     * 
+     */
+    public PermissionType createPermissionType() {
+        return new PermissionType();
+    }
+
+    /**
+     * Create an instance of {@link PermissionSetType }
+     * 
+     */
+    public PermissionSetType createPermissionSetType() {
+        return new PermissionSetType();
+    }
+
+    /**
+     * Create an instance of {@link EffectiveRightsType }
+     * 
+     */
+    public EffectiveRightsType createEffectiveRightsType() {
+        return new EffectiveRightsType();
+    }
+
+    /**
+     * Create an instance of {@link BaseEmailAddressType }
+     * 
+     */
+    public BaseEmailAddressType createBaseEmailAddressType() {
+        return new BaseEmailAddressType();
+    }
+
+    /**
+     * Create an instance of {@link ProxySecurityContextType }
+     * 
+     */
+    public ProxySecurityContextType createProxySecurityContextType() {
+        return new ProxySecurityContextType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfAttachmentsType }
+     * 
+     */
+    public ArrayOfAttachmentsType createArrayOfAttachmentsType() {
+        return new ArrayOfAttachmentsType();
+    }
+
+    /**
+     * Create an instance of {@link PushSubscriptionRequestType }
+     * 
+     */
+    public PushSubscriptionRequestType createPushSubscriptionRequestType() {
+        return new PushSubscriptionRequestType();
+    }
+
+    /**
+     * Create an instance of {@link EmailAddressDictionaryType }
+     * 
+     */
+    public EmailAddressDictionaryType createEmailAddressDictionaryType() {
+        return new EmailAddressDictionaryType();
+    }
+
+    /**
+     * Create an instance of {@link Suggestion }
+     * 
+     */
+    public Suggestion createSuggestion() {
+        return new Suggestion();
+    }
+
+    /**
+     * Create an instance of {@link SuppressReadReceiptType }
+     * 
+     */
+    public SuppressReadReceiptType createSuppressReadReceiptType() {
+        return new SuppressReadReceiptType();
+    }
+
+    /**
+     * Create an instance of {@link AlternatePublicFolderItemIdType }
+     * 
+     */
+    public AlternatePublicFolderItemIdType createAlternatePublicFolderItemIdType() {
+        return new AlternatePublicFolderItemIdType();
+    }
+
+    /**
+     * Create an instance of {@link ReferenceItemResponseType }
+     * 
+     */
+    public ReferenceItemResponseType createReferenceItemResponseType() {
+        return new ReferenceItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfFolderNamesType }
+     * 
+     */
+    public NonEmptyArrayOfFolderNamesType createNonEmptyArrayOfFolderNamesType() {
+        return new NonEmptyArrayOfFolderNamesType();
+    }
+
+    /**
+     * Create an instance of {@link SingleRecipientType }
+     * 
+     */
+    public SingleRecipientType createSingleRecipientType() {
+        return new SingleRecipientType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfPermissionsType }
+     * 
+     */
+    public ArrayOfPermissionsType createArrayOfPermissionsType() {
+        return new ArrayOfPermissionsType();
+    }
+
+    /**
+     * Create an instance of {@link ReplyAllToItemType }
+     * 
+     */
+    public ReplyAllToItemType createReplyAllToItemType() {
+        return new ReplyAllToItemType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarItemType }
+     * 
+     */
+    public CalendarItemType createCalendarItemType() {
+        return new CalendarItemType();
+    }
+
+    /**
+     * Create an instance of {@link AbsoluteMonthlyRecurrencePatternType }
+     * 
+     */
+    public AbsoluteMonthlyRecurrencePatternType createAbsoluteMonthlyRecurrencePatternType() {
+        return new AbsoluteMonthlyRecurrencePatternType();
+    }
+
+    /**
+     * Create an instance of {@link AlternatePublicFolderIdType }
+     * 
+     */
+    public AlternatePublicFolderIdType createAlternatePublicFolderIdType() {
+        return new AlternatePublicFolderIdType();
+    }
+
+    /**
+     * Create an instance of {@link SerializableTimeZoneTime }
+     * 
+     */
+    public SerializableTimeZoneTime createSerializableTimeZoneTime() {
+        return new SerializableTimeZoneTime();
+    }
+
+    /**
+     * Create an instance of {@link ItemAttachmentType }
+     * 
+     */
+    public ItemAttachmentType createItemAttachmentType() {
+        return new ItemAttachmentType();
+    }
+
+    /**
+     * Create an instance of {@link PullSubscriptionRequestType }
+     * 
+     */
+    public PullSubscriptionRequestType createPullSubscriptionRequestType() {
+        return new PullSubscriptionRequestType();
+    }
+
+    /**
+     * Create an instance of {@link TaskType }
+     * 
+     */
+    public TaskType createTaskType() {
+        return new TaskType();
+    }
+
+    /**
+     * Create an instance of {@link PostItemType }
+     * 
+     */
+    public PostItemType createPostItemType() {
+        return new PostItemType();
+    }
+
+    /**
+     * Create an instance of {@link RequestAttachmentIdType }
+     * 
+     */
+    public RequestAttachmentIdType createRequestAttachmentIdType() {
+        return new RequestAttachmentIdType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfNotificationEventTypesType }
+     * 
+     */
+    public NonEmptyArrayOfNotificationEventTypesType createNonEmptyArrayOfNotificationEventTypesType() {
+        return new NonEmptyArrayOfNotificationEventTypesType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfRealItemsType }
+     * 
+     */
+    public ArrayOfRealItemsType createArrayOfRealItemsType() {
+        return new ArrayOfRealItemsType();
+    }
+
+    /**
+     * Create an instance of {@link ItemChangeType }
+     * 
+     */
+    public ItemChangeType createItemChangeType() {
+        return new ItemChangeType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarFolderType }
+     * 
+     */
+    public CalendarFolderType createCalendarFolderType() {
+        return new CalendarFolderType();
+    }
+
+    /**
+     * Create an instance of {@link MimeContentType }
+     * 
+     */
+    public MimeContentType createMimeContentType() {
+        return new MimeContentType();
+    }
+
+    /**
+     * Create an instance of {@link FreeBusyView }
+     * 
+     */
+    public FreeBusyView createFreeBusyView() {
+        return new FreeBusyView();
+    }
+
+    /**
+     * Create an instance of {@link PostReplyItemType }
+     * 
+     */
+    public PostReplyItemType createPostReplyItemType() {
+        return new PostReplyItemType();
+    }
+
+    /**
+     * Create an instance of {@link BodyType }
+     * 
+     */
+    public BodyType createBodyType() {
+        return new BodyType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfRecipientsType }
+     * 
+     */
+    public ArrayOfRecipientsType createArrayOfRecipientsType() {
+        return new ArrayOfRecipientsType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfRestrictedGroupIdentifiersType }
+     * 
+     */
+    public NonEmptyArrayOfRestrictedGroupIdentifiersType createNonEmptyArrayOfRestrictedGroupIdentifiersType() {
+        return new NonEmptyArrayOfRestrictedGroupIdentifiersType();
+    }
+
+    /**
+     * Create an instance of {@link Value }
+     * 
+     */
+    public Value createValue() {
+        return new Value();
+    }
+
+    /**
+     * Create an instance of {@link IsNotEqualToType }
+     * 
+     */
+    public IsNotEqualToType createIsNotEqualToType() {
+        return new IsNotEqualToType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteItemFieldType }
+     * 
+     */
+    public DeleteItemFieldType createDeleteItemFieldType() {
+        return new DeleteItemFieldType();
+    }
+
+    /**
+     * Create an instance of {@link NoEndRecurrenceRangeType }
+     * 
+     */
+    public NoEndRecurrenceRangeType createNoEndRecurrenceRangeType() {
+        return new NoEndRecurrenceRangeType();
+    }
+
+    /**
+     * Create an instance of {@link PostReplyItemBaseType }
+     * 
+     */
+    public PostReplyItemBaseType createPostReplyItemBaseType() {
+        return new PostReplyItemBaseType();
+    }
+
+    /**
+     * Create an instance of {@link TimeZoneType }
+     * 
+     */
+    public TimeZoneType createTimeZoneType() {
+        return new TimeZoneType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfSuggestionDayResult }
+     * 
+     */
+    public ArrayOfSuggestionDayResult createArrayOfSuggestionDayResult() {
+        return new ArrayOfSuggestionDayResult();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfFoldersType }
+     * 
+     */
+    public NonEmptyArrayOfFoldersType createNonEmptyArrayOfFoldersType() {
+        return new NonEmptyArrayOfFoldersType();
+    }
+
+    /**
+     * Create an instance of {@link ExcludesType }
+     * 
+     */
+    public ExcludesType createExcludesType() {
+        return new ExcludesType();
+    }
+
+    /**
+     * Create an instance of {@link ItemType }
+     * 
+     */
+    public ItemType createItemType() {
+        return new ItemType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfAttendeesType }
+     * 
+     */
+    public NonEmptyArrayOfAttendeesType createNonEmptyArrayOfAttendeesType() {
+        return new NonEmptyArrayOfAttendeesType();
+    }
+
+    /**
+     * Create an instance of {@link DistinguishedFolderIdType }
+     * 
+     */
+    public DistinguishedFolderIdType createDistinguishedFolderIdType() {
+        return new DistinguishedFolderIdType();
+    }
+
+    /**
+     * Create an instance of {@link DelegateUserType }
+     * 
+     */
+    public DelegateUserType createDelegateUserType() {
+        return new DelegateUserType();
+    }
+
+    /**
+     * Create an instance of {@link DistinguishedGroupByType }
+     * 
+     */
+    public DistinguishedGroupByType createDistinguishedGroupByType() {
+        return new DistinguishedGroupByType();
+    }
+
+    /**
+     * Create an instance of {@link AttendeeType }
+     * 
+     */
+    public AttendeeType createAttendeeType() {
+        return new AttendeeType();
+    }
+
+    /**
+     * Create an instance of {@link ContainsExpressionType }
+     * 
+     */
+    public ContainsExpressionType createContainsExpressionType() {
+        return new ContainsExpressionType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderHierarchyDeleteType }
+     * 
+     */
+    public SyncFolderHierarchyDeleteType createSyncFolderHierarchyDeleteType() {
+        return new SyncFolderHierarchyDeleteType();
+    }
+
+    /**
+     * Create an instance of {@link ForwardItemType }
+     * 
+     */
+    public ForwardItemType createForwardItemType() {
+        return new ForwardItemType();
+    }
+
+    /**
+     * Create an instance of {@link MeetingMessageType }
+     * 
+     */
+    public MeetingMessageType createMeetingMessageType() {
+        return new MeetingMessageType();
+    }
+
+    /**
+     * Create an instance of {@link UnknownAttendeeConflictData }
+     * 
+     */
+    public UnknownAttendeeConflictData createUnknownAttendeeConflictData() {
+        return new UnknownAttendeeConflictData();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfAllItemsType }
+     * 
+     */
+    public NonEmptyArrayOfAllItemsType createNonEmptyArrayOfAllItemsType() {
+        return new NonEmptyArrayOfAllItemsType();
+    }
+
+    /**
+     * Create an instance of {@link ExtendedPropertyType }
+     * 
+     */
+    public ExtendedPropertyType createExtendedPropertyType() {
+        return new ExtendedPropertyType();
+    }
+
+    /**
+     * Create an instance of {@link EmailAddressDictionaryEntryType }
+     * 
+     */
+    public EmailAddressDictionaryEntryType createEmailAddressDictionaryEntryType() {
+        return new EmailAddressDictionaryEntryType();
+    }
+
+    /**
+     * Create an instance of {@link CompleteNameType }
+     * 
+     */
+    public CompleteNameType createCompleteNameType() {
+        return new CompleteNameType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfBaseItemIdsType }
+     * 
+     */
+    public NonEmptyArrayOfBaseItemIdsType createNonEmptyArrayOfBaseItemIdsType() {
+        return new NonEmptyArrayOfBaseItemIdsType();
+    }
+
+    /**
+     * Create an instance of {@link TimeZoneDefinitionType }
+     * 
+     */
+    public TimeZoneDefinitionType createTimeZoneDefinitionType() {
+        return new TimeZoneDefinitionType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfGroupIdentifiersType }
+     * 
+     */
+    public NonEmptyArrayOfGroupIdentifiersType createNonEmptyArrayOfGroupIdentifiersType() {
+        return new NonEmptyArrayOfGroupIdentifiersType();
+    }
+
+    /**
+     * Create an instance of {@link ImAddressDictionaryEntryType }
+     * 
+     */
+    public ImAddressDictionaryEntryType createImAddressDictionaryEntryType() {
+        return new ImAddressDictionaryEntryType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfPathsToElementType }
+     * 
+     */
+    public NonEmptyArrayOfPathsToElementType createNonEmptyArrayOfPathsToElementType() {
+        return new NonEmptyArrayOfPathsToElementType();
+    }
+
+    /**
+     * Create an instance of {@link FieldURIOrConstantType }
+     * 
+     */
+    public FieldURIOrConstantType createFieldURIOrConstantType() {
+        return new FieldURIOrConstantType();
+    }
+
+    /**
+     * Create an instance of {@link MeetingRequestMessageType }
+     * 
+     */
+    public MeetingRequestMessageType createMeetingRequestMessageType() {
+        return new MeetingRequestMessageType();
+    }
+
+    /**
+     * Create an instance of {@link AbsoluteYearlyRecurrencePatternType }
+     * 
+     */
+    public AbsoluteYearlyRecurrencePatternType createAbsoluteYearlyRecurrencePatternType() {
+        return new AbsoluteYearlyRecurrencePatternType();
     }
 
     /**
@@ -1822,43 +1407,475 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfFoldersType }
+     * Create an instance of {@link ArrayOfAttendeeConflictData }
      * 
      */
-    public ArrayOfFoldersType createArrayOfFoldersType() {
-        return new ArrayOfFoldersType();
+    public ArrayOfAttendeeConflictData createArrayOfAttendeeConflictData() {
+        return new ArrayOfAttendeeConflictData();
     }
 
     /**
-     * Create an instance of {@link WorkingPeriod }
+     * Create an instance of {@link FindFolderParentType }
      * 
      */
-    public WorkingPeriod createWorkingPeriod() {
-        return new WorkingPeriod();
+    public FindFolderParentType createFindFolderParentType() {
+        return new FindFolderParentType();
     }
 
     /**
-     * Create an instance of {@link PathToExceptionFieldType }
+     * Create an instance of {@link AndType }
      * 
      */
-    public PathToExceptionFieldType createPathToExceptionFieldType() {
-        return new PathToExceptionFieldType();
+    public AndType createAndType() {
+        return new AndType();
     }
 
     /**
-     * Create an instance of {@link NonEmptyArrayOfAlternateIdsType }
+     * Create an instance of {@link IndexedPageViewType }
      * 
      */
-    public NonEmptyArrayOfAlternateIdsType createNonEmptyArrayOfAlternateIdsType() {
-        return new NonEmptyArrayOfAlternateIdsType();
+    public IndexedPageViewType createIndexedPageViewType() {
+        return new IndexedPageViewType();
     }
 
     /**
-     * Create an instance of {@link ArrayOfRealItemsType }
+     * Create an instance of {@link ItemChangeDescriptionType }
      * 
      */
-    public ArrayOfRealItemsType createArrayOfRealItemsType() {
-        return new ArrayOfRealItemsType();
+    public ItemChangeDescriptionType createItemChangeDescriptionType() {
+        return new ItemChangeDescriptionType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarEvent }
+     * 
+     */
+    public CalendarEvent createCalendarEvent() {
+        return new CalendarEvent();
+    }
+
+    /**
+     * Create an instance of {@link ExcludesValueType }
+     * 
+     */
+    public ExcludesValueType createExcludesValueType() {
+        return new ExcludesValueType();
+    }
+
+    /**
+     * Create an instance of {@link FreeBusyViewOptionsType }
+     * 
+     */
+    public FreeBusyViewOptionsType createFreeBusyViewOptionsType() {
+        return new FreeBusyViewOptionsType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarPermissionType }
+     * 
+     */
+    public CalendarPermissionType createCalendarPermissionType() {
+        return new CalendarPermissionType();
+    }
+
+    /**
+     * Create an instance of {@link FolderChangeDescriptionType }
+     * 
+     */
+    public FolderChangeDescriptionType createFolderChangeDescriptionType() {
+        return new FolderChangeDescriptionType();
+    }
+
+    /**
+     * Create an instance of {@link AggregateOnType }
+     * 
+     */
+    public AggregateOnType createAggregateOnType() {
+        return new AggregateOnType();
+    }
+
+    /**
+     * Create an instance of {@link PathToUnindexedFieldType }
+     * 
+     */
+    public PathToUnindexedFieldType createPathToUnindexedFieldType() {
+        return new PathToUnindexedFieldType();
+    }
+
+    /**
+     * Create an instance of {@link SearchParametersType }
+     * 
+     */
+    public SearchParametersType createSearchParametersType() {
+        return new SearchParametersType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarEventDetails }
+     * 
+     */
+    public CalendarEventDetails createCalendarEventDetails() {
+        return new CalendarEventDetails();
+    }
+
+    /**
+     * Create an instance of {@link UserOofSettings }
+     * 
+     */
+    public UserOofSettings createUserOofSettings() {
+        return new UserOofSettings();
+    }
+
+    /**
+     * Create an instance of {@link FileAttachmentType }
+     * 
+     */
+    public FileAttachmentType createFileAttachmentType() {
+        return new FileAttachmentType();
+    }
+
+    /**
+     * Create an instance of {@link DeclineItemType }
+     * 
+     */
+    public DeclineItemType createDeclineItemType() {
+        return new DeclineItemType();
+    }
+
+    /**
+     * Create an instance of {@link WellKnownResponseObjectType }
+     * 
+     */
+    public WellKnownResponseObjectType createWellKnownResponseObjectType() {
+        return new WellKnownResponseObjectType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderItemsChangesType }
+     * 
+     */
+    public SyncFolderItemsChangesType createSyncFolderItemsChangesType() {
+        return new SyncFolderItemsChangesType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfCalendarPermissionsType }
+     * 
+     */
+    public ArrayOfCalendarPermissionsType createArrayOfCalendarPermissionsType() {
+        return new ArrayOfCalendarPermissionsType();
+    }
+
+    /**
+     * Create an instance of {@link SetFolderFieldType }
+     * 
+     */
+    public SetFolderFieldType createSetFolderFieldType() {
+        return new SetFolderFieldType();
+    }
+
+    /**
+     * Create an instance of {@link NotificationType }
+     * 
+     */
+    public NotificationType createNotificationType() {
+        return new NotificationType();
+    }
+
+    /**
+     * Create an instance of {@link FolderResponseShapeType }
+     * 
+     */
+    public FolderResponseShapeType createFolderResponseShapeType() {
+        return new FolderResponseShapeType();
+    }
+
+    /**
+     * Create an instance of {@link GroupAttendeeConflictData }
+     * 
+     */
+    public GroupAttendeeConflictData createGroupAttendeeConflictData() {
+        return new GroupAttendeeConflictData();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfFolderChangeDescriptionsType }
+     * 
+     */
+    public NonEmptyArrayOfFolderChangeDescriptionsType createNonEmptyArrayOfFolderChangeDescriptionsType() {
+        return new NonEmptyArrayOfFolderChangeDescriptionsType();
+    }
+
+    /**
+     * Create an instance of {@link PhysicalAddressDictionaryType }
+     * 
+     */
+    public PhysicalAddressDictionaryType createPhysicalAddressDictionaryType() {
+        return new PhysicalAddressDictionaryType();
+    }
+
+    /**
+     * Create an instance of {@link GroupedItemsType }
+     * 
+     */
+    public GroupedItemsType createGroupedItemsType() {
+        return new GroupedItemsType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfBaseFolderIdsType }
+     * 
+     */
+    public NonEmptyArrayOfBaseFolderIdsType createNonEmptyArrayOfBaseFolderIdsType() {
+        return new NonEmptyArrayOfBaseFolderIdsType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfSuggestion }
+     * 
+     */
+    public ArrayOfSuggestion createArrayOfSuggestion() {
+        return new ArrayOfSuggestion();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfUserIdType }
+     * 
+     */
+    public ArrayOfUserIdType createArrayOfUserIdType() {
+        return new ArrayOfUserIdType();
+    }
+
+    /**
+     * Create an instance of {@link ContactItemType }
+     * 
+     */
+    public ContactItemType createContactItemType() {
+        return new ContactItemType();
+    }
+
+    /**
+     * Create an instance of {@link FractionalPageViewType }
+     * 
+     */
+    public FractionalPageViewType createFractionalPageViewType() {
+        return new FractionalPageViewType();
+    }
+
+    /**
+     * Create an instance of {@link ReplyBody }
+     * 
+     */
+    public ReplyBody createReplyBody() {
+        return new ReplyBody();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfDeletedOccurrencesType }
+     * 
+     */
+    public NonEmptyArrayOfDeletedOccurrencesType createNonEmptyArrayOfDeletedOccurrencesType() {
+        return new NonEmptyArrayOfDeletedOccurrencesType();
+    }
+
+    /**
+     * Create an instance of {@link SidAndAttributesType }
+     * 
+     */
+    public SidAndAttributesType createSidAndAttributesType() {
+        return new SidAndAttributesType();
+    }
+
+    /**
+     * Create an instance of {@link TentativelyAcceptItemType }
+     * 
+     */
+    public TentativelyAcceptItemType createTentativelyAcceptItemType() {
+        return new TentativelyAcceptItemType();
+    }
+
+    /**
+     * Create an instance of {@link MailboxData }
+     * 
+     */
+    public MailboxData createMailboxData() {
+        return new MailboxData();
+    }
+
+    /**
+     * Create an instance of {@link BaseObjectChangedEventType }
+     * 
+     */
+    public BaseObjectChangedEventType createBaseObjectChangedEventType() {
+        return new BaseObjectChangedEventType();
+    }
+
+    /**
+     * Create an instance of {@link ExistsType }
+     * 
+     */
+    public ExistsType createExistsType() {
+        return new ExistsType();
+    }
+
+    /**
+     * Create an instance of {@link RootItemIdType }
+     * 
+     */
+    public RootItemIdType createRootItemIdType() {
+        return new RootItemIdType();
+    }
+
+    /**
+     * Create an instance of {@link RecurrenceType }
+     * 
+     */
+    public RecurrenceType createRecurrenceType() {
+        return new RecurrenceType();
+    }
+
+    /**
+     * Create an instance of {@link SmartResponseBaseType }
+     * 
+     */
+    public SmartResponseBaseType createSmartResponseBaseType() {
+        return new SmartResponseBaseType();
+    }
+
+    /**
+     * Create an instance of {@link ImAddressDictionaryType }
+     * 
+     */
+    public ImAddressDictionaryType createImAddressDictionaryType() {
+        return new ImAddressDictionaryType();
+    }
+
+    /**
+     * Create an instance of {@link PhysicalAddressDictionaryEntryType }
+     * 
+     */
+    public PhysicalAddressDictionaryEntryType createPhysicalAddressDictionaryEntryType() {
+        return new PhysicalAddressDictionaryEntryType();
+    }
+
+    /**
+     * Create an instance of {@link AlternateIdType }
+     * 
+     */
+    public AlternateIdType createAlternateIdType() {
+        return new AlternateIdType();
+    }
+
+    /**
+     * Create an instance of {@link RestrictionType }
+     * 
+     */
+    public RestrictionType createRestrictionType() {
+        return new RestrictionType();
+    }
+
+    /**
+     * Create an instance of {@link OccurrenceInfoType }
+     * 
+     */
+    public OccurrenceInfoType createOccurrenceInfoType() {
+        return new OccurrenceInfoType();
+    }
+
+    /**
+     * Create an instance of {@link SearchFolderType }
+     * 
+     */
+    public SearchFolderType createSearchFolderType() {
+        return new SearchFolderType();
+    }
+
+    /**
+     * Create an instance of {@link MeetingResponseMessageType }
+     * 
+     */
+    public MeetingResponseMessageType createMeetingResponseMessageType() {
+        return new MeetingResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfFolderChangesType }
+     * 
+     */
+    public NonEmptyArrayOfFolderChangesType createNonEmptyArrayOfFolderChangesType() {
+        return new NonEmptyArrayOfFolderChangesType();
+    }
+
+    /**
+     * Create an instance of {@link TaskRecurrenceType }
+     * 
+     */
+    public TaskRecurrenceType createTaskRecurrenceType() {
+        return new TaskRecurrenceType();
+    }
+
+    /**
+     * Create an instance of {@link SmartResponseType }
+     * 
+     */
+    public SmartResponseType createSmartResponseType() {
+        return new SmartResponseType();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfRequestAttachmentIdsType }
+     * 
+     */
+    public NonEmptyArrayOfRequestAttachmentIdsType createNonEmptyArrayOfRequestAttachmentIdsType() {
+        return new NonEmptyArrayOfRequestAttachmentIdsType();
+    }
+
+    /**
+     * Create an instance of {@link PathToIndexedFieldType }
+     * 
+     */
+    public PathToIndexedFieldType createPathToIndexedFieldType() {
+        return new PathToIndexedFieldType();
+    }
+
+    /**
+     * Create an instance of {@link FolderChangeType }
+     * 
+     */
+    public FolderChangeType createFolderChangeType() {
+        return new FolderChangeType();
+    }
+
+    /**
+     * Create an instance of {@link CalendarViewType }
+     * 
+     */
+    public CalendarViewType createCalendarViewType() {
+        return new CalendarViewType();
+    }
+
+    /**
+     * Create an instance of {@link SuggestionsViewOptionsType }
+     * 
+     */
+    public SuggestionsViewOptionsType createSuggestionsViewOptionsType() {
+        return new SuggestionsViewOptionsType();
+    }
+
+    /**
+     * Create an instance of {@link SuggestionDayResult }
+     * 
+     */
+    public SuggestionDayResult createSuggestionDayResult() {
+        return new SuggestionDayResult();
+    }
+
+    /**
+     * Create an instance of {@link NonEmptyArrayOfInternetHeadersType }
+     * 
+     */
+    public NonEmptyArrayOfInternetHeadersType createNonEmptyArrayOfInternetHeadersType() {
+        return new NonEmptyArrayOfInternetHeadersType();
     }
 
     /**
@@ -2139,6 +2156,15 @@ public class ObjectFactory {
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     public JAXBElement<String> createMailboxCulture(String value) {
         return new JAXBElement<String>(_MailboxCulture_QNAME, String.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link TimeZoneContextType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/types", name = "TimeZoneContext")
+    public JAXBElement<TimeZoneContextType> createTimeZoneContext(TimeZoneContextType value) {
+        return new JAXBElement<TimeZoneContextType>(_TimeZoneContext_QNAME, TimeZoneContextType.class, null, value);
     }
 
     /**

@@ -14,6 +14,7 @@ import com.microsoft.schemas.exchange.services._2006.types.ExchangeImpersonation
 import com.microsoft.schemas.exchange.services._2006.types.RequestServerVersion;
 import com.microsoft.schemas.exchange.services._2006.types.SerializedSecurityContextType;
 import com.microsoft.schemas.exchange.services._2006.types.ServerVersionInfo;
+import com.microsoft.schemas.exchange.services._2006.types.TimeZoneContextType;
 
 
 /**
@@ -25,8 +26,8 @@ import com.microsoft.schemas.exchange.services._2006.types.ServerVersionInfo;
 @WebService(name = "ExchangeServicePortType", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    com.microsoft.schemas.exchange.services._2006.types.ObjectFactory.class,
-    com.microsoft.schemas.exchange.services._2006.messages.ObjectFactory.class
+    com.microsoft.schemas.exchange.services._2006.messages.ObjectFactory.class,
+    com.microsoft.schemas.exchange.services._2006.types.ObjectFactory.class
 })
 public interface ExchangeServicePortType {
 
@@ -607,6 +608,7 @@ public interface ExchangeServicePortType {
 
     /**
      * 
+     * @param timeZoneContext
      * @param request
      * @param serverVersion
      * @param createItemResult
@@ -628,6 +630,29 @@ public interface ExchangeServicePortType {
         String mailboxCulture,
         @WebParam(name = "RequestServerVersion", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "RequestVersion")
         RequestServerVersion requestVersion,
+        @WebParam(name = "TimeZoneContext", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "TimeZoneContext")
+        TimeZoneContextType timeZoneContext,
+        @WebParam(name = "CreateItemResponse", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages", mode = WebParam.Mode.OUT, partName = "CreateItemResult")
+        Holder<CreateItemResponseType> createItemResult,
+        @WebParam(name = "ServerVersionInfo", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, mode = WebParam.Mode.OUT, partName = "ServerVersion")
+        Holder<ServerVersionInfo> serverVersion);
+
+    /**
+     * 
+     * @param timeZoneContext
+     * @param request
+     * @param serverVersion
+     * @param createItemResult
+     * @param impersonation
+     */
+    @WebMethod(operationName = "CreateItem", action = "http://schemas.microsoft.com/exchange/services/2006/messages/CreateItem")
+    public void createItem(
+        @WebParam(name = "CreateItem", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages", partName = "request")
+        CreateItemType request,
+        @WebParam(name = "ExchangeImpersonation", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "Impersonation")
+        ExchangeImpersonationType impersonation,
+        @WebParam(name = "TimeZoneContext", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "TimeZoneContext")
+        TimeZoneContextType timeZoneContext,
         @WebParam(name = "CreateItemResponse", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages", mode = WebParam.Mode.OUT, partName = "CreateItemResult")
         Holder<CreateItemResponseType> createItemResult,
         @WebParam(name = "ServerVersionInfo", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, mode = WebParam.Mode.OUT, partName = "ServerVersion")
@@ -699,6 +724,7 @@ public interface ExchangeServicePortType {
 
     /**
      * 
+     * @param timeZoneContext
      * @param request
      * @param serverVersion
      * @param impersonation
@@ -720,6 +746,29 @@ public interface ExchangeServicePortType {
         String mailboxCulture,
         @WebParam(name = "RequestServerVersion", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "RequestVersion")
         RequestServerVersion requestVersion,
+        @WebParam(name = "TimeZoneContext", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "TimeZoneContext")
+        TimeZoneContextType timeZoneContext,
+        @WebParam(name = "UpdateItemResponse", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages", mode = WebParam.Mode.OUT, partName = "UpdateItemResult")
+        Holder<UpdateItemResponseType> updateItemResult,
+        @WebParam(name = "ServerVersionInfo", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, mode = WebParam.Mode.OUT, partName = "ServerVersion")
+        Holder<ServerVersionInfo> serverVersion);
+
+    /**
+     * 
+     * @param timeZoneContext
+     * @param request
+     * @param serverVersion
+     * @param impersonation
+     * @param updateItemResult
+     */
+    @WebMethod(operationName = "UpdateItem", action = "http://schemas.microsoft.com/exchange/services/2006/messages/UpdateItem")
+    public void updateItem(
+        @WebParam(name = "UpdateItem", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages", partName = "request")
+        UpdateItemType request,
+        @WebParam(name = "ExchangeImpersonation", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "Impersonation")
+        ExchangeImpersonationType impersonation,
+        @WebParam(name = "TimeZoneContext", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, partName = "TimeZoneContext")
+        TimeZoneContextType timeZoneContext,
         @WebParam(name = "UpdateItemResponse", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/messages", mode = WebParam.Mode.OUT, partName = "UpdateItemResult")
         Holder<UpdateItemResponseType> updateItemResult,
         @WebParam(name = "ServerVersionInfo", targetNamespace = "http://schemas.microsoft.com/exchange/services/2006/types", header = true, mode = WebParam.Mode.OUT, partName = "ServerVersion")

@@ -42,9 +42,9 @@ import javax.xml.bind.annotation.XmlType;
 public class NonEmptyArrayOfAlternateIdsType {
 
     @XmlElements({
-        @XmlElement(name = "AlternateId", type = AlternateIdType.class),
         @XmlElement(name = "AlternatePublicFolderId", type = AlternatePublicFolderIdType.class),
-        @XmlElement(name = "AlternatePublicFolderItemId", type = AlternatePublicFolderItemIdType.class)
+        @XmlElement(name = "AlternatePublicFolderItemId", type = AlternatePublicFolderItemIdType.class),
+        @XmlElement(name = "AlternateId", type = AlternateIdType.class)
     })
     protected List<AlternateIdBaseType> alternateIdOrAlternatePublicFolderIdOrAlternatePublicFolderItemId;
 
@@ -66,9 +66,9 @@ public class NonEmptyArrayOfAlternateIdsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link AlternateIdType }
      * {@link AlternatePublicFolderIdType }
      * {@link AlternatePublicFolderItemIdType }
+     * {@link AlternateIdType }
      * 
      * 
      */

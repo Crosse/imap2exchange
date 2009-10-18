@@ -58,13 +58,13 @@ public class NotificationType {
     @XmlElement(name = "MoreEvents")
     protected boolean moreEvents;
     @XmlElementRefs({
-        @XmlElementRef(name = "CopiedEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
-        @XmlElementRef(name = "StatusEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
         @XmlElementRef(name = "ModifiedEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
         @XmlElementRef(name = "CreatedEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
+        @XmlElementRef(name = "NewMailEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
         @XmlElementRef(name = "DeletedEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
         @XmlElementRef(name = "MovedEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
-        @XmlElementRef(name = "NewMailEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class)
+        @XmlElementRef(name = "CopiedEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
+        @XmlElementRef(name = "StatusEvent", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class)
     })
     protected List<JAXBElement<? extends BaseNotificationEventType>> copiedEventOrCreatedEventOrDeletedEvent;
 
@@ -150,13 +150,13 @@ public class NotificationType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link MovedCopiedEventType }{@code >}
-     * {@link JAXBElement }{@code <}{@link BaseNotificationEventType }{@code >}
      * {@link JAXBElement }{@code <}{@link ModifiedEventType }{@code >}
      * {@link JAXBElement }{@code <}{@link BaseObjectChangedEventType }{@code >}
      * {@link JAXBElement }{@code <}{@link BaseObjectChangedEventType }{@code >}
-     * {@link JAXBElement }{@code <}{@link MovedCopiedEventType }{@code >}
      * {@link JAXBElement }{@code <}{@link BaseObjectChangedEventType }{@code >}
+     * {@link JAXBElement }{@code <}{@link MovedCopiedEventType }{@code >}
+     * {@link JAXBElement }{@code <}{@link MovedCopiedEventType }{@code >}
+     * {@link JAXBElement }{@code <}{@link BaseNotificationEventType }{@code >}
      * 
      * 
      */

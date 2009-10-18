@@ -58,27 +58,27 @@ import javax.xml.bind.annotation.XmlType;
 public class NonEmptyArrayOfAllItemsType {
 
     @XmlElements({
-        @XmlElement(name = "DistributionList", type = DistributionListType.class),
-        @XmlElement(name = "Task", type = TaskType.class),
-        @XmlElement(name = "CancelCalendarItem", type = CancelCalendarItemType.class),
-        @XmlElement(name = "Message", type = MessageType.class),
-        @XmlElement(name = "RemoveItem", type = RemoveItemType.class),
-        @XmlElement(name = "PostReplyItem", type = PostReplyItemType.class),
-        @XmlElement(name = "ReplyAllToItem", type = ReplyAllToItemType.class),
-        @XmlElement(name = "MeetingResponse", type = MeetingResponseMessageType.class),
-        @XmlElement(name = "MeetingMessage", type = MeetingMessageType.class),
-        @XmlElement(name = "AcceptItem", type = AcceptItemType.class),
-        @XmlElement(name = "SuppressReadReceipt", type = SuppressReadReceiptType.class),
-        @XmlElement(name = "Contact", type = ContactItemType.class),
-        @XmlElement(name = "PostItem", type = PostItemType.class),
-        @XmlElement(name = "CalendarItem", type = CalendarItemType.class),
-        @XmlElement(name = "DeclineItem", type = DeclineItemType.class),
-        @XmlElement(name = "MeetingCancellation", type = MeetingCancellationMessageType.class),
-        @XmlElement(name = "ReplyToItem", type = ReplyToItemType.class),
-        @XmlElement(name = "Item"),
         @XmlElement(name = "MeetingRequest", type = MeetingRequestMessageType.class),
         @XmlElement(name = "TentativelyAcceptItem", type = TentativelyAcceptItemType.class),
-        @XmlElement(name = "ForwardItem", type = ForwardItemType.class)
+        @XmlElement(name = "Task", type = TaskType.class),
+        @XmlElement(name = "ReplyToItem", type = ReplyToItemType.class),
+        @XmlElement(name = "CalendarItem", type = CalendarItemType.class),
+        @XmlElement(name = "CancelCalendarItem", type = CancelCalendarItemType.class),
+        @XmlElement(name = "MeetingCancellation", type = MeetingCancellationMessageType.class),
+        @XmlElement(name = "Contact", type = ContactItemType.class),
+        @XmlElement(name = "Item"),
+        @XmlElement(name = "ReplyAllToItem", type = ReplyAllToItemType.class),
+        @XmlElement(name = "PostReplyItem", type = PostReplyItemType.class),
+        @XmlElement(name = "AcceptItem", type = AcceptItemType.class),
+        @XmlElement(name = "ForwardItem", type = ForwardItemType.class),
+        @XmlElement(name = "SuppressReadReceipt", type = SuppressReadReceiptType.class),
+        @XmlElement(name = "RemoveItem", type = RemoveItemType.class),
+        @XmlElement(name = "DistributionList", type = DistributionListType.class),
+        @XmlElement(name = "PostItem", type = PostItemType.class),
+        @XmlElement(name = "Message", type = MessageType.class),
+        @XmlElement(name = "MeetingResponse", type = MeetingResponseMessageType.class),
+        @XmlElement(name = "MeetingMessage", type = MeetingMessageType.class),
+        @XmlElement(name = "DeclineItem", type = DeclineItemType.class)
     })
     protected List<ItemType> itemOrMessageOrCalendarItem;
 
@@ -100,27 +100,27 @@ public class NonEmptyArrayOfAllItemsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DistributionListType }
-     * {@link TaskType }
-     * {@link CancelCalendarItemType }
-     * {@link MessageType }
-     * {@link RemoveItemType }
-     * {@link PostReplyItemType }
-     * {@link ReplyAllToItemType }
-     * {@link MeetingResponseMessageType }
-     * {@link MeetingMessageType }
-     * {@link AcceptItemType }
-     * {@link SuppressReadReceiptType }
-     * {@link ContactItemType }
-     * {@link PostItemType }
-     * {@link CalendarItemType }
-     * {@link DeclineItemType }
-     * {@link MeetingCancellationMessageType }
-     * {@link ReplyToItemType }
-     * {@link ItemType }
      * {@link MeetingRequestMessageType }
      * {@link TentativelyAcceptItemType }
+     * {@link TaskType }
+     * {@link ReplyToItemType }
+     * {@link CalendarItemType }
+     * {@link CancelCalendarItemType }
+     * {@link MeetingCancellationMessageType }
+     * {@link ContactItemType }
+     * {@link ItemType }
+     * {@link ReplyAllToItemType }
+     * {@link PostReplyItemType }
+     * {@link AcceptItemType }
      * {@link ForwardItemType }
+     * {@link SuppressReadReceiptType }
+     * {@link RemoveItemType }
+     * {@link DistributionListType }
+     * {@link PostItemType }
+     * {@link MessageType }
+     * {@link MeetingResponseMessageType }
+     * {@link MeetingMessageType }
+     * {@link DeclineItemType }
      * 
      * 
      */

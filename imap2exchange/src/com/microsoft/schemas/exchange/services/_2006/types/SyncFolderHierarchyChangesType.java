@@ -41,9 +41,9 @@ import javax.xml.bind.annotation.XmlType;
 public class SyncFolderHierarchyChangesType {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "Delete", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
         @XmlElementRef(name = "Update", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
-        @XmlElementRef(name = "Create", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class)
+        @XmlElementRef(name = "Create", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class),
+        @XmlElementRef(name = "Delete", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> createOrUpdateOrDelete;
 
@@ -65,9 +65,9 @@ public class SyncFolderHierarchyChangesType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
      * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyDeleteType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
      * 
      * 
      */

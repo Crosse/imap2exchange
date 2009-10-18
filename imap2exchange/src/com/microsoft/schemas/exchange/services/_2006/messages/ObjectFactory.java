@@ -111,15 +111,15 @@ public class ObjectFactory {
     private final static QName _ArrayOfResponseMessagesTypeGetFolderResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "GetFolderResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeGetItemResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "GetItemResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeSyncFolderHierarchyResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "SyncFolderHierarchyResponseMessage");
-    private final static QName _ArrayOfResponseMessagesTypeMoveFolderResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "MoveFolderResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeMoveItemResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "MoveItemResponseMessage");
+    private final static QName _ArrayOfResponseMessagesTypeMoveFolderResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "MoveFolderResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeFindFolderResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "FindFolderResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeCreateItemResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "CreateItemResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeUnsubscribeResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "UnsubscribeResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeCreateManagedFolderResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "CreateManagedFolderResponseMessage");
-    private final static QName _ArrayOfResponseMessagesTypeDeleteItemResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "DeleteItemResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeDeleteFolderResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "DeleteFolderResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeCreateAttachmentResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "CreateAttachmentResponseMessage");
+    private final static QName _ArrayOfResponseMessagesTypeDeleteItemResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "DeleteItemResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeSendItemResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "SendItemResponseMessage");
     private final static QName _ArrayOfResponseMessagesTypeGetEventsResponseMessage_QNAME = new QName("http://schemas.microsoft.com/exchange/services/2006/messages", "GetEventsResponseMessage");
 
@@ -131,323 +131,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SendNotificationResponseType }
+     * Create an instance of {@link FreeBusyResponseType }
      * 
      */
-    public SendNotificationResponseType createSendNotificationResponseType() {
-        return new SendNotificationResponseType();
-    }
-
-    /**
-     * Create an instance of {@link BaseMoveCopyFolderType }
-     * 
-     */
-    public BaseMoveCopyFolderType createBaseMoveCopyFolderType() {
-        return new BaseMoveCopyFolderType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateItemResponseType }
-     * 
-     */
-    public UpdateItemResponseType createUpdateItemResponseType() {
-        return new UpdateItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UnsubscribeResponseType }
-     * 
-     */
-    public UnsubscribeResponseType createUnsubscribeResponseType() {
-        return new UnsubscribeResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CreateManagedFolderResponseType }
-     * 
-     */
-    public CreateManagedFolderResponseType createCreateManagedFolderResponseType() {
-        return new CreateManagedFolderResponseType();
-    }
-
-    /**
-     * Create an instance of {@link FindItemResponseMessageType }
-     * 
-     */
-    public FindItemResponseMessageType createFindItemResponseMessageType() {
-        return new FindItemResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link FindItemResponseType }
-     * 
-     */
-    public FindItemResponseType createFindItemResponseType() {
-        return new FindItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderItemsResponseMessageType }
-     * 
-     */
-    public SyncFolderItemsResponseMessageType createSyncFolderItemsResponseMessageType() {
-        return new SyncFolderItemsResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link GetFolderType }
-     * 
-     */
-    public GetFolderType createGetFolderType() {
-        return new GetFolderType();
-    }
-
-    /**
-     * Create an instance of {@link GetAttachmentResponseType }
-     * 
-     */
-    public GetAttachmentResponseType createGetAttachmentResponseType() {
-        return new GetAttachmentResponseType();
-    }
-
-    /**
-     * Create an instance of {@link GetFolderResponseType }
-     * 
-     */
-    public GetFolderResponseType createGetFolderResponseType() {
-        return new GetFolderResponseType();
-    }
-
-    /**
-     * Create an instance of {@link FindItemType }
-     * 
-     */
-    public FindItemType createFindItemType() {
-        return new FindItemType();
-    }
-
-    /**
-     * Create an instance of {@link CreateAttachmentType }
-     * 
-     */
-    public CreateAttachmentType createCreateAttachmentType() {
-        return new CreateAttachmentType();
-    }
-
-    /**
-     * Create an instance of {@link ExpandDLResponseMessageType }
-     * 
-     */
-    public ExpandDLResponseMessageType createExpandDLResponseMessageType() {
-        return new ExpandDLResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link FindFolderResponseMessageType }
-     * 
-     */
-    public FindFolderResponseMessageType createFindFolderResponseMessageType() {
-        return new FindFolderResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link CopyItemType }
-     * 
-     */
-    public CopyItemType createCopyItemType() {
-        return new CopyItemType();
-    }
-
-    /**
-     * Create an instance of {@link CreateFolderResponseType }
-     * 
-     */
-    public CreateFolderResponseType createCreateFolderResponseType() {
-        return new CreateFolderResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ConvertIdResponseMessageType }
-     * 
-     */
-    public ConvertIdResponseMessageType createConvertIdResponseMessageType() {
-        return new ConvertIdResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link SubscribeType }
-     * 
-     */
-    public SubscribeType createSubscribeType() {
-        return new SubscribeType();
-    }
-
-    /**
-     * Create an instance of {@link GetUserAvailabilityRequestType }
-     * 
-     */
-    public GetUserAvailabilityRequestType createGetUserAvailabilityRequestType() {
-        return new GetUserAvailabilityRequestType();
-    }
-
-    /**
-     * Create an instance of {@link GetDelegateResponseMessageType }
-     * 
-     */
-    public GetDelegateResponseMessageType createGetDelegateResponseMessageType() {
-        return new GetDelegateResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteAttachmentResponseType }
-     * 
-     */
-    public DeleteAttachmentResponseType createDeleteAttachmentResponseType() {
-        return new DeleteAttachmentResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateItemResponseMessageType }
-     * 
-     */
-    public UpdateItemResponseMessageType createUpdateItemResponseMessageType() {
-        return new UpdateItemResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateDelegateResponseMessageType }
-     * 
-     */
-    public UpdateDelegateResponseMessageType createUpdateDelegateResponseMessageType() {
-        return new UpdateDelegateResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link ExpandDLResponseType }
-     * 
-     */
-    public ExpandDLResponseType createExpandDLResponseType() {
-        return new ExpandDLResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateItemType }
-     * 
-     */
-    public UpdateItemType createUpdateItemType() {
-        return new UpdateItemType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteAttachmentType }
-     * 
-     */
-    public DeleteAttachmentType createDeleteAttachmentType() {
-        return new DeleteAttachmentType();
-    }
-
-    /**
-     * Create an instance of {@link FindFolderResponseType }
-     * 
-     */
-    public FindFolderResponseType createFindFolderResponseType() {
-        return new FindFolderResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ResolveNamesType }
-     * 
-     */
-    public ResolveNamesType createResolveNamesType() {
-        return new ResolveNamesType();
-    }
-
-    /**
-     * Create an instance of {@link GetDelegateType }
-     * 
-     */
-    public GetDelegateType createGetDelegateType() {
-        return new GetDelegateType();
-    }
-
-    /**
-     * Create an instance of {@link GetEventsResponseMessageType }
-     * 
-     */
-    public GetEventsResponseMessageType createGetEventsResponseMessageType() {
-        return new GetEventsResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link ExpandDLType }
-     * 
-     */
-    public ExpandDLType createExpandDLType() {
-        return new ExpandDLType();
-    }
-
-    /**
-     * Create an instance of {@link MoveFolderType }
-     * 
-     */
-    public MoveFolderType createMoveFolderType() {
-        return new MoveFolderType();
-    }
-
-    /**
-     * Create an instance of {@link ResolveNamesResponseType }
-     * 
-     */
-    public ResolveNamesResponseType createResolveNamesResponseType() {
-        return new ResolveNamesResponseType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateDelegateType }
-     * 
-     */
-    public UpdateDelegateType createUpdateDelegateType() {
-        return new UpdateDelegateType();
-    }
-
-    /**
-     * Create an instance of {@link SendItemType }
-     * 
-     */
-    public SendItemType createSendItemType() {
-        return new SendItemType();
-    }
-
-    /**
-     * Create an instance of {@link ResponseMessageType }
-     * 
-     */
-    public ResponseMessageType createResponseMessageType() {
-        return new ResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link GetItemResponseType }
-     * 
-     */
-    public GetItemResponseType createGetItemResponseType() {
-        return new GetItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfDelegateUserResponseMessageType }
-     * 
-     */
-    public ArrayOfDelegateUserResponseMessageType createArrayOfDelegateUserResponseMessageType() {
-        return new ArrayOfDelegateUserResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteFolderType }
-     * 
-     */
-    public DeleteFolderType createDeleteFolderType() {
-        return new DeleteFolderType();
+    public FreeBusyResponseType createFreeBusyResponseType() {
+        return new FreeBusyResponseType();
     }
 
     /**
@@ -459,78 +147,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveDelegateType }
-     * 
-     */
-    public RemoveDelegateType createRemoveDelegateType() {
-        return new RemoveDelegateType();
-    }
-
-    /**
-     * Create an instance of {@link ConvertIdResponseType }
-     * 
-     */
-    public ConvertIdResponseType createConvertIdResponseType() {
-        return new ConvertIdResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderItemsResponseType }
-     * 
-     */
-    public SyncFolderItemsResponseType createSyncFolderItemsResponseType() {
-        return new SyncFolderItemsResponseType();
-    }
-
-    /**
-     * Create an instance of {@link AttachmentInfoResponseMessageType }
-     * 
-     */
-    public AttachmentInfoResponseMessageType createAttachmentInfoResponseMessageType() {
-        return new AttachmentInfoResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link SendNotificationResultType }
-     * 
-     */
-    public SendNotificationResultType createSendNotificationResultType() {
-        return new SendNotificationResultType();
-    }
-
-    /**
-     * Create an instance of {@link ItemInfoResponseMessageType }
-     * 
-     */
-    public ItemInfoResponseMessageType createItemInfoResponseMessageType() {
-        return new ItemInfoResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link FreeBusyResponseType }
-     * 
-     */
-    public FreeBusyResponseType createFreeBusyResponseType() {
-        return new FreeBusyResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DelegateUserResponseMessageType }
-     * 
-     */
-    public DelegateUserResponseMessageType createDelegateUserResponseMessageType() {
-        return new DelegateUserResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link BaseMoveCopyItemType }
-     * 
-     */
-    public BaseMoveCopyItemType createBaseMoveCopyItemType() {
-        return new BaseMoveCopyItemType();
-    }
-
-    /**
      * Create an instance of {@link MoveItemType }
      * 
      */
@@ -539,107 +155,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SyncFolderHierarchyType }
+     * Create an instance of {@link GetFolderResponseType }
      * 
      */
-    public SyncFolderHierarchyType createSyncFolderHierarchyType() {
-        return new SyncFolderHierarchyType();
-    }
-
-    /**
-     * Create an instance of {@link ResolveNamesResponseMessageType }
-     * 
-     */
-    public ResolveNamesResponseMessageType createResolveNamesResponseMessageType() {
-        return new ResolveNamesResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link CreateItemType }
-     * 
-     */
-    public CreateItemType createCreateItemType() {
-        return new CreateItemType();
-    }
-
-    /**
-     * Create an instance of {@link UpdateFolderResponseType }
-     * 
-     */
-    public UpdateFolderResponseType createUpdateFolderResponseType() {
-        return new UpdateFolderResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ResponseMessageType.MessageXml }
-     * 
-     */
-    public ResponseMessageType.MessageXml createResponseMessageTypeMessageXml() {
-        return new ResponseMessageType.MessageXml();
-    }
-
-    /**
-     * Create an instance of {@link SubscribeResponseType }
-     * 
-     */
-    public SubscribeResponseType createSubscribeResponseType() {
-        return new SubscribeResponseType();
-    }
-
-    /**
-     * Create an instance of {@link ConvertIdType }
-     * 
-     */
-    public ConvertIdType createConvertIdType() {
-        return new ConvertIdType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteItemType }
-     * 
-     */
-    public DeleteItemType createDeleteItemType() {
-        return new DeleteItemType();
-    }
-
-    /**
-     * Create an instance of {@link GetUserOofSettingsResponse }
-     * 
-     */
-    public GetUserOofSettingsResponse createGetUserOofSettingsResponse() {
-        return new GetUserOofSettingsResponse();
-    }
-
-    /**
-     * Create an instance of {@link UpdateFolderType }
-     * 
-     */
-    public UpdateFolderType createUpdateFolderType() {
-        return new UpdateFolderType();
-    }
-
-    /**
-     * Create an instance of {@link CreateManagedFolderRequestType }
-     * 
-     */
-    public CreateManagedFolderRequestType createCreateManagedFolderRequestType() {
-        return new CreateManagedFolderRequestType();
-    }
-
-    /**
-     * Create an instance of {@link CopyItemResponseType }
-     * 
-     */
-    public CopyItemResponseType createCopyItemResponseType() {
-        return new CopyItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link DeleteItemResponseType }
-     * 
-     */
-    public DeleteItemResponseType createDeleteItemResponseType() {
-        return new DeleteItemResponseType();
+    public GetFolderResponseType createGetFolderResponseType() {
+        return new GetFolderResponseType();
     }
 
     /**
@@ -651,43 +171,83 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetUserOofSettingsResponse }
+     * Create an instance of {@link UnsubscribeResponseType }
      * 
      */
-    public SetUserOofSettingsResponse createSetUserOofSettingsResponse() {
-        return new SetUserOofSettingsResponse();
+    public UnsubscribeResponseType createUnsubscribeResponseType() {
+        return new UnsubscribeResponseType();
     }
 
     /**
-     * Create an instance of {@link DeleteFolderResponseType }
+     * Create an instance of {@link SubscribeResponseType }
      * 
      */
-    public DeleteFolderResponseType createDeleteFolderResponseType() {
-        return new DeleteFolderResponseType();
+    public SubscribeResponseType createSubscribeResponseType() {
+        return new SubscribeResponseType();
     }
 
     /**
-     * Create an instance of {@link CopyFolderType }
+     * Create an instance of {@link DeleteItemResponseType }
      * 
      */
-    public CopyFolderType createCopyFolderType() {
-        return new CopyFolderType();
+    public DeleteItemResponseType createDeleteItemResponseType() {
+        return new DeleteItemResponseType();
     }
 
     /**
-     * Create an instance of {@link CopyFolderResponseType }
+     * Create an instance of {@link ExpandDLResponseType }
      * 
      */
-    public CopyFolderResponseType createCopyFolderResponseType() {
-        return new CopyFolderResponseType();
+    public ExpandDLResponseType createExpandDLResponseType() {
+        return new ExpandDLResponseType();
     }
 
     /**
-     * Create an instance of {@link SuggestionsResponseType }
+     * Create an instance of {@link SyncFolderItemsResponseType }
      * 
      */
-    public SuggestionsResponseType createSuggestionsResponseType() {
-        return new SuggestionsResponseType();
+    public SyncFolderItemsResponseType createSyncFolderItemsResponseType() {
+        return new SyncFolderItemsResponseType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteItemType }
+     * 
+     */
+    public DeleteItemType createDeleteItemType() {
+        return new DeleteItemType();
+    }
+
+    /**
+     * Create an instance of {@link ConvertIdType }
+     * 
+     */
+    public ConvertIdType createConvertIdType() {
+        return new ConvertIdType();
+    }
+
+    /**
+     * Create an instance of {@link GetUserOofSettingsResponse }
+     * 
+     */
+    public GetUserOofSettingsResponse createGetUserOofSettingsResponse() {
+        return new GetUserOofSettingsResponse();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfDelegateUserResponseMessageType }
+     * 
+     */
+    public ArrayOfDelegateUserResponseMessageType createArrayOfDelegateUserResponseMessageType() {
+        return new ArrayOfDelegateUserResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteAttachmentType }
+     * 
+     */
+    public DeleteAttachmentType createDeleteAttachmentType() {
+        return new DeleteAttachmentType();
     }
 
     /**
@@ -699,94 +259,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SubscribeResponseMessageType }
-     * 
-     */
-    public SubscribeResponseMessageType createSubscribeResponseMessageType() {
-        return new SubscribeResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link CreateAttachmentResponseType }
-     * 
-     */
-    public CreateAttachmentResponseType createCreateAttachmentResponseType() {
-        return new CreateAttachmentResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SendNotificationResponseMessageType }
-     * 
-     */
-    public SendNotificationResponseMessageType createSendNotificationResponseMessageType() {
-        return new SendNotificationResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link MoveItemResponseType }
-     * 
-     */
-    public MoveItemResponseType createMoveItemResponseType() {
-        return new MoveItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link SyncFolderHierarchyResponseMessageType }
-     * 
-     */
-    public SyncFolderHierarchyResponseMessageType createSyncFolderHierarchyResponseMessageType() {
-        return new SyncFolderHierarchyResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link FolderInfoResponseMessageType }
-     * 
-     */
-    public FolderInfoResponseMessageType createFolderInfoResponseMessageType() {
-        return new FolderInfoResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfFreeBusyResponse }
-     * 
-     */
-    public ArrayOfFreeBusyResponse createArrayOfFreeBusyResponse() {
-        return new ArrayOfFreeBusyResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetUserAvailabilityResponseType }
-     * 
-     */
-    public GetUserAvailabilityResponseType createGetUserAvailabilityResponseType() {
-        return new GetUserAvailabilityResponseType();
-    }
-
-    /**
-     * Create an instance of {@link CreateFolderType }
-     * 
-     */
-    public CreateFolderType createCreateFolderType() {
-        return new CreateFolderType();
-    }
-
-    /**
-     * Create an instance of {@link CreateItemResponseType }
-     * 
-     */
-    public CreateItemResponseType createCreateItemResponseType() {
-        return new CreateItemResponseType();
-    }
-
-    /**
-     * Create an instance of {@link GetUserOofSettingsRequest }
-     * 
-     */
-    public GetUserOofSettingsRequest createGetUserOofSettingsRequest() {
-        return new GetUserOofSettingsRequest();
-    }
-
-    /**
      * Create an instance of {@link SendItemResponseType }
      * 
      */
@@ -795,67 +267,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetEventsType }
+     * Create an instance of {@link FindFolderResponseType }
      * 
      */
-    public GetEventsType createGetEventsType() {
-        return new GetEventsType();
+    public FindFolderResponseType createFindFolderResponseType() {
+        return new FindFolderResponseType();
     }
 
     /**
-     * Create an instance of {@link AddDelegateResponseMessageType }
+     * Create an instance of {@link UpdateDelegateResponseMessageType }
      * 
      */
-    public AddDelegateResponseMessageType createAddDelegateResponseMessageType() {
-        return new AddDelegateResponseMessageType();
+    public UpdateDelegateResponseMessageType createUpdateDelegateResponseMessageType() {
+        return new UpdateDelegateResponseMessageType();
     }
 
     /**
-     * Create an instance of {@link GetEventsResponseType }
+     * Create an instance of {@link SendNotificationResultType }
      * 
      */
-    public GetEventsResponseType createGetEventsResponseType() {
-        return new GetEventsResponseType();
+    public SendNotificationResultType createSendNotificationResultType() {
+        return new SendNotificationResultType();
     }
 
     /**
-     * Create an instance of {@link SetUserOofSettingsRequest }
+     * Create an instance of {@link GetDelegateResponseMessageType }
      * 
      */
-    public SetUserOofSettingsRequest createSetUserOofSettingsRequest() {
-        return new SetUserOofSettingsRequest();
+    public GetDelegateResponseMessageType createGetDelegateResponseMessageType() {
+        return new GetDelegateResponseMessageType();
     }
 
     /**
-     * Create an instance of {@link RemoveDelegateResponseMessageType }
+     * Create an instance of {@link SubscribeResponseMessageType }
      * 
      */
-    public RemoveDelegateResponseMessageType createRemoveDelegateResponseMessageType() {
-        return new RemoveDelegateResponseMessageType();
+    public SubscribeResponseMessageType createSubscribeResponseMessageType() {
+        return new SubscribeResponseMessageType();
     }
 
     /**
-     * Create an instance of {@link BaseResponseMessageType }
+     * Create an instance of {@link CreateManagedFolderRequestType }
      * 
      */
-    public BaseResponseMessageType createBaseResponseMessageType() {
-        return new BaseResponseMessageType();
-    }
-
-    /**
-     * Create an instance of {@link UnsubscribeType }
-     * 
-     */
-    public UnsubscribeType createUnsubscribeType() {
-        return new UnsubscribeType();
-    }
-
-    /**
-     * Create an instance of {@link FindFolderType }
-     * 
-     */
-    public FindFolderType createFindFolderType() {
-        return new FindFolderType();
+    public CreateManagedFolderRequestType createCreateManagedFolderRequestType() {
+        return new CreateManagedFolderRequestType();
     }
 
     /**
@@ -867,11 +323,251 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfResponseMessagesType }
+     * Create an instance of {@link ExpandDLResponseMessageType }
      * 
      */
-    public ArrayOfResponseMessagesType createArrayOfResponseMessagesType() {
-        return new ArrayOfResponseMessagesType();
+    public ExpandDLResponseMessageType createExpandDLResponseMessageType() {
+        return new ExpandDLResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderHierarchyResponseMessageType }
+     * 
+     */
+    public SyncFolderHierarchyResponseMessageType createSyncFolderHierarchyResponseMessageType() {
+        return new SyncFolderHierarchyResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteFolderType }
+     * 
+     */
+    public DeleteFolderType createDeleteFolderType() {
+        return new DeleteFolderType();
+    }
+
+    /**
+     * Create an instance of {@link FindItemResponseMessageType }
+     * 
+     */
+    public FindItemResponseMessageType createFindItemResponseMessageType() {
+        return new FindItemResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateDelegateType }
+     * 
+     */
+    public UpdateDelegateType createUpdateDelegateType() {
+        return new UpdateDelegateType();
+    }
+
+    /**
+     * Create an instance of {@link ExpandDLType }
+     * 
+     */
+    public ExpandDLType createExpandDLType() {
+        return new ExpandDLType();
+    }
+
+    /**
+     * Create an instance of {@link RemoveDelegateType }
+     * 
+     */
+    public RemoveDelegateType createRemoveDelegateType() {
+        return new RemoveDelegateType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateFolderType }
+     * 
+     */
+    public UpdateFolderType createUpdateFolderType() {
+        return new UpdateFolderType();
+    }
+
+    /**
+     * Create an instance of {@link SetUserOofSettingsResponse }
+     * 
+     */
+    public SetUserOofSettingsResponse createSetUserOofSettingsResponse() {
+        return new SetUserOofSettingsResponse();
+    }
+
+    /**
+     * Create an instance of {@link UpdateItemType }
+     * 
+     */
+    public UpdateItemType createUpdateItemType() {
+        return new UpdateItemType();
+    }
+
+    /**
+     * Create an instance of {@link CreateAttachmentType }
+     * 
+     */
+    public CreateAttachmentType createCreateAttachmentType() {
+        return new CreateAttachmentType();
+    }
+
+    /**
+     * Create an instance of {@link ResponseMessageType }
+     * 
+     */
+    public ResponseMessageType createResponseMessageType() {
+        return new ResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link ResolveNamesType }
+     * 
+     */
+    public ResolveNamesType createResolveNamesType() {
+        return new ResolveNamesType();
+    }
+
+    /**
+     * Create an instance of {@link CreateFolderType }
+     * 
+     */
+    public CreateFolderType createCreateFolderType() {
+        return new CreateFolderType();
+    }
+
+    /**
+     * Create an instance of {@link CopyFolderType }
+     * 
+     */
+    public CopyFolderType createCopyFolderType() {
+        return new CopyFolderType();
+    }
+
+    /**
+     * Create an instance of {@link FolderInfoResponseMessageType }
+     * 
+     */
+    public FolderInfoResponseMessageType createFolderInfoResponseMessageType() {
+        return new FolderInfoResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link CopyFolderResponseType }
+     * 
+     */
+    public CopyFolderResponseType createCopyFolderResponseType() {
+        return new CopyFolderResponseType();
+    }
+
+    /**
+     * Create an instance of {@link MoveItemResponseType }
+     * 
+     */
+    public MoveItemResponseType createMoveItemResponseType() {
+        return new MoveItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link GetEventsType }
+     * 
+     */
+    public GetEventsType createGetEventsType() {
+        return new GetEventsType();
+    }
+
+    /**
+     * Create an instance of {@link GetUserAvailabilityRequestType }
+     * 
+     */
+    public GetUserAvailabilityRequestType createGetUserAvailabilityRequestType() {
+        return new GetUserAvailabilityRequestType();
+    }
+
+    /**
+     * Create an instance of {@link ResolveNamesResponseType }
+     * 
+     */
+    public ResolveNamesResponseType createResolveNamesResponseType() {
+        return new ResolveNamesResponseType();
+    }
+
+    /**
+     * Create an instance of {@link GetAttachmentResponseType }
+     * 
+     */
+    public GetAttachmentResponseType createGetAttachmentResponseType() {
+        return new GetAttachmentResponseType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteAttachmentResponseType }
+     * 
+     */
+    public DeleteAttachmentResponseType createDeleteAttachmentResponseType() {
+        return new DeleteAttachmentResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SubscribeType }
+     * 
+     */
+    public SubscribeType createSubscribeType() {
+        return new SubscribeType();
+    }
+
+    /**
+     * Create an instance of {@link GetEventsResponseType }
+     * 
+     */
+    public GetEventsResponseType createGetEventsResponseType() {
+        return new GetEventsResponseType();
+    }
+
+    /**
+     * Create an instance of {@link FindItemType }
+     * 
+     */
+    public FindItemType createFindItemType() {
+        return new FindItemType();
+    }
+
+    /**
+     * Create an instance of {@link BaseMoveCopyItemType }
+     * 
+     */
+    public BaseMoveCopyItemType createBaseMoveCopyItemType() {
+        return new BaseMoveCopyItemType();
+    }
+
+    /**
+     * Create an instance of {@link GetEventsResponseMessageType }
+     * 
+     */
+    public GetEventsResponseMessageType createGetEventsResponseMessageType() {
+        return new GetEventsResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderHierarchyType }
+     * 
+     */
+    public SyncFolderHierarchyType createSyncFolderHierarchyType() {
+        return new SyncFolderHierarchyType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfFreeBusyResponse }
+     * 
+     */
+    public ArrayOfFreeBusyResponse createArrayOfFreeBusyResponse() {
+        return new ArrayOfFreeBusyResponse();
+    }
+
+    /**
+     * Create an instance of {@link BaseMoveCopyFolderType }
+     * 
+     */
+    public BaseMoveCopyFolderType createBaseMoveCopyFolderType() {
+        return new BaseMoveCopyFolderType();
     }
 
     /**
@@ -883,6 +579,118 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SendNotificationResponseMessageType }
+     * 
+     */
+    public SendNotificationResponseMessageType createSendNotificationResponseMessageType() {
+        return new SendNotificationResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link DelegateUserResponseMessageType }
+     * 
+     */
+    public DelegateUserResponseMessageType createDelegateUserResponseMessageType() {
+        return new DelegateUserResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link GetUserAvailabilityResponseType }
+     * 
+     */
+    public GetUserAvailabilityResponseType createGetUserAvailabilityResponseType() {
+        return new GetUserAvailabilityResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SetUserOofSettingsRequest }
+     * 
+     */
+    public SetUserOofSettingsRequest createSetUserOofSettingsRequest() {
+        return new SetUserOofSettingsRequest();
+    }
+
+    /**
+     * Create an instance of {@link MoveFolderType }
+     * 
+     */
+    public MoveFolderType createMoveFolderType() {
+        return new MoveFolderType();
+    }
+
+    /**
+     * Create an instance of {@link CopyItemType }
+     * 
+     */
+    public CopyItemType createCopyItemType() {
+        return new CopyItemType();
+    }
+
+    /**
+     * Create an instance of {@link AddDelegateResponseMessageType }
+     * 
+     */
+    public AddDelegateResponseMessageType createAddDelegateResponseMessageType() {
+        return new AddDelegateResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link CreateAttachmentResponseType }
+     * 
+     */
+    public CreateAttachmentResponseType createCreateAttachmentResponseType() {
+        return new CreateAttachmentResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ResponseMessageType.MessageXml }
+     * 
+     */
+    public ResponseMessageType.MessageXml createResponseMessageTypeMessageXml() {
+        return new ResponseMessageType.MessageXml();
+    }
+
+    /**
+     * Create an instance of {@link ItemInfoResponseMessageType }
+     * 
+     */
+    public ItemInfoResponseMessageType createItemInfoResponseMessageType() {
+        return new ItemInfoResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link CreateManagedFolderResponseType }
+     * 
+     */
+    public CreateManagedFolderResponseType createCreateManagedFolderResponseType() {
+        return new CreateManagedFolderResponseType();
+    }
+
+    /**
+     * Create an instance of {@link RemoveDelegateResponseMessageType }
+     * 
+     */
+    public RemoveDelegateResponseMessageType createRemoveDelegateResponseMessageType() {
+        return new RemoveDelegateResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link CreateFolderResponseType }
+     * 
+     */
+    public CreateFolderResponseType createCreateFolderResponseType() {
+        return new CreateFolderResponseType();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfResponseMessagesType }
+     * 
+     */
+    public ArrayOfResponseMessagesType createArrayOfResponseMessagesType() {
+        return new ArrayOfResponseMessagesType();
+    }
+
+    /**
      * Create an instance of {@link SyncFolderHierarchyResponseType }
      * 
      */
@@ -891,11 +699,203 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UpdateItemResponseType }
+     * 
+     */
+    public UpdateItemResponseType createUpdateItemResponseType() {
+        return new UpdateItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link BaseResponseMessageType }
+     * 
+     */
+    public BaseResponseMessageType createBaseResponseMessageType() {
+        return new BaseResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link FindFolderType }
+     * 
+     */
+    public FindFolderType createFindFolderType() {
+        return new FindFolderType();
+    }
+
+    /**
+     * Create an instance of {@link GetFolderType }
+     * 
+     */
+    public GetFolderType createGetFolderType() {
+        return new GetFolderType();
+    }
+
+    /**
+     * Create an instance of {@link SendNotificationResponseType }
+     * 
+     */
+    public SendNotificationResponseType createSendNotificationResponseType() {
+        return new SendNotificationResponseType();
+    }
+
+    /**
+     * Create an instance of {@link AttachmentInfoResponseMessageType }
+     * 
+     */
+    public AttachmentInfoResponseMessageType createAttachmentInfoResponseMessageType() {
+        return new AttachmentInfoResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link ConvertIdResponseType }
+     * 
+     */
+    public ConvertIdResponseType createConvertIdResponseType() {
+        return new ConvertIdResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SendItemType }
+     * 
+     */
+    public SendItemType createSendItemType() {
+        return new SendItemType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateItemResponseMessageType }
+     * 
+     */
+    public UpdateItemResponseMessageType createUpdateItemResponseMessageType() {
+        return new UpdateItemResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link CreateItemResponseType }
+     * 
+     */
+    public CreateItemResponseType createCreateItemResponseType() {
+        return new CreateItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link DeleteFolderResponseType }
+     * 
+     */
+    public DeleteFolderResponseType createDeleteFolderResponseType() {
+        return new DeleteFolderResponseType();
+    }
+
+    /**
+     * Create an instance of {@link FindItemResponseType }
+     * 
+     */
+    public FindItemResponseType createFindItemResponseType() {
+        return new FindItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link UnsubscribeType }
+     * 
+     */
+    public UnsubscribeType createUnsubscribeType() {
+        return new UnsubscribeType();
+    }
+
+    /**
+     * Create an instance of {@link GetDelegateType }
+     * 
+     */
+    public GetDelegateType createGetDelegateType() {
+        return new GetDelegateType();
+    }
+
+    /**
+     * Create an instance of {@link ResolveNamesResponseMessageType }
+     * 
+     */
+    public ResolveNamesResponseMessageType createResolveNamesResponseMessageType() {
+        return new ResolveNamesResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link GetUserOofSettingsRequest }
+     * 
+     */
+    public GetUserOofSettingsRequest createGetUserOofSettingsRequest() {
+        return new GetUserOofSettingsRequest();
+    }
+
+    /**
+     * Create an instance of {@link ConvertIdResponseMessageType }
+     * 
+     */
+    public ConvertIdResponseMessageType createConvertIdResponseMessageType() {
+        return new ConvertIdResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link CreateItemType }
+     * 
+     */
+    public CreateItemType createCreateItemType() {
+        return new CreateItemType();
+    }
+
+    /**
+     * Create an instance of {@link SuggestionsResponseType }
+     * 
+     */
+    public SuggestionsResponseType createSuggestionsResponseType() {
+        return new SuggestionsResponseType();
+    }
+
+    /**
+     * Create an instance of {@link FindFolderResponseMessageType }
+     * 
+     */
+    public FindFolderResponseMessageType createFindFolderResponseMessageType() {
+        return new FindFolderResponseMessageType();
+    }
+
+    /**
+     * Create an instance of {@link GetItemResponseType }
+     * 
+     */
+    public GetItemResponseType createGetItemResponseType() {
+        return new GetItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link CopyItemResponseType }
+     * 
+     */
+    public CopyItemResponseType createCopyItemResponseType() {
+        return new CopyItemResponseType();
+    }
+
+    /**
+     * Create an instance of {@link SyncFolderItemsResponseMessageType }
+     * 
+     */
+    public SyncFolderItemsResponseMessageType createSyncFolderItemsResponseMessageType() {
+        return new SyncFolderItemsResponseMessageType();
+    }
+
+    /**
      * Create an instance of {@link GetAttachmentType }
      * 
      */
     public GetAttachmentType createGetAttachmentType() {
         return new GetAttachmentType();
+    }
+
+    /**
+     * Create an instance of {@link UpdateFolderResponseType }
+     * 
+     */
+    public UpdateFolderResponseType createUpdateFolderResponseType() {
+        return new UpdateFolderResponseType();
     }
 
     /**
@@ -1682,21 +1682,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "MoveFolderResponseMessage", scope = ArrayOfResponseMessagesType.class)
-    public JAXBElement<FolderInfoResponseMessageType> createArrayOfResponseMessagesTypeMoveFolderResponseMessage(FolderInfoResponseMessageType value) {
-        return new JAXBElement<FolderInfoResponseMessageType>(_ArrayOfResponseMessagesTypeMoveFolderResponseMessage_QNAME, FolderInfoResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ItemInfoResponseMessageType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "MoveItemResponseMessage", scope = ArrayOfResponseMessagesType.class)
     public JAXBElement<ItemInfoResponseMessageType> createArrayOfResponseMessagesTypeMoveItemResponseMessage(ItemInfoResponseMessageType value) {
         return new JAXBElement<ItemInfoResponseMessageType>(_ArrayOfResponseMessagesTypeMoveItemResponseMessage_QNAME, ItemInfoResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FolderInfoResponseMessageType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "MoveFolderResponseMessage", scope = ArrayOfResponseMessagesType.class)
+    public JAXBElement<FolderInfoResponseMessageType> createArrayOfResponseMessagesTypeMoveFolderResponseMessage(FolderInfoResponseMessageType value) {
+        return new JAXBElement<FolderInfoResponseMessageType>(_ArrayOfResponseMessagesTypeMoveFolderResponseMessage_QNAME, FolderInfoResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
     }
 
     /**
@@ -1739,15 +1739,6 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "DeleteItemResponseMessage", scope = ArrayOfResponseMessagesType.class)
-    public JAXBElement<ResponseMessageType> createArrayOfResponseMessagesTypeDeleteItemResponseMessage(ResponseMessageType value) {
-        return new JAXBElement<ResponseMessageType>(_ArrayOfResponseMessagesTypeDeleteItemResponseMessage_QNAME, ResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}}
-     * 
-     */
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "DeleteFolderResponseMessage", scope = ArrayOfResponseMessagesType.class)
     public JAXBElement<ResponseMessageType> createArrayOfResponseMessagesTypeDeleteFolderResponseMessage(ResponseMessageType value) {
         return new JAXBElement<ResponseMessageType>(_ArrayOfResponseMessagesTypeDeleteFolderResponseMessage_QNAME, ResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
@@ -1760,6 +1751,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "CreateAttachmentResponseMessage", scope = ArrayOfResponseMessagesType.class)
     public JAXBElement<AttachmentInfoResponseMessageType> createArrayOfResponseMessagesTypeCreateAttachmentResponseMessage(AttachmentInfoResponseMessageType value) {
         return new JAXBElement<AttachmentInfoResponseMessageType>(_ArrayOfResponseMessagesTypeCreateAttachmentResponseMessage_QNAME, AttachmentInfoResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ResponseMessageType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://schemas.microsoft.com/exchange/services/2006/messages", name = "DeleteItemResponseMessage", scope = ArrayOfResponseMessagesType.class)
+    public JAXBElement<ResponseMessageType> createArrayOfResponseMessagesTypeDeleteItemResponseMessage(ResponseMessageType value) {
+        return new JAXBElement<ResponseMessageType>(_ArrayOfResponseMessagesTypeDeleteItemResponseMessage_QNAME, ResponseMessageType.class, ArrayOfResponseMessagesType.class, value);
     }
 
     /**

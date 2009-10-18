@@ -63,18 +63,18 @@ public abstract class MultipleOperandBooleanExpressionType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link AndType }{@code >}
-     * {@link JAXBElement }{@code <}{@link IsLessThanType }{@code >}
+     * {@link JAXBElement }{@code <}{@link IsNotEqualToType }{@code >}
+     * {@link JAXBElement }{@code <}{@link IsEqualToType }{@code >}
      * {@link JAXBElement }{@code <}{@link IsGreaterThanOrEqualToType }{@code >}
      * {@link JAXBElement }{@code <}{@link ContainsExpressionType }{@code >}
-     * {@link JAXBElement }{@code <}{@link ExistsType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SearchExpressionType }{@code >}
-     * {@link JAXBElement }{@code <}{@link OrType }{@code >}
-     * {@link JAXBElement }{@code <}{@link IsLessThanOrEqualToType }{@code >}
-     * {@link JAXBElement }{@code <}{@link IsEqualToType }{@code >}
-     * {@link JAXBElement }{@code <}{@link NotType }{@code >}
      * {@link JAXBElement }{@code <}{@link IsGreaterThanType }{@code >}
-     * {@link JAXBElement }{@code <}{@link IsNotEqualToType }{@code >}
+     * {@link JAXBElement }{@code <}{@link OrType }{@code >}
+     * {@link JAXBElement }{@code <}{@link ExistsType }{@code >}
+     * {@link JAXBElement }{@code <}{@link IsLessThanOrEqualToType }{@code >}
+     * {@link JAXBElement }{@code <}{@link AndType }{@code >}
+     * {@link JAXBElement }{@code <}{@link IsLessThanType }{@code >}
+     * {@link JAXBElement }{@code <}{@link NotType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SearchExpressionType }{@code >}
      * {@link JAXBElement }{@code <}{@link ExcludesType }{@code >}
      * 
      * 
