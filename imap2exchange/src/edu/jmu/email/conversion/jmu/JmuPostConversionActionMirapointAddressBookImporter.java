@@ -1,12 +1,15 @@
 package edu.jmu.email.conversion.jmu;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -121,6 +124,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     }
 
     protected LDIFReader getAddressBook(User user, String sid) {
+        String versionLine = "version: 1\n";
         LDIFReader reader = null;
 
         String postData = "";
@@ -137,13 +141,31 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         // Add the "version: 1" line to the top of the response. Dirty hack.
         StringBuilder sb = new StringBuilder();
-        sb.append("version: 1" + "\n");
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(response));
+        BufferedReader br = new BufferedReader(new InputStreamReader(response));        
+        
+        Writer out = null;
+        try {
+            out = new BufferedWriter(new FileWriter(String.format("logs/%s.ldif", user.getUid())));
+        } catch (IOException e1) { }
+
+        sb.append(versionLine);
+        if (out != null) {
+            try {
+                out.write(versionLine);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+        
         String line = null;
         try {
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");
+                if (out != null) {
+                    out.write(line + "\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,6 +173,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             try {
                 br.close();
                 response.close();
+                out.close();
             } catch (IOException e) {
             }
         }
@@ -351,9 +374,23 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 email = email.concat(String.format("@%s", JmuSite.getInstance().getMailDomain()));
             }
         }
-        // Set the FileAs attribute to "cn (mail)".
-        contactItem.setFileAs(String.format("%s (%s)", getEntryAttribute(entry, "cn"), email));
-
+        
+        String identity = "";
+        // Get the string to use for FileAs, DisplayName, and Subject fields.
+        if (!getEntryAttribute(entry, "sn").isEmpty() && !getEntryAttribute(entry, "givenname").isEmpty()) {
+            // User filled out first and last name fields. Use those.
+            identity = String.format("%s, %s", getEntryAttribute(entry, "sn"), getEntryAttribute(entry, "givenname"));
+            contactItem.setFileAsMapping(FileAsMappingType.LAST_COMMA_FIRST);
+        } else if (!getEntryAttribute(entry, "displayname").isEmpty()) {
+            // Use the displayName
+            identity = getEntryAttribute(entry, "displayname");
+        }
+            
+        // Set the FileAs and Subject fields.
+        contactItem.setFileAs(identity);
+        contactItem.setSubject(identity);
+        contactItem.setDisplayName(identity);
+        
         // Short-circuit really quickly: do a search for the FileAs field
         // to check if the contact already exists. If so, just return that.
         if (ContactUtil.getContact(user, email, contactsFolderId) != null) {
@@ -372,14 +409,40 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Set the GivenName to "givenname".
         contactItem.setGivenName(getEntryAttribute(entry, "givenname"));
 
-        // Set the EmailAddress1 to "mail".
-        EmailAddressDictionaryEntryType emailAddressEntry = new EmailAddressDictionaryEntryType();
-        emailAddressEntry.setKey(EmailAddressKeyType.EMAIL_ADDRESS_1);
-        emailAddressEntry.setValue(email);
-        EmailAddressDictionaryType emailAddressDict = new EmailAddressDictionaryType();
-        emailAddressDict.getEntry().add(emailAddressEntry);
-        contactItem.setEmailAddresses(emailAddressDict);
-
+        // Set the email address.  There are convenience methods to do some of 
+        // this, but for some reason I can't make them work for me--especially
+        // trying to set Email1DisplayName
+        List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
+        
+        // Set the Email Address 1 DisplayName.
+        ExtendedPropertyType e1DisplayName = new ExtendedPropertyType();
+        e1DisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1DisplayName);
+        e1DisplayName.setValue(String.format("%s (%s)", identity, email));
+        props.add(e1DisplayName);
+        // Set the Email Address 1 Address Type (SMTP).
+        ExtendedPropertyType e1AddressType = new ExtendedPropertyType();
+        e1AddressType.setExtendedFieldURI(ContactUtil.ptefEmail1AddressType);
+        e1AddressType.setValue("SMTP");
+        props.add(e1AddressType);
+        // Set the Email Address 1 Email Address.
+        ExtendedPropertyType e1Address = new ExtendedPropertyType();
+        e1Address.setExtendedFieldURI(ContactUtil.ptefEmail1EmailAddress);
+        e1Address.setValue(email);
+        props.add(e1Address);
+        // Set the Email Address 1 OriginalDisplayName.
+        ExtendedPropertyType e1OriginalDisplayName = new ExtendedPropertyType();
+        e1OriginalDisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalDisplayName);
+        e1OriginalDisplayName.setValue(String.format("%s (%s)", identity, email));
+        props.add(e1OriginalDisplayName);
+        // Set the Email Address 1 Original EntryId.
+        ExtendedPropertyType e1OriginalEntryID = new ExtendedPropertyType();
+        e1OriginalEntryID.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalEntryID);
+        e1OriginalEntryID.setValue(ContactUtil.createOneOffEntryId(identity, email));
+        props.add(e1OriginalEntryID);
+        // Add all of the above to the extended properties field of the contact.
+        contactItem.getExtendedProperty().addAll(props);
+        
+        
         // Set the CompanyName to "o".
         contactItem.setCompanyName(getEntryAttribute(entry, "o"));
         // Set the Department to "ou".
@@ -438,8 +501,6 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         contactItem.setNickname(getEntryAttribute(entry, "xmozillanickname"));
         // Set the BusinessHomePage to "homeurl".
         contactItem.setBusinessHomePage(getEntryAttribute(entry, "homeurl"));
-        // Set the DisplayName to "displayname".
-        contactItem.setDisplayName(getEntryAttribute(entry, "displayname"));
 
         // Set the WeddingAnniversary to the corresponding fields.
         XMLGregorianCalendar weddingAnniversary = convertToXMLGregorianCalendar(getEntryAttribute(entry, "anniversaryyear"), getEntryAttribute(entry, "anniversarymonth"), getEntryAttribute(entry, "anniversaryday"));
