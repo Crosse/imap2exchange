@@ -166,7 +166,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         } catch (IOException e1) {
         }
 
-        sb.append(versionLine);
+        // Write out the versionLine for the file.  The stream will get it below.
         if (out != null) {
             try {
                 out.write(versionLine);
@@ -194,6 +194,13 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             } catch (IOException e) {
             }
         }
+        
+        if (sb.length() < versionLine.length()) {
+            logger.info("User does not have a Mirapoint address book");
+            return null;
+        }
+        
+        sb.insert(0, versionLine);
 
         InputStream ldifStream = new ByteArrayInputStream(sb.toString().getBytes());
 
@@ -265,6 +272,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     private void processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
         String tag = ",mail=";
 
+        if (groups.size() < 1) {
+            logger.warn("No groups to process.");
+            return;
+        }
+        
         int groupsCreated = 0;
         for (LDAPEntry group : groups) {
             String cn = getEntryAttribute(group, "cn");
@@ -280,9 +292,14 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
             logger.info(String.format("DL CREATE: [ %s ]", cn));
 
+            if (group.getAttribute("member") == null) {
+                logger.warn(String.format("DL CREATE: [ %s ] has no members--not creating", cn));
+                continue;
+            }
+            
             for (String member : group.getAttribute("member").getStringValueArray()) {
                 int mailTag = member.indexOf(tag);
-                String mail = member.substring(mailTag + tag.length());
+                String mail = sanitizeString(member.substring(mailTag + tag.length()));
                 if (mail.indexOf("@") < 0) {
                     mail += "@" + JmuSite.getInstance().getMailDomain();
                 }
@@ -347,14 +364,17 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         if (findContact(email) != null) {
             // Contact already exists. Stop processing.
-            logger.info(String.format("%-6s CONTACT: [ %16s ]: already exists; refusing to duplicate", "SKIP", email));
+            logger.info(String.format("%-6s CONTACT: [ %16s ] already exists; refusing to duplicate", "SKIP", email));
             return true;
         }
 
         // Set the Categories attribute to "category".
-        ArrayOfStringsType categories = new ArrayOfStringsType();
-        categories.getString().add(getEntryAttribute(entry, "category"));
-        contactItem.setCategories(categories);
+        String category = getEntryAttribute(entry, "category");
+        if (!category.isEmpty()) {
+            ArrayOfStringsType categories = new ArrayOfStringsType();
+            categories.getString().add(category);
+            contactItem.setCategories(categories);
+        }
 
         // Set the Surname to "sn".
         contactItem.setSurname(getEntryAttribute(entry, "sn"));
