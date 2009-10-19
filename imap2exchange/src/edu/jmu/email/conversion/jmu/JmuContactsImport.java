@@ -21,7 +21,7 @@
  * </pre>
  * 
  */
-package edu.jmu.email.conversion.test;
+package edu.jmu.email.conversion.jmu;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,23 +36,27 @@ import edu.yale.its.tp.email.conversion.yale.YaleUser;
  * @author wrightst
  * 
  */
-public class ContactsImportTest {
-    private static final Log logger = LogFactory.getLog(ContactsImportTest.class);
+public class JmuContactsImport {
+    private static final Log logger = LogFactory.getLog(JmuContactsImport.class);
 
     public static void main(String[] args) {
         wireSpring();
+        
+        if (args.length == 1) {
+            User user = new YaleUser();
+            // Set the Uid to the first command-line arg.
+            user.setUid(args[0]);
+            user.setConversion(ExchangeConversionFactory.getInstance().makeExchangeConversion(user));
+            user.getConversion().performUserSetupAction();
+//            user.setSourceImapPo("mpmail3.jmu.edu");
+//            user.setUPN("miguser@ad.jmu.edu");
+//            user.setPrimarySMTPAddress("miguser@jmu.edu");            
+            user.getConversion().setReport(new Report());
 
-        User user = new YaleUser();
-        user.setUid("miguser");
-        user.setSourceImapPo("mpmail3.jmu.edu");
-        user.setConversion(ExchangeConversionFactory.getInstance().makeExchangeConversion(user));
-        user.getConversion().setReport(new Report());
-        user.setUPN("miguser@ad.jmu.edu");
-        user.setPrimarySMTPAddress("miguser@jmu.edu");
+            logger.debug(String.format("User: %s@%s", user.getUid(), user.getSourceImapPo()));
+            user.getConversion().performPostConversionAction();
+        }
 
-        logger.debug(String.format("User: %s@%s", user.getUid(), user.getSourceImapPo()));
-
-        user.getConversion().performPostConversionAction();
     }
 
     public static void wireSpring() {
