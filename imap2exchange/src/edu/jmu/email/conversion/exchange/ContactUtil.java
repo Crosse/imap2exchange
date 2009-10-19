@@ -18,25 +18,23 @@ import com.microsoft.schemas.exchange.services._2006.messages.ExchangeServicePor
 import com.microsoft.schemas.exchange.services._2006.messages.FindItemResponseMessageType;
 import com.microsoft.schemas.exchange.services._2006.messages.FindItemResponseType;
 import com.microsoft.schemas.exchange.services._2006.messages.FindItemType;
+import com.microsoft.schemas.exchange.services._2006.messages.GetItemResponseType;
+import com.microsoft.schemas.exchange.services._2006.messages.GetItemType;
 import com.microsoft.schemas.exchange.services._2006.messages.ItemInfoResponseMessageType;
 import com.microsoft.schemas.exchange.services._2006.messages.ResponseMessageType;
 import com.microsoft.schemas.exchange.services._2006.types.AlternateIdType;
 import com.microsoft.schemas.exchange.services._2006.types.BaseFolderIdType;
 import com.microsoft.schemas.exchange.services._2006.types.BodyType;
 import com.microsoft.schemas.exchange.services._2006.types.BodyTypeType;
-import com.microsoft.schemas.exchange.services._2006.types.ConstantValueType;
 import com.microsoft.schemas.exchange.services._2006.types.ContactItemType;
 import com.microsoft.schemas.exchange.services._2006.types.DefaultShapeNamesType;
-import com.microsoft.schemas.exchange.services._2006.types.DictionaryURIType;
 import com.microsoft.schemas.exchange.services._2006.types.DistinguishedFolderIdType;
 import com.microsoft.schemas.exchange.services._2006.types.DistinguishedPropertySetType;
-import com.microsoft.schemas.exchange.services._2006.types.EmailAddressDictionaryEntryType;
 import com.microsoft.schemas.exchange.services._2006.types.ExchangeVersionType;
 import com.microsoft.schemas.exchange.services._2006.types.ExtendedPropertyType;
-import com.microsoft.schemas.exchange.services._2006.types.FieldURIOrConstantType;
 import com.microsoft.schemas.exchange.services._2006.types.FolderIdType;
 import com.microsoft.schemas.exchange.services._2006.types.IdFormatType;
-import com.microsoft.schemas.exchange.services._2006.types.IsEqualToType;
+import com.microsoft.schemas.exchange.services._2006.types.ItemIdType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemQueryTraversalType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemResponseShapeType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemType;
@@ -44,12 +42,11 @@ import com.microsoft.schemas.exchange.services._2006.types.MapiPropertyTypeType;
 import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfAllItemsType;
 import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfAlternateIdsType;
 import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfBaseFolderIdsType;
+import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfBaseItemIdsType;
 import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfPropertyValuesType;
 import com.microsoft.schemas.exchange.services._2006.types.PathToExtendedFieldType;
-import com.microsoft.schemas.exchange.services._2006.types.PathToIndexedFieldType;
 import com.microsoft.schemas.exchange.services._2006.types.RequestServerVersion;
 import com.microsoft.schemas.exchange.services._2006.types.ResponseClassType;
-import com.microsoft.schemas.exchange.services._2006.types.RestrictionType;
 import com.microsoft.schemas.exchange.services._2006.types.ServerVersionInfo;
 import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
 import com.novell.ldap.util.Base64;
@@ -87,6 +84,7 @@ public class ContactUtil {
 
     public static final int PID_LID_FILE_UNDER = 0x8005;
     public static final int PID_LID_DISTRIBUTION_LIST_NAME = 0x8053;
+    public static final int PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH = 15000;
     public static final int PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS = 0X8054;
     public static final int PID_LID_DISTRIBUTION_LIST_MEMBERS = 0x8055;
     public static final int PID_LID_EMAIL1_DISPLAY_NAME = 0x8080;
@@ -102,6 +100,7 @@ public class ContactUtil {
     public static final String ONEOFF_ENTRYID_VERSION = "0000";
     public static final String ONEOFF_ENTRYID_FLAGS = "0190";
     public static final String ONEOFF_ENTRYID_PAD = "0000";
+    public static final String DISTRIBUTION_LIST_ITEM_CLASS = "IPM.DistList";
     public static final PathToExtendedFieldType ptefEmail1DisplayName = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefEmail1AddressType = new PathToExtendedFieldType();
     public static final PathToExtendedFieldType ptefEmail1EmailAddress = new PathToExtendedFieldType();
@@ -158,14 +157,14 @@ public class ContactUtil {
         CreateItemType creator = getCreator(contactsFolderId);
         creator.getItems().getItemOrMessageOrCalendarItem().add(contact);
 
-        return getResponse(user, creator);
+        return getCreateItemResponse(user, creator);
     }
 
     public static List<ItemType> createContact(User user, ContactItemType contact, DistinguishedFolderIdType folderId) {
         CreateItemType creator = getCreator(folderId);
         creator.getItems().getItemOrMessageOrCalendarItem().add(contact);
 
-        return getResponse(user, creator);
+        return getCreateItemResponse(user, creator);
     }
 
     private static CreateItemType getCreator(BaseFolderIdType contactsFolderId) {
@@ -182,9 +181,8 @@ public class ContactUtil {
         return creator;
     }
 
-    public static ContactItemType getContact(User user, String emailAddress, BaseFolderIdType contactsFolderId) {
-        ContactItemType contact = null;
-        emailAddress = sanitizeString(emailAddress);
+    public static List<ItemType> getContacts(User user, BaseFolderIdType contactsFolderId) {
+        List<ItemType> contacts = new ArrayList<ItemType>();
 
         // Form the FindItem request.
         FindItemType finder = new FindItemType();
@@ -197,39 +195,11 @@ public class ContactUtil {
         // Choose the traversal mode.
         finder.setTraversal(ItemQueryTraversalType.SHALLOW);
 
-        // Define the folders to search.
         NonEmptyArrayOfBaseFolderIdsType folderIds = new NonEmptyArrayOfBaseFolderIdsType();
         List<BaseFolderIdType> ids = folderIds.getFolderIdOrDistinguishedFolderId();
         ids.add(contactsFolderId);
         finder.setParentFolderIds(folderIds);
-
-        // Identify the field to examine.
-        PathToIndexedFieldType pathToIndexedField = new PathToIndexedFieldType();
-        pathToIndexedField.setFieldURI(DictionaryURIType.CONTACTS_EMAIL_ADDRESS);
-        pathToIndexedField.setFieldIndex("EmailAddress1");
-
-        // Define the type of search filter to apply.
-        IsEqualToType equalsExpression = new IsEqualToType();
-        equalsExpression.setPath(typesObjectFactory.createPath(pathToIndexedField));
-
-        // Identify the value to compare to the examined field.
-        ConstantValueType constantValue = new ConstantValueType();
-        constantValue.setValue(emailAddress);
-        FieldURIOrConstantType fieldUriOrConstantValue = new FieldURIOrConstantType();
-        fieldUriOrConstantValue.setConstant(constantValue);
-
-        // Add the value to the search expression.
-        equalsExpression.setFieldURIOrConstant(fieldUriOrConstantValue);
-
-        // Create a restriction.
-        RestrictionType restriction = new RestrictionType();
-
-        // Add the search expression to the restriction.
-        restriction.setSearchExpression(typesObjectFactory.createIsEqualTo(equalsExpression));
-
-        // Add the restriction to the request.
-        // finder.setRestriction(restriction);
-
+        
         // define response Objects and their holders
         FindItemResponseType findItemResponse = new FindItemResponseType();
         Holder<FindItemResponseType> responseHolder = new Holder<FindItemResponseType>(findItemResponse);
@@ -259,20 +229,13 @@ public class ContactUtil {
                 } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
                     FindItemResponseMessageType findResponse = (FindItemResponseMessageType) response;
                     for (ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()) {
-                        if (item instanceof ContactItemType) {
-                            ContactItemType cTmp = (ContactItemType) item;
-                            for (EmailAddressDictionaryEntryType e : cTmp.getEmailAddresses().getEntry()) {
-                                if (e.getValue().equalsIgnoreCase(emailAddress)) {
-                                    contact = (ContactItemType) item;
-                                    break;
-                                }
-                            }
-                        }
+                        contacts.add(item);
                     }
                 }
             }
         } catch (Exception e) {
             logger.debug(e.getMessage());
+            //e.printStackTrace();
             throw new RuntimeException("Exception performing getContacts", e);
         } finally {
             if (user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
@@ -281,6 +244,71 @@ public class ContactUtil {
                 user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
         }
 
+        return contacts;
+    }
+    
+    public static ContactItemType findContactByEntryId(User user, ItemIdType id) {
+        ContactItemType contact = null;
+        
+        GetItemType getItem = new GetItemType();
+        ItemResponseShapeType itemShape = new ItemResponseShapeType();
+        itemShape.setBaseShape(DefaultShapeNamesType.ALL_PROPERTIES);
+        getItem.setItemShape(itemShape);
+        
+        NonEmptyArrayOfBaseItemIdsType ids = new NonEmptyArrayOfBaseItemIdsType();
+        ids.getItemIdOrOccurrenceItemIdOrRecurringMasterItemId().add(id);
+        getItem.setItemIds(ids);
+        
+        // define response Objects and their holders
+        GetItemResponseType findItemResponse = new GetItemResponseType();
+        Holder<GetItemResponseType> responseHolder = new Holder<GetItemResponseType>(findItemResponse);
+
+        ServerVersionInfo serverVersion = new ServerVersionInfo();
+        Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
+
+        ExchangeServicePortType proxy = null;
+        List<JAXBElement<? extends ResponseMessageType>> responses = null;
+        try {
+            user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+            proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
+            user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+            user.getConversion().getReport().start(Report.EXCHANGE_META);
+            proxy.getItem(getItem, user.getImpersonation(), responseHolder, serverVersionHolder);
+            responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
+            user.getConversion().getReport().stop(Report.EXCHANGE_META);
+
+            for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
+                ResponseMessageType response = jaxResponse.getValue();
+                if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
+                    logger.warn("Get Items by ItemId Response Error: " + response.getMessageText());
+                    user.getConversion().warnings++;
+                } else if (response.getResponseClass().equals(ResponseClassType.WARNING)) {
+                    logger.warn("Get Items by ItemId Response Warning: " + response.getMessageText());
+                    user.getConversion().warnings++;
+                } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
+                    ItemInfoResponseMessageType getResponse = (ItemInfoResponseMessageType) response;
+                    for (ItemType item : getResponse.getItems().getItemOrMessageOrCalendarItem()) {
+                        if (item instanceof ContactItemType) {
+                            contact = (ContactItemType)item;
+                            break;
+                        }
+                    }
+                }
+                if (contact != null) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            logger.debug(e.getMessage());
+            //e.printStackTrace();
+            throw new RuntimeException("Exception performing getContactsByItemId", e);
+        } finally {
+            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
+                user.getConversion().getReport().stop(Report.EXCHANGE_META);
+            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
+                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+        }
+        
         return contact;
     }
 
@@ -289,27 +317,48 @@ public class ContactUtil {
         
         ItemType list = new ItemType();
         
-        list.setItemClass("IPM.DistList");
+        list.setItemClass(DISTRIBUTION_LIST_ITEM_CLASS);
         list.setSubject(dlName);
         list.setBody(new BodyType());
         list.getBody().setValue("");
         list.getBody().setBodyType(BodyTypeType.TEXT);
         
         NonEmptyArrayOfPropertyValuesType wrappedEntryIds = new NonEmptyArrayOfPropertyValuesType();
-        // NonEmptyArrayOfPropertyValuesType oneOffEntryIds = new NonEmptyArrayOfPropertyValuesType();
+        NonEmptyArrayOfPropertyValuesType oneOffEntryIds = new NonEmptyArrayOfPropertyValuesType();
         
+        int wrappedEntryIdsLength = 0;
+        int oneOffEntryIdsLength = 0;
         for (ContactItemType member : members) {
-            String entryId = createWrappedEntryId(user, member);
-            logger.info(String.format("ADD: [ %-16s ] to group [ %s ]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
-            wrappedEntryIds.getValue().add(entryId);
+            logger.debug(String.format("ADD: [ %-16s ] to group [ %s ]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
             
-            /*
-            String oneoffEntryId = createOneOffMemberEntryId(member);
-            oneOffEntryIds.getValue().add(oneoffEntryId);
-            wrappedEntryIds.getValue().add(oneoffEntryId);
-            */
+            String entryId = createWrappedEntryId(user, member);
+            wrappedEntryIds.getValue().add(Base64.encode(hexStringToByteArray(entryId)));
+            wrappedEntryIdsLength += entryId.length();
+            if (wrappedEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
+                logger.warn(String.format(
+                  "DL \"%s\" has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
+                  dlName, 
+                  wrappedEntryIdsLength,
+                  PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
+                return null;
+            }
+            
+            String oneoffEntryId = createOneOffEntryId(member);
+            oneOffEntryIds.getValue().add(Base64.encode(hexStringToByteArray(oneoffEntryId)));
+            oneOffEntryIdsLength += oneoffEntryId.length();
+            if (oneOffEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
+                logger.warn(String.format(
+                  "DL \"%s\" has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
+                  dlName, 
+                  oneOffEntryIdsLength,
+                  PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
+                return null;
+            }
+
         }
         
+        logger.info(String.format("DL \"%s\" contains %d members", dlName, wrappedEntryIds.getValue().size()));
+
         List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
         
         ExtendedPropertyType displayName = new ExtendedPropertyType();
@@ -332,19 +381,17 @@ public class ContactUtil {
         dlMembers.setValues(wrappedEntryIds);
         props.add(dlMembers);
         
-        /*
         ExtendedPropertyType dlOneOffMembers = new ExtendedPropertyType();
         dlOneOffMembers.setExtendedFieldURI(ptefOneOffMembers);
         dlOneOffMembers.setValues(oneOffEntryIds);
         props.add(dlOneOffMembers);
-        */
         
         list.getExtendedProperty().addAll(props);
         
         CreateItemType creator = getCreator(contactsFolderId);
         creator.getItems().getItemOrMessageOrCalendarItem().add(list);
 
-        return getResponse(user, creator).get(0);
+        return getCreateItemResponse(user, creator).get(0);
     }
     
     public static String createWrappedEntryId(User user, ItemType entry) {
@@ -413,7 +460,7 @@ public class ContactUtil {
                 } 
             } catch (Exception e) {
                 logger.warn(e.getMessage());
-                //throw new RuntimeException("Exception calling ConvertId on Exchange Server: " + e.getMessage(), e);
+                throw new RuntimeException("Exception calling ConvertId on Exchange Server: " + e.getMessage(), e);
             } finally {
                 if (user.getConversion().getReport().isStarted(Report.EXCHANGE_MIME))
                     user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
@@ -424,7 +471,7 @@ public class ContactUtil {
             logger.warn("Could not create WrappedEntryId: " + e.getMessage());
         }
         
-        return Base64.encode(hexStringToByteArray(retval));
+        return retval;
     }
 
     
@@ -448,8 +495,9 @@ public class ContactUtil {
         sb.append(ONEOFF_ENTRYID_PAD);
         
         //logger.debug(sb.toString());
-        return Base64.encode(hexStringToByteArray(sb.toString()));
+        return sb.toString();
     }
+    
     public static String createOneOffEntryId(ContactItemType entry) {
         String emailAddress = sanitizeString(entry.getEmailAddresses().getEntry().get(0).getValue());
         String displayName = sanitizeString(entry.getDisplayName());
@@ -457,6 +505,13 @@ public class ContactUtil {
         return createOneOffEntryId(displayName, emailAddress);
     }
     
+    public static String createOneOffEntryIdInBase64(String displayName, String emailAddress) {
+        return Base64.encode(hexStringToByteArray(createOneOffEntryId(displayName, emailAddress)));
+    }
+    
+    public static String createOneOffEntryIdInBase64(ContactItemType entry) {
+        return Base64.encode(hexStringToByteArray(createOneOffEntryId(entry)));
+    }
     
     private static String convertToHexString(String s) {
         StringBuilder sb = new StringBuilder();
@@ -467,7 +522,7 @@ public class ContactUtil {
         return sb.toString();
     }
     
-    public static List<ItemType> getResponse(User user, CreateItemType creator) {
+    public static List<ItemType> getCreateItemResponse(User user, CreateItemType creator) {
         List<ItemType> items = new ArrayList<ItemType>();
         // define response Objects and their holders
         CreateItemResponseType createItemResponse = new CreateItemResponseType();
@@ -495,11 +550,11 @@ public class ContactUtil {
                         user.getConversion().warnings++;
                     } catch (Exception e1) {
                         e1.printStackTrace();
-                        logger.warn("Create Distribution List In Exchange Response Error - unable to determine source item.");
+                        logger.warn("Create Item in Exchange Response Error - unable to determine source item.");
                         user.getConversion().warnings++;
                     }
                 } else if (response.getResponseClass().equals(ResponseClassType.WARNING)) {
-                    logger.warn("Create Distribution List In Exchange Response Warning: " + response.getMessageText());
+                    logger.warn("Create Item in Exchange Response Warning: " + response.getMessageText());
                     user.getConversion().warnings++;
                 } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
                     for (ItemType item : ((ItemInfoResponseMessageType) response).getItems().getItemOrMessageOrCalendarItem()) {

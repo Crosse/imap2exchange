@@ -22,7 +22,22 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.microsoft.schemas.exchange.services._2006.types.*;
+import com.microsoft.schemas.exchange.services._2006.types.ArrayOfStringsType;
+import com.microsoft.schemas.exchange.services._2006.types.BaseFolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.BodyType;
+import com.microsoft.schemas.exchange.services._2006.types.BodyTypeType;
+import com.microsoft.schemas.exchange.services._2006.types.ContactItemType;
+import com.microsoft.schemas.exchange.services._2006.types.EmailAddressDictionaryEntryType;
+import com.microsoft.schemas.exchange.services._2006.types.ExtendedPropertyType;
+import com.microsoft.schemas.exchange.services._2006.types.FileAsMappingType;
+import com.microsoft.schemas.exchange.services._2006.types.FolderIdType;
+import com.microsoft.schemas.exchange.services._2006.types.ItemType;
+import com.microsoft.schemas.exchange.services._2006.types.PhoneNumberDictionaryEntryType;
+import com.microsoft.schemas.exchange.services._2006.types.PhoneNumberDictionaryType;
+import com.microsoft.schemas.exchange.services._2006.types.PhoneNumberKeyType;
+import com.microsoft.schemas.exchange.services._2006.types.PhysicalAddressDictionaryEntryType;
+import com.microsoft.schemas.exchange.services._2006.types.PhysicalAddressDictionaryType;
+import com.microsoft.schemas.exchange.services._2006.types.PhysicalAddressKeyType;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPMessage;
 import com.novell.ldap.LDAPSearchResult;
@@ -49,7 +64,7 @@ import edu.yale.its.tp.email.conversion.imap.ImapServerFactory;
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  * 
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
@@ -65,6 +80,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     private String importedContactsFolderName;
     private String loginUrl;
     private String addrBookUrl;
+    private List<ItemType> contacts;
 
     @Override
     public boolean perform(ExchangeConversion conv) {
@@ -79,7 +95,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         logger.debug(String.format("Using folder \"%s\" as the Contacts import folder", importedContactsFolderName));
 
         importAddressBook(user, addrbook, contactsFolderId);
-        
+
         return true;
     }
 
@@ -142,12 +158,13 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Add the "version: 1" line to the top of the response. Dirty hack.
         StringBuilder sb = new StringBuilder();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(response));        
-        
+        BufferedReader br = new BufferedReader(new InputStreamReader(response));
+
         Writer out = null;
         try {
             out = new BufferedWriter(new FileWriter(String.format("logs/%s.ldif", user.getUid())));
-        } catch (IOException e1) { }
+        } catch (IOException e1) {
+        }
 
         sb.append(versionLine);
         if (out != null) {
@@ -158,7 +175,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 e1.printStackTrace();
             }
         }
-        
+
         String line = null;
         try {
             while ((line = br.readLine()) != null) {
@@ -186,91 +203,8 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             logger.error("Could not parse LDIF data:  " + e.getMessage());
             e.printStackTrace();
         }
-        
+
         return reader;
-    }
-
-    protected String doLogin(User user) {
-        String sid = "";
-
-        // Use this to get the adminUid and adminPwd for the mail store.
-        ImapServer server = ImapServerFactory.getInstance().getImapServer(user.getSourceImapPo());
-
-        String loginData = "";
-
-        // Encode the POST string in the form:
-        // user=adminUid&password=adminPwd&caluser=migrateduser
-        try {
-            loginData = String.format("%s=%s&%s=%s&%s=%s", URLEncoder.encode("user", "UTF-8"), URLEncoder.encode(server.getAdminUid(), "UTF-8"), URLEncoder.encode("password", "UTF-8"), URLEncoder.encode(server.getAdminPwd(), "UTF-8"), URLEncoder.encode("caluser", "UTF-8"), URLEncoder.encode(user.getPrimarySMTPAddress(), "UTF-8"));
-            // logger.debug(String.format("loginData:  %s", loginData));
-        } catch (UnsupportedEncodingException e1) {
-            logger.error("Error encoding POST data for mail store logon");
-        }
-
-        String url = String.format("https://%s%s", user.getSourceImapPo(), loginUrl);
-
-        InputStream response = submitHttpRequest(url, loginData);
-
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response));
-        String line;
-        String startTag = "<sid>";
-        String endTag = "</sid>";
-        try {
-            while ((line = rd.readLine()) != null) {
-                // logger.debug(String.format("Response: %s", line));
-                if (line.contains((CharSequence) "<sid>")) {
-                    int start = line.indexOf(startTag) + startTag.length();
-                    int end = line.indexOf(endTag);
-                    sid = line.substring(start, end);
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Could not log in to mail store", e);
-        } finally {
-            try {
-                rd.close();
-                response.close();
-            } catch (Exception e) { }
-        }
-
-        return sid;
-    }
-
-    protected InputStream submitHttpRequest(String url, String postData) {
-        InputStream response = null;
-        URLConnection conn = null;
-        OutputStreamWriter wr = null;
-        URL requestUrl = null;
-
-        // Submit the HTTP request.
-        try {
-            requestUrl = new URL(url);
-            logger.debug(String.format("requestUrl = %s", requestUrl.toString()));
-            conn = requestUrl.openConnection();
-            if (postData != null) {
-                conn.setDoOutput(true);
-                wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write(postData);
-                wr.flush();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error submitting HTTP request", e);
-        } finally {
-            try {
-                wr.close();
-            } catch (IOException e) {
-            }
-        }
-
-        try {
-            // Get the response.
-            response = conn.getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException("Error getting response from server");
-        }
-
-        return response;
     }
 
     protected void importAddressBook(User user, LDIFReader addrbook, BaseFolderIdType contactsFolderId) {
@@ -278,12 +212,19 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             logger.warn("addrbook was null");
             return;
         }
+        
+        logger.info("Processing user's address book");
+
+        // First, get the user's existing contacts.
+        contacts = ContactUtil.getContacts(user, contactsFolderId);
 
         LDAPMessage msg = null;
         LDAPEntry entry = null;
         List<LDAPEntry> groups = new ArrayList<LDAPEntry>();
 
         try {
+            int totalContacts = 0;
+            int contactsImported = 0;
             while ((msg = addrbook.readMessage()) != null) {
                 entry = ((LDAPSearchResult) msg).getEntry();
 
@@ -298,67 +239,79 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                     // Groups will be processed last.
                     groups.add(entry);
                 } else {
+                    totalContacts++;
                     boolean created = createContact(user, entry, contactsFolderId);
                     if (!created) {
                         user.getConversion().warnings++;
+                    } else {
+                        contactsImported++;
                     }
                 }
-
             }
-            
+            logger.info(String.format("Imported %d of %d contacts", contactsImported, totalContacts));
+
             if (groups.size() > 0) {
                 processGroups(user, groups, contactsFolderId);
             }
 
         } catch (Exception e) {
             logger.warn("Could not import user's address book");
+            e.printStackTrace();
             user.getConversion().warnings++;
         }
 
     }
 
-    
-    private boolean processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
+    private void processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
         String tag = ",mail=";
-        
+
+        int groupsCreated = 0;
         for (LDAPEntry group : groups) {
             String cn = getEntryAttribute(group, "cn");
+
+            if (findDistributionList(cn) != null) {
+                // Group already exists.  Bork.
+                logger.info(String.format("DL  FOUND: [ %s ]; not creating or updating", cn));
+                groupsCreated++;
+                continue;
+            }
+            
             List<ContactItemType> members = new ArrayList<ContactItemType>();
-            
+
             logger.info(String.format("DL CREATE: [ %s ]", cn));
-            
+
             for (String member : group.getAttribute("member").getStringValueArray()) {
                 int mailTag = member.indexOf(tag);
                 String mail = member.substring(mailTag + tag.length());
                 if (mail.indexOf("@") < 0) {
                     mail += "@" + JmuSite.getInstance().getMailDomain();
                 }
+                mail = sanitizeString(mail);
 
-                ContactItemType contact = ContactUtil.getContact(user, mail, contactsFolderId);
+                ContactItemType contact = findContact(mail);
+
                 if (contact == null) {
-                    // For Mirapoint this should never happen, since groups 
+                    // For Mirapoint this should never happen, since groups
                     // may only contain items in the address book.
                     // ...but, log it just in case.
-                    logger.warn(String.format("Group %s contains %s, but it could not be found", cn, mail));
+                    logger.warn(String.format("Group \"%s\" contains \"%s\", but it could not be found", cn, mail));
                     continue;
                 } else {
                     members.add(contact);
                 }
             }
-            
+
             ItemType dl = ContactUtil.createDistributionList(user, cn, members, contactsFolderId);
-            if (dl != null) { 
-                logger.info("DL CREATE: success");
+            if (dl != null) {
+                logger.info(String.format("DL CREATE: successfully created \"%s\"", cn));
+                groupsCreated++;
             } else {
-                logger.warn("DL ERROR:  could not create distribution list " + cn);
+                logger.warn(String.format("DL ERROR: could not create distribution list \"%s\"", cn));
                 user.getConversion().warnings++;
             }
-            
         }
-
-        return true;
+        logger.info(String.format("Created %d of %d distribution groups", groupsCreated, groups.size()));
     }
-     
 
     protected boolean createContact(User user, LDAPEntry entry, BaseFolderIdType contactsFolderId) {
         boolean success = false;
@@ -374,9 +327,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 email = email.concat(String.format("@%s", JmuSite.getInstance().getMailDomain()));
             }
         }
-        
+
         String identity = "";
-        // Get the string to use for FileAs, DisplayName, and Subject fields.
+        // Get the string to use for FileAs, DisplayName, and Subject
+        // fields.
         if (!getEntryAttribute(entry, "sn").isEmpty() && !getEntryAttribute(entry, "givenname").isEmpty()) {
             // User filled out first and last name fields. Use those.
             identity = String.format("%s, %s", getEntryAttribute(entry, "sn"), getEntryAttribute(entry, "givenname"));
@@ -385,18 +339,16 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             // Use the displayName
             identity = getEntryAttribute(entry, "displayname");
         }
-            
+
         // Set the FileAs and Subject fields.
         contactItem.setFileAs(identity);
         contactItem.setSubject(identity);
         contactItem.setDisplayName(identity);
-        
-        // Short-circuit really quickly: do a search for the FileAs field
-        // to check if the contact already exists. If so, just return that.
-        if (ContactUtil.getContact(user, email, contactsFolderId) != null) {
-            logger.info(String.format("%-6s CONTACT: [ %16s ]: already exists", "SKIP", email));
-            success = true;
-            return success;
+
+        if (findContact(email) != null) {
+            // Contact already exists. Stop processing.
+            logger.info(String.format("%-6s CONTACT: [ %16s ]: already exists; refusing to duplicate", "SKIP", email));
+            return true;
         }
 
         // Set the Categories attribute to "category".
@@ -409,11 +361,13 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Set the GivenName to "givenname".
         contactItem.setGivenName(getEntryAttribute(entry, "givenname"));
 
-        // Set the email address.  There are convenience methods to do some of 
-        // this, but for some reason I can't make them work for me--especially
+        // Set the email address. There are convenience methods to do some
+        // of
+        // this, but for some reason I can't make them work for
+        // me--especially
         // trying to set Email1DisplayName
         List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
-        
+
         // Set the Email Address 1 DisplayName.
         ExtendedPropertyType e1DisplayName = new ExtendedPropertyType();
         e1DisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1DisplayName);
@@ -437,12 +391,12 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Set the Email Address 1 Original EntryId.
         ExtendedPropertyType e1OriginalEntryID = new ExtendedPropertyType();
         e1OriginalEntryID.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalEntryID);
-        e1OriginalEntryID.setValue(ContactUtil.createOneOffEntryId(identity, email));
+        e1OriginalEntryID.setValue(ContactUtil.createOneOffEntryIdInBase64(identity, email));
         props.add(e1OriginalEntryID);
-        // Add all of the above to the extended properties field of the contact.
+        // Add all of the above to the extended properties field of the
+        // contact.
         contactItem.getExtendedProperty().addAll(props);
-        
-        
+
         // Set the CompanyName to "o".
         contactItem.setCompanyName(getEntryAttribute(entry, "o"));
         // Set the Department to "ou".
@@ -517,10 +471,14 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         }
 
         logger.info(String.format("CREATE CONTACT: [ %16s ]", email));
-        if (ContactUtil.createContact(user, contactItem, contactsFolderId) != null) {
+        List<ItemType> retval = null;
+        if ((retval = ContactUtil.createContact(user, contactItem, contactsFolderId)) != null) {
+            for (ItemType item : retval) {
+                contacts.add(ContactUtil.findContactByEntryId(user, item.getItemId()));
+            }
             success = true;
         } else {
-            logger.warn(String.format("Error creating contact %s", entry.getDN()));
+            logger.warn(String.format("Error creating contact \"%s\"", entry.getDN()));
             user.getConversion().warnings++;
             success = false;
         }
@@ -530,10 +488,46 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
     protected String getEntryAttribute(LDAPEntry entry, String attribute) {
         if (entry.getAttribute(attribute) != null) {
-            return entry.getAttribute(attribute).getStringValue().trim();
+            return sanitizeString(entry.getAttribute(attribute).getStringValue());
         } else {
             return "";
         }
+    }
+
+    protected ContactItemType findContact(String email) {
+        for (ItemType item : contacts) {
+            if (item instanceof ContactItemType) {
+                if (!email.isEmpty() && ((ContactItemType)item).getEmailAddresses() != null) {
+                    for (EmailAddressDictionaryEntryType dictEntry : ((ContactItemType)item).getEmailAddresses().getEntry()) {
+                        if (dictEntry.getValue().isEmpty()) {
+                            continue;
+                        } else if (email.equalsIgnoreCase(dictEntry.getValue())) {
+                            return (ContactItemType)item;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    protected ItemType findDistributionList(String dlName) {
+        ItemType retval = null;
+        if (dlName.isEmpty()) {
+            logger.warn("dlName was empty in findDistributionList");
+            return null;
+        }
+        
+        for (ItemType item : contacts) {
+            if (ContactUtil.DISTRIBUTION_LIST_ITEM_CLASS.equalsIgnoreCase(item.getItemClass())) {
+                if (dlName.equalsIgnoreCase(item.getSubject())) {
+                    retval = item;
+                    break;
+                }
+            }
+        }
+        
+        return retval;
     }
 
     protected XMLGregorianCalendar convertToXMLGregorianCalendar(String year, String month, String day) {
@@ -553,6 +547,94 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         } catch (Exception e) {
             return null;
         }
+    }
+
+    protected String doLogin(User user) {
+        String sid = "";
+
+        // Use this to get the adminUid and adminPwd for the mail store.
+        ImapServer server = ImapServerFactory.getInstance().getImapServer(user.getSourceImapPo());
+
+        String loginData = "";
+
+        // Encode the POST string in the form:
+        // user=adminUid&password=adminPwd&caluser=migrateduser
+        try {
+            loginData = String.format("%s=%s&%s=%s&%s=%s", URLEncoder.encode("user", "UTF-8"), URLEncoder.encode(server.getAdminUid(), "UTF-8"), URLEncoder.encode("password", "UTF-8"), URLEncoder.encode(server.getAdminPwd(), "UTF-8"), URLEncoder.encode("caluser", "UTF-8"), URLEncoder.encode(user.getPrimarySMTPAddress(), "UTF-8"));
+            // logger.debug(String.format("loginData:  %s", loginData));
+        } catch (UnsupportedEncodingException e1) {
+            logger.error("Error encoding POST data for mail store logon");
+        }
+
+        String url = String.format("https://%s%s", user.getSourceImapPo(), loginUrl);
+
+        InputStream response = submitHttpRequest(url, loginData);
+
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response));
+        String line;
+        String startTag = "<sid>";
+        String endTag = "</sid>";
+        try {
+            while ((line = rd.readLine()) != null) {
+                // logger.debug(String.format("Response: %s", line));
+                if (line.contains((CharSequence) "<sid>")) {
+                    int start = line.indexOf(startTag) + startTag.length();
+                    int end = line.indexOf(endTag);
+                    sid = line.substring(start, end);
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Could not log in to mail store", e);
+        } finally {
+            try {
+                rd.close();
+                response.close();
+            } catch (Exception e) {
+            }
+        }
+
+        return sid;
+    }
+
+    protected InputStream submitHttpRequest(String url, String postData) {
+        InputStream response = null;
+        URLConnection conn = null;
+        OutputStreamWriter wr = null;
+        URL requestUrl = null;
+
+        // Submit the HTTP request.
+        try {
+            requestUrl = new URL(url);
+            logger.debug(String.format("requestUrl = %s", requestUrl.toString()));
+            conn = requestUrl.openConnection();
+            if (postData != null) {
+                conn.setDoOutput(true);
+                wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write(postData);
+                wr.flush();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error submitting HTTP request", e);
+        } finally {
+            try {
+                wr.close();
+            } catch (IOException e) {
+            }
+        }
+
+        try {
+            // Get the response.
+            response = conn.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException("Error getting response from server");
+        }
+
+        return response;
+    }
+    
+    protected String sanitizeString(String s) {
+        return s.trim();
     }
 
     /**
@@ -585,5 +667,4 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     public void setAddrBookUrl(String addrBookUrl) {
         this.addrBookUrl = addrBookUrl;
     }
-
 }
