@@ -52,7 +52,7 @@ import edu.yale.its.tp.email.conversion.imap.FolderAltNames;
  * 
  * 
  * 
- * Yales Exchange Conversion Command Line Util.
+ * JMU's Exchange Conversion Command Line Util.
  */
 public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListener
 // , ExchangeConversionStartListener
@@ -99,13 +99,17 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
     }
 
     public void wireSpring() {
-        springContext = new FileSystemXmlApplicationContext(new String[] { "/config/imap2exchange-config.xml", "/config/imap2exchange-jmu-config.xml", "/config/imapservers.xml" });
+        springContext = new FileSystemXmlApplicationContext(
+            new String[] { 
+                    "/config/imap2exchange-config.xml", 
+                    "/config/imap2exchange-jmu-config.xml", 
+                    "/config/imapservers.xml" });
     }
 
     /**
      * Starts the ConversionManager and add the users defined at the command
      * line
-     * or ones that werwe batch loaded via config file defined user file.
+     * or ones that were batch loaded via config file defined user file.
      * 
      */
     public void startConversion() {
@@ -144,7 +148,10 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
         }
 
         for (String flag : flags) {
-            if (!(flag.equals(CLEAN_FLAG) || flag.equals(BATCH_FLAG) || flag.equals(MHOST_FLAG) || flag.equals(FINAL_FLAG))) {
+            if (!(flag.equals(CLEAN_FLAG) || 
+                  flag.equals(BATCH_FLAG) || 
+                  flag.equals(MHOST_FLAG) || 
+                  flag.equals(FINAL_FLAG))) {
                 System.err.println("Invalid flag: " + flag);
                 printUsage();
             }
@@ -171,7 +178,8 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
             String po = null;
             switch (args.size()) {
             case 1:
-                if (args.size() == 1 && (flags.contains(CLEAN_FLAG) || flags.contains(MHOST_FLAG))) {
+                if (args.size() == 1 && 
+                    (flags.contains(CLEAN_FLAG) || flags.contains(MHOST_FLAG))) {
                     uid = args.get(0);
                     break;
                 } else {
@@ -207,7 +215,6 @@ public class JmuExchangeConversionCmdLineUtil implements NoMoreConversionsListen
         System.err.println("Usage: [" + CLEAN_FLAG + "] [" + BATCH_FLAG + "] [" + FINAL_FLAG + "] username legacyPo");
         System.err.println("       -batch - uses batch file defined in config/config.properties");
         System.err.println("       -clean - for development use only, this will HARD DELETE all mail and Non-System Folders.");
-        System.err.println("       -final - for YALE use only, this is used by the YalePostConversionActionACSUpdater class to determine if ACS should be updated.");
         System.err.println("       -mhost - for JMU use only, discover the user's sourceImapPo (mailHost) via eDirectory.");
         System.exit(0);
     }
