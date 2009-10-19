@@ -9,7 +9,7 @@ echo "====================================================="
 
 # Name the main class
 #################################################
-$CLASSNAME="edu.jmu.email.conversion.test.ContactsImportTest"
+$CLASSNAME="edu.jmu.email.conversion.jmu.JmuContactsImport"
 
 # Set the Classpath
 #################################################
