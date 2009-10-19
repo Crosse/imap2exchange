@@ -293,6 +293,11 @@ public class MessageUtil {
     public static List<MessageType> createMessagesInExchange(User user, List<Message> messages,  BaseFolderIdType folderId) throws MessagingException, IOException{
         if(messages == null || messages.isEmpty()) return new ArrayList<MessageType>();
         NonEmptyArrayOfAllItemsType convertedMessages = convertMessagesToMessageTypesSerially(user, messages);
+        for (ItemType item : convertedMessages.getItemOrMessageOrCalendarItem()) {
+            if (item == null) {
+                logger.warn("Found null message");
+            }
+        }
         return createMessagesInExchange(user, convertedMessages, folderId, messages);
     }
 
@@ -308,6 +313,8 @@ public class MessageUtil {
             , BaseFolderIdType folderId
             , List<Message> sourceMessages){
 
+        //com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump = true;
+        
         List<MessageType> messages = new ArrayList<MessageType>();
 
         TargetFolderIdType targetFolder = new TargetFolderIdType();
@@ -321,14 +328,14 @@ public class MessageUtil {
         creator.setItems(itemsArray);
         creator.setSavedItemFolderId(targetFolder);
         creator.setMessageDisposition(MessageDispositionType.SAVE_ONLY);
-
+        
         // define response Objects and their holders
         CreateItemResponseType createItemResponse = new CreateItemResponseType();
         Holder<CreateItemResponseType> responseHolder = new Holder<CreateItemResponseType>(createItemResponse);
 
         ServerVersionInfo serverVersion = new ServerVersionInfo();
         Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
-
+        
         ExchangeServicePortType proxy = null;
         List<JAXBElement <? extends ResponseMessageType>> responses = null;
         try{
@@ -364,7 +371,9 @@ public class MessageUtil {
                 i++;
             }
         } catch (Exception e){
-            throw new RuntimeException("Exception creating messages on Exchange Server", e);
+            //logger.warn("Exception creating messages in Exchange Server: ", e);
+            //user.getConversion().warnings++;
+            throw new RuntimeException("Exception creating messages on Exchange Server: ", e);
         } finally {
             if(user.getConversion().getReport().isStarted(Report.EXCHANGE_MIME))
                 user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
