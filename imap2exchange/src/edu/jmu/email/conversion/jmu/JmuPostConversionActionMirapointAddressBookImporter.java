@@ -223,7 +223,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         logger.info("Processing user's address book");
 
         // First, get the user's existing contacts.
-        contacts = ContactUtil.getContacts(user, contactsFolderId);
+        contacts = ContactUtil.getContacts(contactsFolderId);
 
         LDAPMessage msg = null;
         LDAPEntry entry = null;

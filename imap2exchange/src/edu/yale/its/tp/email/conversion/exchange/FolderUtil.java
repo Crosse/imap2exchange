@@ -55,18 +55,21 @@ public class FolderUtil {
 	
 	public static String EXCHANGE_MAIL_FOLDER_CLASS = "IPF.Note";
 
-	public static List<BaseFolderType> getRootMailFolders(User user){
-		DistinguishedFolderIdType root = new DistinguishedFolderIdType();
-		root.setId(DistinguishedFolderIdNameType.MSGFOLDERROOT);
-//		List<BaseFolderType> foldersWithIdsOnly = findChildFolders(user, root);
-		return getChildFolders(user, root);
+	public static BaseFolderIdType getRootFolderId(){
+		DistinguishedFolderIdType rootId = new DistinguishedFolderIdType();
+		rootId.setId(DistinguishedFolderIdNameType.MSGFOLDERROOT);
+		return rootId;
+	}
+
+	public static List<BaseFolderType> getRootMailFolders(){
+		return getChildFolders(getRootFolderId());
 	}
 
 //	public static List<BaseFolderType> getChildFolders(User user, BaseFolderIdType parentFolderId){
 //		return getFolders(user, findChildFolders(user, parentFolderId));
 //	}
 
-	public static List<BaseFolderType> getChildFolders(User user, BaseFolderIdType parentFolderId){
+	public static List<BaseFolderType> getChildFolders(BaseFolderIdType parentFolderId){
 
 		// Create FindFolder
 		FindFolderType finder = new FindFolderType();
@@ -105,15 +108,16 @@ public class FolderUtil {
 		ExchangeServicePortType proxy = null;
 		List<BaseFolderType> mailFolders = new ArrayList<BaseFolderType>();
 		List<JAXBElement <? extends ResponseMessageType>> responses = null;
+		User user = ExchangeConversion.getConv().getUser();
 		try{
-			user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_CONNECT);
 			proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-			user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-			user.getConversion().getReport().start(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_META);
 			proxy.findFolder(finder, user.getImpersonation() ,responseHolder, serverVersionHolder);
 			responses = responseHolder.value.getResponseMessages()
 			                                    .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-			user.getConversion().getReport().stop(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_META);
 			                                
 
 			for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
@@ -143,10 +147,10 @@ public class FolderUtil {
 		} catch (Exception e){
 			throw new RuntimeException("Exception Performing getChildFolders", e);
 		} finally{
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-				user.getConversion().getReport().stop(Report.EXCHANGE_META);
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-				user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+			if(Report.getReport().isStarted(Report.EXCHANGE_META))
+				Report.getReport().stop(Report.EXCHANGE_META);
+			if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+				Report.getReport().stop(Report.EXCHANGE_CONNECT);
 		}
 		return mailFolders;
 		
@@ -158,16 +162,16 @@ public class FolderUtil {
 		return createFolder(user, folderName, root);
 	}
 		
-	public static List<FolderType> createRootFolder(User user, List<String> folderNames){
+	public static List<FolderType> createRootFolder(List<String> folderNames){
 		DistinguishedFolderIdType root = new DistinguishedFolderIdType();
 		root.setId(DistinguishedFolderIdNameType.MSGFOLDERROOT);
-		return createFolders(user, folderNames, root);
+		return createFolders(folderNames, root);
 	}
 
 	public static FolderType createFolder(User user, String folderName, BaseFolderIdType parentFolderId){
 		List<String> folderNames = new ArrayList<String>();
 		folderNames.add(folderName);
-		List<FolderType> folders = createFolders(user, folderNames, parentFolderId);
+		List<FolderType> folders = createFolders(folderNames, parentFolderId);
 		if(folders.size() == 1){
 			return folders.get(0);
 		} else {
@@ -175,7 +179,7 @@ public class FolderUtil {
 		}
 	}
 	
-	public static List<FolderType> createFolders(User user, List<String> folderNames, BaseFolderIdType parentFolderId){
+	public static List<FolderType> createFolders(List<String> folderNames, BaseFolderIdType parentFolderId){
 
 		List<FolderType> returnList = new ArrayList<FolderType>();
 		CreateFolderType creator = new CreateFolderType();
@@ -208,17 +212,18 @@ public class FolderUtil {
 		ServerVersionInfo serverVersion = new ServerVersionInfo();
 		Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
 
+		User user = ExchangeConversion.getConv().getUser();
 		ExchangeServicePortType proxy = null;
 		List<JAXBElement <? extends ResponseMessageType>> responses = null;
 		try{
-			user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_CONNECT);
 			proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-			user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-			user.getConversion().getReport().start(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_META);
 			proxy.createFolder(creator, user.getImpersonation() ,responseHolder, serverVersionHolder);
 			responses = responseHolder.value.getResponseMessages()
                        .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-			user.getConversion().getReport().stop(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_META);
 			
 			for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
 				ResponseMessageType response = jaxResponse.getValue();
@@ -239,22 +244,22 @@ public class FolderUtil {
 		} catch (Exception e){
 			throw new RuntimeException("Exception performing CreateFolder", e);
 		} finally {
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-				user.getConversion().getReport().stop(Report.EXCHANGE_META);
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-				user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+			if(Report.getReport().isStarted(Report.EXCHANGE_META))
+				Report.getReport().stop(Report.EXCHANGE_META);
+			if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+				Report.getReport().stop(Report.EXCHANGE_CONNECT);
 		}
 		
 		return returnList;
 	}
 	
-	public static void deleteFolder(User user, FolderIdType folderId){
+	public static void deleteFolder(FolderIdType folderId){
 		List<FolderIdType> ids = new ArrayList<FolderIdType>();
 		ids.add(folderId);
-		deleteFolders(user, ids);
+		deleteFolders(ids);
 	}
 	
-	public static void deleteFolders(User user, List<FolderIdType> folderIds){
+	public static void deleteFolders(List<FolderIdType> folderIds){
 		
 		DeleteFolderType deleter = new DeleteFolderType();
 		
@@ -274,17 +279,18 @@ public class FolderUtil {
 		ServerVersionInfo serverVersion = new ServerVersionInfo();
 		Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
 
+		User user = ExchangeConversion.getConv().getUser();
 		ExchangeServicePortType proxy = null;
 		List<JAXBElement <? extends ResponseMessageType>> responses = null;
 		try{
-			user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_CONNECT);
 			proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-			user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-			user.getConversion().getReport().start(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_META);
 			proxy.deleteFolder(deleter, user.getImpersonation() ,responseHolder, serverVersionHolder);
 			responses = responseHolder.value.getResponseMessages()
                        .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-			user.getConversion().getReport().stop(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_META);
 			
 			for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
 				ResponseMessageType response = jaxResponse.getValue();
@@ -301,10 +307,10 @@ public class FolderUtil {
 		} catch (Exception e){
 			throw new RuntimeException("Exception Performing DeleteFolder", e);
 		} finally {
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-				user.getConversion().getReport().stop(Report.EXCHANGE_META);
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-				user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+			if(Report.getReport().isStarted(Report.EXCHANGE_META))
+				Report.getReport().stop(Report.EXCHANGE_META);
+			if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+				Report.getReport().stop(Report.EXCHANGE_CONNECT);
 		} 
 	}
 	
@@ -420,7 +426,7 @@ public class FolderUtil {
 //		} 
 //	}
 
-	public static List<BaseFolderType> moveFolders(User user, List<FolderIdType> folderIds, TargetFolderIdType targetFolderId){
+	public static List<BaseFolderType> moveFolders(List<FolderIdType> folderIds, TargetFolderIdType targetFolderId){
 		
 		List<BaseFolderType> returnList = new ArrayList<BaseFolderType>();
 
@@ -442,17 +448,18 @@ public class FolderUtil {
 		ServerVersionInfo serverVersion = new ServerVersionInfo();
 		Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
 
+		User user = ExchangeConversion.getConv().getUser();
 		ExchangeServicePortType proxy = null;
 		List<JAXBElement <? extends ResponseMessageType>> responses = null;
 		try{
-			user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_CONNECT);
 			proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-			user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-			user.getConversion().getReport().start(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_CONNECT);
+			Report.getReport().start(Report.EXCHANGE_META);
 			proxy.moveFolder(mover, user.getImpersonation() ,responseHolder, serverVersionHolder);
 			responses = responseHolder.value.getResponseMessages()
                        .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-			user.getConversion().getReport().stop(Report.EXCHANGE_META);
+			Report.getReport().stop(Report.EXCHANGE_META);
 			
 			for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
 				ResponseMessageType response = jaxResponse.getValue();
@@ -473,10 +480,10 @@ public class FolderUtil {
 		} catch (Exception e){
 			throw new RuntimeException("Exception Performing MoveFolder", e);
 		} finally {
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-				user.getConversion().getReport().stop(Report.EXCHANGE_META);
-			if(user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-				user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+			if(Report.getReport().isStarted(Report.EXCHANGE_META))
+				Report.getReport().stop(Report.EXCHANGE_META);
+			if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+				Report.getReport().stop(Report.EXCHANGE_CONNECT);
 		}
 		return returnList;
 	}

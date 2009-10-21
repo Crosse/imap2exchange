@@ -85,7 +85,7 @@ public class ContactsFolderUtil {
         folderName = sanitizeString(folderName);
 
 
-        List<BaseFolderType> childFolders = FolderUtil.getChildFolders(user, parentFolderId);
+        List<BaseFolderType> childFolders = FolderUtil.getChildFolders(parentFolderId);
         for (BaseFolderType bFolder : childFolders) {
             if (folderName.equalsIgnoreCase(bFolder.getDisplayName())) {
                 logger.debug(String.format("Found requested folder \"%s\"", bFolder.getDisplayName()));
@@ -149,13 +149,13 @@ public class ContactsFolderUtil {
         ExchangeServicePortType proxy = null;
         List<JAXBElement<? extends ResponseMessageType>> responses = null;
         try {
-            user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_CONNECT);
             proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-            user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-            user.getConversion().getReport().start(Report.EXCHANGE_META);
+            Report.getReport().stop(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_META);
             proxy.createFolder(creator, user.getImpersonation(), responseHolder, serverVersionHolder);
             responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-            user.getConversion().getReport().stop(Report.EXCHANGE_META);
+            Report.getReport().stop(Report.EXCHANGE_META);
 
             for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                 ResponseMessageType response = jaxResponse.getValue();
@@ -176,10 +176,10 @@ public class ContactsFolderUtil {
         } catch (Exception e) {
             throw new RuntimeException("Exception performing CreateFolder", e);
         } finally {
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-                user.getConversion().getReport().stop(Report.EXCHANGE_META);
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+            if (Report.getReport().isStarted(Report.EXCHANGE_META))
+                Report.getReport().stop(Report.EXCHANGE_META);
+            if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                Report.getReport().stop(Report.EXCHANGE_CONNECT);
         }
 
         return returnList;

@@ -46,29 +46,20 @@ import java.util.*;
  */
 public class FolderAltName {
 
-    String exchangeFolderName;
-    List<String> imapFolderNames;
-
-    public String getExchangeFolderName() {
-        return exchangeFolderName;
-    }
-    public void setExchangeFolderName(String exchangeFolderName) {
-        this.exchangeFolderName = exchangeFolderName;
-    }
-    public List<String> getImapFolderNames() {
-        return imapFolderNames;
-    }
-    public void setImapFolderNames(List<String> imapFolderNames) {
-        this.imapFolderNames = imapFolderNames;
-    }
-
-    public boolean contains(String imapFolderName){
-        for(String folderName : imapFolderNames){
-            if(folderName.equalsIgnoreCase(imapFolderName)){
-                return true;
-            }
-        }
-        return false; 
-    }
-
+	String exchangeFolderName;
+	List<String> imapFolderNames;
+	
+	public String getExchangeFolderName() {
+		return exchangeFolderName;
+	}
+	public void setExchangeFolderName(String exchangeFolderName) {
+		this.exchangeFolderName = exchangeFolderName;
+	}
+	public List<String> getImapFolderNames() {
+		return imapFolderNames;
+	}
+	public void setImapFolderNames(List<String> imapFolderNames) {
+		this.imapFolderNames = imapFolderNames;
+	}
+	
 }

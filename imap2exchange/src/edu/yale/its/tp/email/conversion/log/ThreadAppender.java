@@ -77,9 +77,7 @@ public class ThreadAppender extends AppenderSkeleton {
 		String name  = event.getThreadName(); 
 		if(name.startsWith("i2e: ")
 		&& name.contains("@")){
-            // return event.getThreadName().substring(5);
-            String[] parts = name.substring(5).split("@");
-            return parts[0];
+			return event.getThreadName().substring(5);
 		} else {
 			return this.managerLogFilename;
 		}

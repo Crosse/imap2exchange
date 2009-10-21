@@ -13,6 +13,7 @@ import edu.yale.its.tp.email.conversion.event.*;
 import edu.yale.its.tp.email.conversion.exchange.*;
 
 import com.microsoft.schemas.exchange.services._2006.types.*;
+import com.sun.mail.imap.IMAPFolder;
 
 /**
  * 
@@ -63,6 +64,7 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 	List<MessageType> exchangeDeletedItems;
 	List<String> excludedImapFolders;
 	List<String> includedImapFolders;
+	Matcher includeExcludeMatcher;
 	FolderAltNames altNames;
 	Folder imapRootFolder;
 	FolderIdType rootExchangeFolderId;
@@ -80,15 +82,21 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 	long messagesMovedCnt;
 	long messagesMovedSize;
 	
-	Report report;
-
+	private static ThreadLocal<ExchangeConversion> conv = new ThreadLocal<ExchangeConversion>();
+	
 	/**
 	 *  method called by thread to start the conversion 
 	 */
 	public void run() {
-		report = new Report();
-		start = System.currentTimeMillis();
+		
+		logger.debug("Start run()");
+
+		conv.set(this);
+
 		try{
+			new Report();
+			start = System.currentTimeMillis();
+
 			if(performUserSetupAction() == FAILED)
 				throw new RuntimeException("Error performing User Setup for " + this.getId());
 			if(isCleaner) {
@@ -104,7 +112,7 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 			success = false;
 		}
 		if(!success){
-			logger.info("Conversion for " + user.getUid() + " did NOT complete unsuccessfully.");
+			logger.info("Conversion for " + user.getUid() + " did NOT complete successfully.");
 		} else {
 			logger.info(messagesMovedCnt + " messages [" 
 					  + ByteFormatter.of(messagesMovedSize).format(messagesMovedSize) 
@@ -117,7 +125,7 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 		}
 		end = System.currentTimeMillis();
 		if(logger.isDebugEnabled()){
-			logger.debug("Timer Report:\n" + report.toString());
+			logger.debug("Timer Report:\n" + Report.getReport().toString());
 		}
 	}
 	
@@ -183,15 +191,15 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 	 */
 	public void cleanExchangeAccount(){
 		logger.info("Cleaning Exchange Account: " + user.getUid());
-		List<BaseFolderType> exchangeFolders = FolderUtil.getRootMailFolders(user);
+		List<BaseFolderType> exchangeFolders = FolderUtil.getRootMailFolders();
 		for(BaseFolderType folder : exchangeFolders){
 			if(ExchangeSystemFolders.isExchangeSystemFolders(folder.getDisplayName())){
 				logger.info("Cleaning System Folder: " + folder.getDisplayName());
-				List<MessageType> messages = MessageUtil.getMessages(user, folder.getFolderId());
-				MessageUtil.deleteMessages(user, messages, DisposalType.HARD_DELETE);
+				List<MessageType> messages = MessageUtil.getMessages(folder.getFolderId());
+				MessageUtil.deleteMessages(messages, DisposalType.HARD_DELETE);
 			} else {
 				logger.info("Deleting non-System Folder: " + folder.getDisplayName());
-				FolderUtil.deleteFolder(user, folder.getFolderId());
+				FolderUtil.deleteFolder(folder.getFolderId());
 			}
 		}
 	}
@@ -201,32 +209,40 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 	 *
 	 */
 	public boolean convert(){
+		
+		logger.debug("Start convert()");
+		
 		Store imapStore = null;
 		try{
-			/*
-			 * Get Connection to IMAP Server to start the Conversion
-			 * I don't pool the connection because there is no advantage
-			 * I have to get a new connection for each user...
-			 */
+			
+			/* Get IMAP Folders	 */
 			imapStore = ImapServerFactory.getInstance().getImapStore(user);
+			imapRootFolder = imapStore.getDefaultFolder();
+			Map<String, Folder> imapFolders = new TreeMap<String, Folder>();
+			getAllChildImapFolders(imapFolders, imapRootFolder);
+
+			/* Get Exchange Folders */
+			Map<String, BaseFolderType> exchangeFolders = new HashMap<String, BaseFolderType>();
+			BaseFolderIdType rootExchangeFolderId = FolderUtil.getRootFolderId();
+			getAllChildExchangeFolders(exchangeFolders, rootExchangeFolderId, null);
 			
-			MergedImapFolder root = new MergedImapFolder();
-			root.setConv(this);
-			Folder rootImapFolder = imapStore.getDefaultFolder();
-			this.imapRootFolder = rootImapFolder;
-			root.addFolder(rootImapFolder);
-			root.setExcludedImapFolders(excludedImapFolders);
-			root.setIncludedImapFolders(includedImapFolders);
-			List<MergedImapFolder> imapFolders = root.getChildFolders();
+			if(logger.isDebugEnabled())	{
+				if(exchangeFolders.isEmpty())
+					logger.debug("Root Exchange Mail Folders are Empty");
+			}
 			
-			List<BaseFolderType> exchangeFolders = FolderUtil.getRootMailFolders(user);
-			rootExchangeFolderId = FolderUtil.getFolderTypeFromList(exchangeFolders, "INBOX").getParentFolderId();
-			BaseFolderType deletedItems = FolderUtil.getFolderTypeFromList(exchangeFolders, ExchangeSystemFolders.DELETED_ITEMS.getFolderName());
-			setExchangeDeletedItems(MessageUtil.getMessages(user, deletedItems.getFolderId()));
+			/* Filter Imap Folders to includes/excludes */
+			filterImapFolders(imapFolders);
+			
+			/* MergeImapFolders */
+			Map<String, MergedImapFolder> mergedImapFolders = mergeFolders(imapFolders);
+			
+			BaseFolderType deletedItems = exchangeFolders.get(ExchangeSystemFolders.DELETED_ITEMS.getFolderName().toLowerCase());
+			setExchangeDeletedItems(MessageUtil.getMessages(deletedItems.getFolderId()));
 			
 			FolderSynchronizer folderSyncer = new FolderSynchronizer();
 			folderSyncer.setConv(this);
-			folderSyncer.mergeFolders(imapFolders, exchangeFolders, rootExchangeFolderId);
+			folderSyncer.syncFolders(mergedImapFolders, exchangeFolders);
 			
 		} catch (MessagingException me){
 			logger.error("Error Communicating with IMAP Server", me);
@@ -244,6 +260,190 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 		return true;
 	}
 	
+	// Recursively add all the folders in this mailbox to a list.
+	protected void getAllChildImapFolders(Map<String, Folder> folders, Folder parent) throws MessagingException{
+		for(Folder folder : parent.list()){
+			folders.put(folder.getFullName(), folder);
+			getAllChildImapFolders(folders, folder);
+		}
+	}
+	
+	// Recursively add all the folders in this mailbox to a list.
+	protected void getAllChildExchangeFolders(Map<String, BaseFolderType> exchangeFolders, BaseFolderIdType parentId, String parentName) throws MessagingException{
+		List<BaseFolderType> exchangeMailFolders = FolderUtil.getChildFolders(parentId);
+		for(BaseFolderType folder : exchangeMailFolders){
+			if(parentName != null)
+				folder.setDisplayName(parentName + imapRootFolder.getSeparator() + folder.getDisplayName());
+			logger.debug("Found pre-existing exchange folder: " + folder.getDisplayName());
+			exchangeFolders.put(folder.getDisplayName().toLowerCase(), folder);
+			getAllChildExchangeFolders(exchangeFolders, folder.getFolderId(), folder.getDisplayName());
+		}
+	}
+	
+	public void filterImapFolders(Map<String, Folder> folders){
+		
+		if(getExcludedImapFolders() == null
+		&& getIncludedImapFolders() == null){
+			logger.debug("syncing all folder because there are no include/excludes defined.");
+			return;
+		}
+
+		// Find the ones to remove
+		List<String> pathsToRemove = new ArrayList<String>(); 
+		for(String path : folders.keySet()){
+			if(isExcluded(path) && !isIncluded(path)){
+				pathsToRemove.add(path);
+				continue;
+			}
+		}
+		
+		// Actually remove them...
+		for(String path : pathsToRemove){
+			folders.remove(path);
+		}
+		
+		// Clear the removeBuffer and test opening them...
+		pathsToRemove = new ArrayList<String>();
+		for(String folderName : folders.keySet()){
+			Folder folder = folders.get(folderName);
+			if(!canOpenFolder(folder)){
+				pathsToRemove.add(folderName);
+			}
+		}
+		
+		// Actually remove the one I can't open...
+		for(String path : pathsToRemove){
+			folders.remove(path);
+		}
+
+	}
+	
+	protected boolean isExcluded(String folderName) {
+		if (this.getExcludedImapFolders() == null)
+			return false;
+		for (String exclude : this.getExcludedImapFolders()) {
+		    logger.debug("Comparing folder \"" + exclude + "\" to the excluded list");
+		    if (includeExcludeMatcher == null) {
+		        logger.warn("includeExcludeMatcher == null");
+		    }
+			if (includeExcludeMatcher.matches(exclude, folderName)) {
+				logger.info("Excluding " + folderName + " because it is in the exclusion list.");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected boolean isIncluded(String folderName) {
+		if (this.getIncludedImapFolders() == null)
+			return true;
+		for (String include : this.getIncludedImapFolders()) {
+			if (includeExcludeMatcher.matches(include, folderName)) {
+				logger.info("Including " + folderName + " because it is in the inclusion list.");
+				return true;
+			}
+		}
+		logger.info("Excluding " + folderName + " because it is not in the inclusion list.");
+		return false;
+	}
+
+	/**
+	 * This merges folders of the same name and if any folder of the same name
+	 * with the same parent is subscribed, the exchange folder will be subscribed.
+	 */
+	protected Map<String, MergedImapFolder> mergeFolders(Map<String, Folder> imapFolders) throws MessagingException{
+		Map<String, MergedImapFolder> mergedFolders = new TreeMap<String, MergedImapFolder>();
+		for(String folderName : imapFolders.keySet()){
+			Folder folder = imapFolders.get(folderName);
+			// Special Case for Alt Folder Names
+			if(getAltNames() != null){
+				FolderAltName altName = getAltNames().getFolderAltName(folder.getFullName()); 
+				if(altName != null){
+					mergeFolder(mergedFolders, altName.getExchangeFolderName(), folder);
+					continue;
+				}
+			}
+			mergeFolder(mergedFolders, folder.getFullName(), folder);
+		}
+		return mergedFolders;
+	}
+
+	/**
+	 * I create new MergedImapFolders here to control what is merged with what...
+	 * @param mergedFolders
+	 * @param mergedFolderName
+	 * @param folder
+	 * @throws MessagingException
+	 */
+	protected void mergeFolder(Map<String, MergedImapFolder> mergedFolders, String mergedFolderName, Folder folder) throws MessagingException{
+		/*  The toLowerCase merges folders of the same name different case, because exchange is case insensitive. */
+		MergedImapFolder mergedFolder = mergedFolders.get(mergedFolderName.toLowerCase());
+		if(mergedFolder == null){
+			mergedFolder = new MergedImapFolder();
+			mergedFolder.setName(getFolderName(mergedFolderName));
+			mergedFolder.setParent(getParentFolder(mergedFolderName, mergedFolders));
+			mergedFolder.setSubscribed(folder.isSubscribed());
+			mergedFolder.addFolder(folder);
+			mergedFolders.put(mergedFolderName.toLowerCase(), mergedFolder);
+		} else {
+			mergedFolder.setSubscribed(mergedFolder.isSubscribed() || folder.isSubscribed());
+			mergedFolder.addFolder(folder);
+		}
+	}
+	
+	/**
+	 * Return the leaf foldername
+	 * @param fullname
+	 * @return
+	 * @throws MessagingException 
+	 */
+	protected String getFolderName(String fullname) throws MessagingException{
+		String name  = fullname.substring(fullname.lastIndexOf(imapRootFolder.getSeparator()) + 1);
+		logger.debug("Get FolderName for: " + fullname + " returned " + name);
+		return name;
+	}
+	
+	/**
+	 * I can do this because I use a treemap to store the folders causing them 
+	 * to be created in exchange in the right order.
+	 * @param folderPath
+	 * @param mergedFolders
+	 * @return
+	 * @throws MessagingException 
+	 */
+	protected MergedImapFolder getParentFolder(String fullname, Map<String, MergedImapFolder> mergedFolders) throws MessagingException{
+		int idx = fullname.lastIndexOf(imapRootFolder.getSeparator());
+		if(idx == -1)
+			return null;
+		String parentFolderName = fullname.substring(0, idx);
+		logger.debug("Get ParentFolderName for: " + fullname + " returned " + parentFolderName);
+		MergedImapFolder parentFolder = mergedFolders.get(parentFolderName.toLowerCase());
+		return parentFolder;		
+	}
+	
+
+	/**
+	 * Javamail/UW will return all files in the user home directory This is an
+	 * easy way to filter out the noncompliant folders
+	 */
+	protected boolean canOpenFolder(Folder folder) {
+
+		Folder imapFolder = folder;
+		logger.debug("Trying to open imapFolder : " + folder.getFullName());
+		try {
+			long uid = ((IMAPFolder) imapFolder).getUIDValidity();
+			if (uid > 1) {
+				imapFolder.open(Folder.READ_ONLY);
+				return true;
+			} else {
+				logger.debug("invalid folder uidvalidity: " + uid);
+			}
+		} catch (MessagingException me) {
+			logger.debug("Folder or File " + user.getUid() + "." + folder.getFullName() + " was not converted because it is not a mail folder:" + me.getMessage());
+		}
+		return false;
+	}
+
 	public List<MessageType> getExchangeDeletedItems() {
 		return exchangeDeletedItems;
 	}
@@ -413,18 +613,33 @@ import com.microsoft.schemas.exchange.services._2006.types.*;
 	}
 
 	/**
-	 * @return the report
+	 * @return the conv
 	 */
-	public Report getReport() {
-		return report;
+	public static ExchangeConversion getConv() {
+		return conv.get();
 	}
 
 	/**
-	 * @param report the report to set
+	 * @param conv the conv to set
 	 */
-	public void setReport(Report report) {
-		this.report = report;
+	public static void setConv(ExchangeConversion conv) {
+		ExchangeConversion.conv.set(conv);
 	}
+
+	/**
+	 * @return the includeExcludeMatcher
+	 */
+	public Matcher getIncludeExcludeMatcher() {
+		return includeExcludeMatcher;
+	}
+
+	/**
+	 * @param includeExcludeMatcher the includeExcludeMatcher to set
+	 */
+	public void setIncludeExcludeMatcher(Matcher includeExcludeMatcher) {
+		this.includeExcludeMatcher = includeExcludeMatcher;
+	}
+	
 	
 	
 }

@@ -2,7 +2,6 @@ package edu.yale.its.tp.email.conversion.yale;
 
 import java.util.*;
 import javax.mail.*;
-import java.security.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -80,7 +79,7 @@ public class YaleImapServerFactory  extends ImapServerFactory{
 		try {
 			
 			// configure the jvm to use the jsse security.
-			Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+//			Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
 
 			// JavaMail stuff
 	    	Properties javamailProps = new Properties(System.getProperties());

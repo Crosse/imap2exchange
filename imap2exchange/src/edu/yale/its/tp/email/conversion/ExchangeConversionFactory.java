@@ -2,6 +2,8 @@ package edu.yale.its.tp.email.conversion;
 
 import java.util.*;
 import edu.yale.its.tp.email.conversion.imap.*;
+import edu.yale.its.tp.email.conversion.util.StringEqualsMatcher;
+import edu.yale.its.tp.email.conversion.util.Matcher;
 
 /**
  * <pre>
@@ -45,6 +47,8 @@ public class ExchangeConversionFactory {
 	FolderAltNames altNames;
 	List<String> excludedImapFolders;
 	List<String> includedImapFolders;
+	Matcher includeExcludeMatcher = new StringEqualsMatcher();  // Default.
+	
 	Map<String, PluggableConversionAction> pluggableConversionActions = new HashMap<String, PluggableConversionAction>();
 
 	static ExchangeConversionFactory singleton;
@@ -99,6 +103,7 @@ public class ExchangeConversionFactory {
 		conv.setPluggableConversionActions(pluggableConversionActions);
 		conv.setExcludedImapFolders(excludedImapFolders);
 		conv.setIncludedImapFolders(this.includedImapFolders);
+		conv.setIncludeExcludeMatcher(this.includeExcludeMatcher);
 		user.setConversion(conv);
 		return conv;
 	}
@@ -132,6 +137,20 @@ public class ExchangeConversionFactory {
 	 */
 	public void setIncludedImapFolders(List<String> includedImapFolders) {
 		this.includedImapFolders = includedImapFolders;
+	}
+
+	/**
+	 * @return the includeExcludeMatcher
+	 */
+	public Matcher getIncludeExcludeMatcher() {
+		return includeExcludeMatcher;
+	}
+
+	/**
+	 * @param includeExcludeMatcher the includeExcludeMatcher to set
+	 */
+	public void setIncludeExcludeMatcher(Matcher includeExcludeMatcher) {
+		this.includeExcludeMatcher = includeExcludeMatcher;
 	}
 
 

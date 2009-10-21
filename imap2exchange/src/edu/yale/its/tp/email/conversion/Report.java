@@ -60,6 +60,12 @@ public class Report {
 	public static final String EXCHANGE_META = "Exchange MetaData Calls";
 	public static final String EXCHANGE_MIME = "Exchange Message Delivery";
 	
+	private static ThreadLocal<Report> report = new ThreadLocal<Report>(); 
+
+	public Report(){
+		report.set(this);
+	}
+	
 	public class Timer {
 		
 		String name;
@@ -142,5 +148,8 @@ public class Report {
 		return sb.toString();
 	}
 	
+	public static Report getReport(){
+		return Report.report.get();
+	}
 
 }

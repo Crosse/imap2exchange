@@ -51,6 +51,7 @@ import com.microsoft.schemas.exchange.services._2006.types.ServerVersionInfo;
 import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
 import com.novell.ldap.util.Base64;
 
+import edu.yale.its.tp.email.conversion.ExchangeConversion;
 import edu.yale.its.tp.email.conversion.Report;
 import edu.yale.its.tp.email.conversion.User;
 import edu.yale.its.tp.email.conversion.exchange.ExchangeServerPortFactory;
@@ -181,7 +182,7 @@ public class ContactUtil {
         return creator;
     }
 
-    public static List<ItemType> getContacts(User user, BaseFolderIdType contactsFolderId) {
+    public static List<ItemType> getContacts(BaseFolderIdType contactsFolderId) {
         List<ItemType> contacts = new ArrayList<ItemType>();
 
         // Form the FindItem request.
@@ -209,14 +210,15 @@ public class ContactUtil {
 
         ExchangeServicePortType proxy = null;
         List<JAXBElement<? extends ResponseMessageType>> responses = null;
+        User user = ExchangeConversion.getConv().getUser();
         try {
-            user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_CONNECT);
             proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-            user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-            user.getConversion().getReport().start(Report.EXCHANGE_META);
+            Report.getReport().stop(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_META);
             proxy.findItem(finder, user.getImpersonation(), responseHolder, serverVersionHolder);
             responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-            user.getConversion().getReport().stop(Report.EXCHANGE_META);
+            Report.getReport().stop(Report.EXCHANGE_META);
 
             for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                 ResponseMessageType response = jaxResponse.getValue();
@@ -238,10 +240,10 @@ public class ContactUtil {
             //e.printStackTrace();
             throw new RuntimeException("Exception performing getContacts", e);
         } finally {
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-                user.getConversion().getReport().stop(Report.EXCHANGE_META);
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+            if (Report.getReport().isStarted(Report.EXCHANGE_META))
+                Report.getReport().stop(Report.EXCHANGE_META);
+            if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                Report.getReport().stop(Report.EXCHANGE_CONNECT);
         }
 
         return contacts;
@@ -269,13 +271,13 @@ public class ContactUtil {
         ExchangeServicePortType proxy = null;
         List<JAXBElement<? extends ResponseMessageType>> responses = null;
         try {
-            user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_CONNECT);
             proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-            user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-            user.getConversion().getReport().start(Report.EXCHANGE_META);
+            Report.getReport().stop(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_META);
             proxy.getItem(getItem, user.getImpersonation(), responseHolder, serverVersionHolder);
             responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-            user.getConversion().getReport().stop(Report.EXCHANGE_META);
+            Report.getReport().stop(Report.EXCHANGE_META);
 
             for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                 ResponseMessageType response = jaxResponse.getValue();
@@ -303,10 +305,10 @@ public class ContactUtil {
             //e.printStackTrace();
             throw new RuntimeException("Exception performing getContactsByItemId", e);
         } finally {
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_META))
-                user.getConversion().getReport().stop(Report.EXCHANGE_META);
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+            if (Report.getReport().isStarted(Report.EXCHANGE_META))
+                Report.getReport().stop(Report.EXCHANGE_META);
+            if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                Report.getReport().stop(Report.EXCHANGE_CONNECT);
         }
         
         return contact;
@@ -425,14 +427,14 @@ public class ContactUtil {
             ExchangeServicePortType proxy = null;
             List<JAXBElement<? extends ResponseMessageType>> responses = null;
             try {
-                user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+                Report.getReport().start(Report.EXCHANGE_CONNECT);
                 proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-                user.getConversion().getReport().start(Report.EXCHANGE_MIME);
+                Report.getReport().stop(Report.EXCHANGE_CONNECT);
+                Report.getReport().start(Report.EXCHANGE_MIME);
                 proxy.convertId(convertReq, requestVersion, responseHolder, serverVersionHolder);
                 // proxy.convertId(convertReq, responseHolder, serverVersionHolder);
                 responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-                user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
+                Report.getReport().stop(Report.EXCHANGE_MIME);
                 for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                     ResponseMessageType response = jaxResponse.getValue();
                     if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
@@ -462,10 +464,10 @@ public class ContactUtil {
                 logger.warn(e.getMessage());
                 throw new RuntimeException("Exception calling ConvertId on Exchange Server: " + e.getMessage(), e);
             } finally {
-                if (user.getConversion().getReport().isStarted(Report.EXCHANGE_MIME))
-                    user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
-                if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-                    user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+                if (Report.getReport().isStarted(Report.EXCHANGE_MIME))
+                    Report.getReport().stop(Report.EXCHANGE_MIME);
+                if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
             }
         } catch (Exception e) {
             logger.warn("Could not create WrappedEntryId: " + e.getMessage());
@@ -534,13 +536,13 @@ public class ContactUtil {
         ExchangeServicePortType proxy = null;
         List<JAXBElement<? extends ResponseMessageType>> responses = null;
         try {
-            user.getConversion().getReport().start(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_CONNECT);
             proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-            user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
-            user.getConversion().getReport().start(Report.EXCHANGE_MIME);
+            Report.getReport().stop(Report.EXCHANGE_CONNECT);
+            Report.getReport().start(Report.EXCHANGE_MIME);
             proxy.createItem(creator, user.getImpersonation(), responseHolder, serverVersionHolder);
             responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-            user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
+            Report.getReport().stop(Report.EXCHANGE_MIME);
             int i = 0;
             for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                 ResponseMessageType response = jaxResponse.getValue();
@@ -567,10 +569,10 @@ public class ContactUtil {
             e.printStackTrace();
             throw new RuntimeException("Exception creating contact on Exchange Server: " + e.getMessage(), e);
         } finally {
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_MIME))
-                user.getConversion().getReport().stop(Report.EXCHANGE_MIME);
-            if (user.getConversion().getReport().isStarted(Report.EXCHANGE_CONNECT))
-                user.getConversion().getReport().stop(Report.EXCHANGE_CONNECT);
+            if (Report.getReport().isStarted(Report.EXCHANGE_MIME))
+                Report.getReport().stop(Report.EXCHANGE_MIME);
+            if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                Report.getReport().stop(Report.EXCHANGE_CONNECT);
         }
 
         return items;

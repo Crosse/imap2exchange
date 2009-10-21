@@ -1,18 +1,4 @@
-package edu.yale.its.tp.email.conversion.exchange.updaters;
-
-import java.io.*;
-import java.util.*;
-import javax.mail.*;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import com.microsoft.schemas.exchange.services._2006.types.*;
-
-import edu.yale.its.tp.email.conversion.*;
-import edu.yale.its.tp.email.conversion.exchange.*;
-
 /**
- * 
  * <pre>
  * Copyright (c) 2000-2003 Yale University. All rights reserved.
  * 
@@ -43,29 +29,48 @@ import edu.yale.its.tp.email.conversion.exchange.*;
  * 
  * 3. The names "Yale" and "Yale University" must not be used to endorse
  * or promote products derived from this software.
- * </pre>
- *
-
+ *</pre>
  *
  */
-public class ImapUidUpdater extends MessageUpdater{
+package edu.yale.its.tp.email.conversion.util;
+
+import org.springframework.util.AntPathMatcher;
+
+
+/**
+ * @author jjv6
+ *
+ */
+public class AntPathTypeMatcher implements Matcher{
 	
-	private static Log logger = LogFactory.getLog(IsReadUpdater.class);
+	boolean ignoreCase = true;
 	
-	public ImapUidUpdater(User user){
-		super(user);
-		this.type = "ImapUidUpdater";
+	/* (non-Javadoc)
+	 * @see edu.yale.its.tp.email.conversion.util.Matcher#matches(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean matches(String expression, String value) {
+		AntPathMatcher m = new AntPathMatcher();
+		if(ignoreCase)
+			return m.match(expression.toLowerCase(), value.toLowerCase());
+		else
+			return m.match(expression, value);
+	}
+
+	/**
+	 * @return the ignoreCase
+	 */
+	public boolean isIgnoreCase() {
+		return ignoreCase;
+	}
+
+	/**
+	 * @param ignoreCase the ignoreCase to set
+	 */
+	public void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
 	}
 	
-	public boolean needsUpdate(Message message, MessageType messageType) throws MessagingException, IOException{
-		String euid = MessageUtil.getExtProp(messageType, MessageUtil.IMAP_UID_URI).getValue();
-		String iuid = String.valueOf(((UIDFolder)message.getFolder()).getUID(message));
-//		logger.debug("Checking uids: " + euid + " vs " + iuid);
-		return !euid.equals(iuid);  
-	}
-	public List<MessageType> update(List<Message> messagesToUpdate, List<MessageType> messageTypesToUpdate) throws MessagingException, IOException{
-		logger.debug("Updating " + messagesToUpdate.size() + " messages with ImapUidUpdater");
-		return MessageUtil.updateMessagesImapUid(messageTypesToUpdate, messagesToUpdate);
-	}
+	
 
 }

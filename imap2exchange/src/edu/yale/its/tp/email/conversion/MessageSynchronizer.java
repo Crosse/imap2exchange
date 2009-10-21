@@ -98,9 +98,9 @@ public class MessageSynchronizer {
 	protected void sort() throws MessagingException{
 		
 		imapMessages = imapFolder.getMessages();
-		exchangeMessages = imapFolder.getMessageTypesFromThisFolder(MessageUtil.getMessages(user, exchangeFolder.getFolderId()));
+		exchangeMessages = imapFolder.getMessageTypesFromThisFolder(MessageUtil.getMessages(exchangeFolder.getFolderId()));
 		
-		List<String> imapUids = MessageUtil.getMessageUIDs(user, imapMessages);
+		List<String> imapUids = MessageUtil.getMessageUIDs(imapMessages);
 		List<String> exchangeUids = MessageUtil.getMessageTypeUIDs(exchangeMessages);
 
 		imapMessagesToCreate.addAll(imapMessages);
@@ -126,7 +126,7 @@ public class MessageSynchronizer {
 			imapDeletedMessages = imapFolder.getDeletedMessages();
 			List<MessageType> exchangeDeletedMessagesFromThisFolder = imapFolder.getMessageTypesFromThisFolder(exchangeDeletedMessages);
 			
-			List<String> imapDeletedUids = MessageUtil.getMessageUIDs(user, imapDeletedMessages);
+			List<String> imapDeletedUids = MessageUtil.getMessageUIDs(imapDeletedMessages);
 			List<String> exchangeDeletedUids = MessageUtil.getMessageTypeUIDs(exchangeDeletedMessagesFromThisFolder);
 
 			imapMessagesToCreateInDeletedItems.addAll(imapDeletedMessages);
@@ -219,9 +219,9 @@ public class MessageSynchronizer {
 	 */
 	protected void deleteMessagesInExchange() throws IOException, MessagingException{
 		logger.info("There are " + exchangeMessagesToDelete.size() + " messages to delete in " + imapFolder.getFolderNames());
-		MessageUtil.deleteMessages(user, exchangeMessagesToDelete, DisposalType.HARD_DELETE);
+		MessageUtil.deleteMessages(exchangeMessagesToDelete, DisposalType.HARD_DELETE);
 		logger.info("There are " + exchangeMessagesToDeleteInDeletedItems.size() + " messages to delete in Deleted Items");
-		MessageUtil.deleteMessages(user, exchangeMessagesToDeleteInDeletedItems, DisposalType.HARD_DELETE);
+		MessageUtil.deleteMessages(exchangeMessagesToDeleteInDeletedItems, DisposalType.HARD_DELETE);
 	}
 	
 	/**

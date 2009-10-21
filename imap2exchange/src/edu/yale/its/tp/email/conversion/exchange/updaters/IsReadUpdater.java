@@ -64,7 +64,7 @@ public class IsReadUpdater extends MessageUpdater{
 	}
 	public List<MessageType> update(List<Message> messagesToUpdate, List<MessageType> messageTypesToUpdate) throws MessagingException, IOException{
 		logger.debug("Updating " + messagesToUpdate.size() + " messages with MessageUpdater");
-		return MessageUtil.updateMessagesIsRead(user, messageTypesToUpdate, messagesToUpdate);
+		return MessageUtil.updateMessagesIsRead(messageTypesToUpdate, messagesToUpdate);
 	}
 
 }

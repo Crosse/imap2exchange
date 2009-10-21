@@ -64,52 +64,50 @@ public class FolderSynchronizer {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	public void mergeFolders(List<MergedImapFolder> imapFolders
-                           , List<BaseFolderType> exchangeFolders
-                           , FolderIdType parentFolderId) throws MessagingException, IOException{
-
+	public void syncFolders(Map<String, MergedImapFolder> imapFolders
+                           , Map<String, BaseFolderType> exchangeFolders) throws MessagingException, IOException{
 
 		/* 
 		* Create Folders that don't exist on the dest host
 		* Then merge the messages for all folders...
 		*/
-		for(MergedImapFolder imapFolder : imapFolders){
+		for(String imapFolderName : imapFolders.keySet()){
+			
+			MergedImapFolder imapFolder = imapFolders.get(imapFolderName.toLowerCase());
 		
 			logger.info("Starting Conversion of " + imapFolder.getFolderNames());
-			
-			BaseFolderType exchangeFolder = FolderUtil.getFolderTypeFromList(exchangeFolders, imapFolder.getName());
+
+			ExchangeSystemFolders esf = ExchangeSystemFolders.fromName(imapFolder.getFullName());
+			if(esf != null && !esf.isMailFolder()){
+				logger.warn("Not Syncronizing Messages in a Non-Mail Exchange System folder: " + esf.getFolderName());
+				conv.warnings++;
+				continue;
+			}
+
+			BaseFolderType exchangeFolder = exchangeFolders.get(imapFolder.getFullName().toLowerCase()); 
+
 			if(exchangeFolder == null){
+
+				MergedImapFolder parentImapFolder = imapFolder.getParent();
+				FolderIdType exchangeParentFolderId = null;
+				if(parentImapFolder != null){
+					exchangeParentFolderId = exchangeFolders.get(parentImapFolder.getFullName().toLowerCase()).getFolderId();
+				}else
+					exchangeParentFolderId = exchangeFolders.get(ExchangeSystemFolders.INBOX.getFolderName().toLowerCase()).getParentFolderId();
+					
 				
 				logger.info("Exchange Folder [" + imapFolder.getName() + "] does not exist, creating it");
-				exchangeFolder = FolderUtil.createFolder(conv.getUser(), imapFolder.getName(), parentFolderId);
-
+				exchangeFolder = FolderUtil.createFolder(conv.getUser(), imapFolder.getName(), exchangeParentFolderId);
+				
 				// I need to add the props back to the returned folder since it only has the id in it 
 				exchangeFolder.setDisplayName(imapFolder.getName());
-				exchangeFolder.setParentFolderId(parentFolderId);
-				exchangeFolders.add(exchangeFolder);
+				exchangeFolder.setParentFolderId(exchangeParentFolderId);
+				exchangeFolders.put(imapFolder.getFullName().toLowerCase(), exchangeFolder);
 				
-			} else if (parentFolderId.equals(conv.getRootExchangeFolderId())){
-				ExchangeSystemFolders esf =  ExchangeSystemFolders.fromName(imapFolder.getName());
-				if(esf != null
-				&& !esf.isMailFolder()){
-					logger.warn("Not Syncronizing Messages in a Non-Mail Exchange System folder: " + esf.getFolderName());
-					conv.warnings++;
-					continue;
-				}
 			}
 			
-	//		Can't do this via EWS...
-	//		if(imapFolder.isSubscribed()){
-	//			FolderUtil.updateFolderStatus(conv.getUser(), exchangeFolder, imapFolder);
-	//		}
+			syncMessages(imapFolder, exchangeFolder);
 			
-			mergeMessages(imapFolder, exchangeFolder);
-			
-			// MergeSubFolders...
-			List<MergedImapFolder> childImapFolders = imapFolder.getChildFolders();
-			List<BaseFolderType> childExchangeFolders = FolderUtil.getChildFolders(conv.getUser(), exchangeFolder.getFolderId());
-			mergeFolders(childImapFolders, childExchangeFolders, exchangeFolder.getFolderId());
-			imapFolder.close(false);
 		}
 	
 	}
@@ -121,7 +119,7 @@ public class FolderSynchronizer {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	public void mergeMessages(MergedImapFolder imapFolder, BaseFolderType exchangeFolder) throws MessagingException, IOException{
+	public void syncMessages(MergedImapFolder imapFolder, BaseFolderType exchangeFolder) throws MessagingException, IOException{
 		MessageSynchronizer syncer = new MessageSynchronizer();
 		syncer.setUser(conv.getUser());
 		syncer.setImapFolder(imapFolder);

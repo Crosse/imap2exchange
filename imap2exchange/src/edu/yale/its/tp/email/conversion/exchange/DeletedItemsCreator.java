@@ -51,6 +51,6 @@ public class DeletedItemsCreator extends MessageCreator {
 	protected List<MessageType> create(User user, List<Message> messagesToMove, BaseFolderIdType destFolderId) throws MessagingException, IOException {
 		DistinguishedFolderIdType deletedItemsFolderId = new DistinguishedFolderIdType();
 		deletedItemsFolderId.setId(DistinguishedFolderIdNameType.DELETEDITEMS);
-		return MessageUtil.createMessagesInExchange(user, messagesToMove, deletedItemsFolderId);
+		return MessageUtil.createMessagesInExchange(messagesToMove, deletedItemsFolderId);
 	}
 }

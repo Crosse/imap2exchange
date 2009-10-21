@@ -159,7 +159,7 @@ public class MessageCreator {
 	}
 	
 	protected List<MessageType> create(User user, List<Message> messagesToMove, BaseFolderIdType destFolderId) throws MessagingException, IOException {
-		return MessageUtil.createMessagesInExchange(user, messagesToMove, destFolderId);
+		return MessageUtil.createMessagesInExchange(messagesToMove, destFolderId);
 	} 
 	
 	public void flush() throws MessagingException, IOException{

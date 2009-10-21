@@ -65,7 +65,7 @@ public class PrMsgStatusUpdater extends MessageUpdater{
 	
 	public List<MessageType> update(List<Message> messagesToUpdate, List<MessageType> messageTypesToUpdate) throws MessagingException, IOException{
 		logger.debug("Updating " + messagesToUpdate.size() + " messages PrMsgStatus");
-		return MessageUtil.updatePrMsgStatus(user, messageTypesToUpdate, messagesToUpdate);
+		return MessageUtil.updatePrMsgStatus(messageTypesToUpdate, messagesToUpdate);
 	}
 
 }
