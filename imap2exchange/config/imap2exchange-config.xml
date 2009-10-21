@@ -52,6 +52,9 @@
         class="edu.yale.its.tp.email.conversion.ExchangeConversionFactory"
         scope="singleton">
         <property name="maxMessageGrpSize" value="5242880" />
+        <!--
+        <property name="maxMessageGrpSize" value="512" />
+        -->
         <property name="maxMessageSize" value="41943040" />
         <!--
         <property name="altNames" ref="altNames" /> 
