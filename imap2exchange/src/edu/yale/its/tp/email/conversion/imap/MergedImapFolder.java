@@ -182,7 +182,6 @@ public class MergedImapFolder {
 					folder.fetch(messageArray, IMAP_FETCH_PROFILE);
 					Report.getReport().stop(Report.IMAP_META);
 					for (Message message : messageArray) {
-					    //logger.debug("Inspecting message " + MessageUtil.getMessageUID(message));
 						if (ImapUtil.isDeleted(message)) {
 							deletedMessages.add(message);
 						} else {
@@ -190,7 +189,7 @@ public class MergedImapFolder {
 						}
 					}
 				} else {
-				    logger.warn("Folder " + folder.getFullName() + " does not hold messages");
+				    logger.debug("Folder " + folder.getFullName() + " does not hold messages");
 				}
 			}
 		}
