@@ -95,8 +95,10 @@ public class ContactsFolderUtil {
         }
         if (folder == null) {
             logger.debug(String.format("Folder \"%s\" does not exist", folderName));
+            return null;
+        } else  {
+            return folder.getFolderId();
         }
-        return folder.getFolderId();
     }
 
     public static ContactsFolderType createFolder(User user, String folderName, BaseFolderIdType parentFolderId) {
