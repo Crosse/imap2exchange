@@ -174,7 +174,7 @@ import com.sun.mail.imap.IMAPFolder;
 	protected boolean performConversionAction(String actionName){
 		PluggableConversionAction action = pluggableConversionActions.get(actionName);
 		if(action == null) {
-			logger.debug("No Puggable Conversion Action defined for: " + actionName);
+			logger.debug("No Pluggable Conversion Action defined for: " + actionName);
 			return true;
 		}
 		return action.perform(this);
@@ -321,8 +321,10 @@ import com.sun.mail.imap.IMAPFolder;
 	protected boolean isExcluded(String folderName) {
 		if (this.getExcludedImapFolders() == null)
 			return false;
+		
+		logger.debug("Comparing folder \"" + folderName + "\" to the excluded list");
+        
 		for (String exclude : this.getExcludedImapFolders()) {
-		    logger.debug("Comparing folder \"" + exclude + "\" to the excluded list");
 		    if (includeExcludeMatcher == null) {
 		        logger.warn("includeExcludeMatcher == null");
 		    }
