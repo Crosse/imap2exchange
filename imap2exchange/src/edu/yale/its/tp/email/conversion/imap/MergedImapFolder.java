@@ -172,8 +172,7 @@ public class MergedImapFolder {
 			deletedMessages = new ArrayList<Message>();
 
 			for (Folder folder : folders) {
-			    if(folder.getType() == Folder.HOLDS_MESSAGES ||
-			       folder.getType() == (Folder.HOLDS_MESSAGES | Folder.HOLDS_FOLDERS)){
+                            if ( (folder.getType() & Folder.HOLDS_MESSAGES) == Folder.HOLDS_MESSAGES) {
 				    if (!folder.isOpen()) {
 				        folder.open(Folder.READ_ONLY);
 				    }
