@@ -74,7 +74,7 @@ public class FolderSynchronizer {
 		for(String imapFolderName : imapFolders.keySet()){
 			
 			MergedImapFolder imapFolder = imapFolders.get(imapFolderName.toLowerCase());
-		
+
 			logger.info("Starting Conversion of " + imapFolder.getFolderNames());
 
 			ExchangeSystemFolders esf = ExchangeSystemFolders.fromName(imapFolder.getFullName());
@@ -84,23 +84,23 @@ public class FolderSynchronizer {
 				continue;
 			}
 
-			BaseFolderType exchangeFolder = exchangeFolders.get(imapFolder.getFullName().toLowerCase()); 
+			BaseFolderType exchangeFolder = exchangeFolders.get(imapFolder.getFullName().toLowerCase().trim()); 
 
 			if(exchangeFolder == null){
 
 				MergedImapFolder parentImapFolder = imapFolder.getParent();
 				FolderIdType exchangeParentFolderId = null;
 				if(parentImapFolder != null){
-					exchangeParentFolderId = exchangeFolders.get(parentImapFolder.getFullName().toLowerCase()).getFolderId();
+					exchangeParentFolderId = exchangeFolders.get(parentImapFolder.getFullName().toLowerCase().trim()).getFolderId();
 				}else
 					exchangeParentFolderId = exchangeFolders.get(ExchangeSystemFolders.INBOX.getFolderName().toLowerCase()).getParentFolderId();
 					
 				
 				logger.info("Exchange Folder [" + imapFolder.getName() + "] does not exist, creating it");
-				exchangeFolder = FolderUtil.createFolder(conv.getUser(), imapFolder.getName(), exchangeParentFolderId);
+				exchangeFolder = FolderUtil.createFolder(conv.getUser(), imapFolder.getName().trim(), exchangeParentFolderId);
 				
 				// I need to add the props back to the returned folder since it only has the id in it 
-				exchangeFolder.setDisplayName(imapFolder.getName());
+				exchangeFolder.setDisplayName(imapFolder.getName().trim());
 				exchangeFolder.setParentFolderId(exchangeParentFolderId);
 				exchangeFolders.put(imapFolder.getFullName().toLowerCase(), exchangeFolder);
 				
