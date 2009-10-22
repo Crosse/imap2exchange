@@ -119,7 +119,7 @@ public class MergedImapFolder {
 	}
 	
 	/** 
-	 * Sets the name... Be carefull here...
+	 * Sets the name... Be careful here...
 	 * @param name
 	 */
 	public void setName(String name){
@@ -172,7 +172,7 @@ public class MergedImapFolder {
 			deletedMessages = new ArrayList<Message>();
 
 			for (Folder folder : folders) {
-                            if ( (folder.getType() & Folder.HOLDS_MESSAGES) == Folder.HOLDS_MESSAGES) {
+			    if ( (folder.getType() & Folder.HOLDS_MESSAGES) == Folder.HOLDS_MESSAGES) {
 				    if (!folder.isOpen()) {
 				        folder.open(Folder.READ_ONLY);
 				    }
