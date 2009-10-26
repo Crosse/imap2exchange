@@ -72,44 +72,55 @@ public class FolderSynchronizer {
 		* Then merge the messages for all folders...
 		*/
 		for(String imapFolderName : imapFolders.keySet()){
-			
 			MergedImapFolder imapFolder = imapFolders.get(imapFolderName.toLowerCase());
+			// Exchange does not like leading or trailing spaces.  Use these strings
+			// to "fix" any folders necessary, when creating the folder in Exchange.
+			String sanitizedImapFolderName = imapFolder.getName().trim();
+			String sanitizedFullImapFolderName = imapFolder.getFullName().trim().toLowerCase();
 
 			logger.info("Starting Conversion of " + imapFolder.getFolderNames());
+			if (imapFolder.getName().startsWith(" ") || imapFolder.getName().endsWith(" ")) {
+				logger.warn(String.format("IMAP folder [%s] has leading and/or trailing spaces: folder name will be trimmed", imapFolder.getName()));
+			}
 
 			ExchangeSystemFolders esf = ExchangeSystemFolders.fromName(imapFolder.getFullName());
 			if(esf != null && !esf.isMailFolder()){
-				logger.warn("Not Syncronizing Messages in a Non-Mail Exchange System folder: " + esf.getFolderName());
+				logger.warn("Not Synchronizing Messages in a Non-Mail Exchange System folder: " + esf.getFolderName());
 				conv.warnings++;
 				continue;
 			}
 
-			BaseFolderType exchangeFolder = exchangeFolders.get(imapFolder.getFullName().toLowerCase().trim()); 
+			BaseFolderType exchangeFolder = exchangeFolders.get(sanitizedFullImapFolderName); 
 
 			if(exchangeFolder == null){
 
 				MergedImapFolder parentImapFolder = imapFolder.getParent();
+				
 				FolderIdType exchangeParentFolderId = null;
 				if(parentImapFolder != null){
-					exchangeParentFolderId = exchangeFolders.get(parentImapFolder.getFullName().toLowerCase().trim()).getFolderId();
-				}else
+					// Only reason this is here is to draw attention to the the fact
+					// that the parentImapFolder may also have whitespace issues, and 
+					// therefore the Exchange folder will have been trimmed.
+					String sanitizedParentImapFolder = parentImapFolder.getFullName().trim().toLowerCase();
+					exchangeParentFolderId = exchangeFolders.get(sanitizedParentImapFolder).getFolderId();
+				} else {
 					exchangeParentFolderId = exchangeFolders.get(ExchangeSystemFolders.INBOX.getFolderName().toLowerCase()).getParentFolderId();
+				}
 					
 				
-				logger.info("Exchange Folder [" + imapFolder.getName() + "] does not exist, creating it");
-				exchangeFolder = FolderUtil.createFolder(conv.getUser(), imapFolder.getName().trim(), exchangeParentFolderId);
+				logger.info("Exchange Folder [" + sanitizedImapFolderName + "] does not exist, creating it");
+				exchangeFolder = FolderUtil.createFolder(conv.getUser(), sanitizedImapFolderName, exchangeParentFolderId);
 				
 				// I need to add the props back to the returned folder since it only has the id in it 
-				exchangeFolder.setDisplayName(imapFolder.getName().trim());
+				exchangeFolder.setDisplayName(sanitizedImapFolderName);
 				exchangeFolder.setParentFolderId(exchangeParentFolderId);
-				exchangeFolders.put(imapFolder.getFullName().toLowerCase(), exchangeFolder);
+				exchangeFolders.put(sanitizedFullImapFolderName, exchangeFolder);
 				
 			}
 			
 			syncMessages(imapFolder, exchangeFolder);
 			
 		}
-	
 	}
 
 	/**
