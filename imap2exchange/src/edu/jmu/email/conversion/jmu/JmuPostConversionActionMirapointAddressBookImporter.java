@@ -92,7 +92,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         }
 
         BaseFolderIdType contactsFolderId = createOrGetImportFolder(user);
-        logger.debug(String.format("Using folder \"%s\" as the Contacts import folder", importedContactsFolderName));
+        logger.debug(String.format("Using folder [%s] as the Contacts import folder", importedContactsFolderName));
 
         importAddressBook(user, addrbook, contactsFolderId);
 
@@ -113,13 +113,13 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             contactsFolderId = ContactsFolderUtil.getFolder(user, importedContactsFolderName, parentFolderId);
             if (contactsFolderId == null) {
                 // Folder doesn't exist; create it.
-                logger.info(String.format("Creating contacts folder \"%s\"", importedContactsFolderName));
+                logger.info(String.format("Creating contacts folder [%s]", importedContactsFolderName));
                 ContactsFolderUtil.createFolder(user, importedContactsFolderName, parentFolderId);
                 contactsFolderId = ContactsFolderUtil.getFolder(user, importedContactsFolderName, parentFolderId);
                 if (contactsFolderId == null) {
-                    logger.error(String.format("Could not create folder \"%s\"", importedContactsFolderName));
+                    logger.error(String.format("Could not create folder [%s]", importedContactsFolderName));
                 } else {
-                    logger.debug(String.format("Created folder \"%s\"", importedContactsFolderName));
+                    logger.debug(String.format("Created folder [%s]", importedContactsFolderName));
                 }
             }
         }
@@ -171,7 +171,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             try {
                 out.write(versionLine);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
+                logger.warn(e1.getMessage());
                 e1.printStackTrace();
             }
         }
@@ -185,6 +185,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
             }
         } catch (IOException e) {
+            logger.warn(e.getMessage());
             e.printStackTrace();
         } finally {
             try {
@@ -194,12 +195,12 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             } catch (IOException e) {
             }
         }
-        
+
         if (sb.length() < versionLine.length()) {
             logger.info("User does not have a Mirapoint address book");
             return null;
         }
-        
+
         sb.insert(0, versionLine);
 
         InputStream ldifStream = new ByteArrayInputStream(sb.toString().getBytes());
@@ -219,11 +220,12 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             logger.warn("addrbook was null");
             return;
         }
-        
+
         logger.info("Processing user's address book");
 
         // First, get the user's existing contacts.
         contacts = ContactUtil.getContacts(contactsFolderId);
+        logger.info("Found " + contacts.size() + " existing contacts.");
 
         LDAPMessage msg = null;
         LDAPEntry entry = null;
@@ -262,7 +264,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             }
 
         } catch (Exception e) {
-            logger.warn("Could not import user's address book");
+            logger.warn("Could not import user's address book: " + e.getMessage());
             e.printStackTrace();
             user.getConversion().warnings++;
         }
@@ -276,27 +278,27 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             logger.warn("No groups to process.");
             return;
         }
-        
+
         int groupsCreated = 0;
         for (LDAPEntry group : groups) {
             String cn = getEntryAttribute(group, "cn");
 
             if (findDistributionList(cn) != null) {
                 // Group already exists.  Bork.
-                logger.info(String.format("DL  FOUND: [ %s ]; not creating or updating", cn));
+                logger.info(String.format("DL  FOUND: [%s]; not creating or updating", cn));
                 groupsCreated++;
                 continue;
             }
-            
+
             List<ContactItemType> members = new ArrayList<ContactItemType>();
 
-            logger.info(String.format("DL CREATE: [ %s ]", cn));
+            logger.info(String.format("DL CREATE: [%s]", cn));
 
             if (group.getAttribute("member") == null) {
-                logger.warn(String.format("DL CREATE: [ %s ] has no members--not creating", cn));
+                logger.warn(String.format("DL CREATE: [%s] has no members--not creating", cn));
                 continue;
             }
-            
+
             for (String member : group.getAttribute("member").getStringValueArray()) {
                 int mailTag = member.indexOf(tag);
                 String mail = sanitizeString(member.substring(mailTag + tag.length()));
@@ -305,13 +307,13 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
                 mail = sanitizeString(mail);
 
-                ContactItemType contact = findContact(mail);
+                ContactItemType contact = findContact(mail, cn);
 
                 if (contact == null) {
                     // For Mirapoint this should never happen, since groups
                     // may only contain items in the address book.
                     // ...but, log it just in case.
-                    logger.warn(String.format("Group \"%s\" contains \"%s\", but it could not be found", cn, mail));
+                    logger.warn(String.format("Group [%s] contains [%s], but it could not be found", cn, mail));
                     continue;
                 } else {
                     members.add(contact);
@@ -320,10 +322,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
             ItemType dl = ContactUtil.createDistributionList(user, cn, members, contactsFolderId);
             if (dl != null) {
-                logger.info(String.format("DL CREATE: successfully created \"%s\"", cn));
+                logger.info(String.format("DL CREATE: successfully created [%s]", cn));
                 groupsCreated++;
             } else {
-                logger.warn(String.format("DL ERROR: could not create distribution list \"%s\"", cn));
+                logger.warn(String.format("DL ERROR: could not create distribution list [%s]", cn));
                 user.getConversion().warnings++;
             }
         }
@@ -362,12 +364,12 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         contactItem.setSubject(identity);
         contactItem.setDisplayName(identity);
 
-        if (findContact(email) != null) {
+        if (findContact(email, identity) != null) {
             // Contact already exists. Stop processing.
-            logger.info(String.format("%-6s CONTACT: [ %16s ] already exists; refusing to duplicate", "SKIP", email));
+            logger.info(String.format("%-6s CONTACT: [%16s] already exists; refusing to duplicate", "SKIP", email));
             return true;
         }
-
+        
         // Set the Categories attribute to "category".
         String category = getEntryAttribute(entry, "category");
         if (!category.isEmpty()) {
@@ -381,41 +383,48 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // Set the GivenName to "givenname".
         contactItem.setGivenName(getEntryAttribute(entry, "givenname"));
 
-        // Set the email address. There are convenience methods to do some
-        // of
-        // this, but for some reason I can't make them work for
-        // me--especially
-        // trying to set Email1DisplayName
-        List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
+        if (email.length() > 0) {
+            // Set the email address. There are convenience methods to do some
+            // of
+            // this, but for some reason I can't make them work for
+            // me--especially
+            // trying to set Email1DisplayName
+            List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
 
-        // Set the Email Address 1 DisplayName.
-        ExtendedPropertyType e1DisplayName = new ExtendedPropertyType();
-        e1DisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1DisplayName);
-        e1DisplayName.setValue(String.format("%s (%s)", identity, email));
-        props.add(e1DisplayName);
-        // Set the Email Address 1 Address Type (SMTP).
-        ExtendedPropertyType e1AddressType = new ExtendedPropertyType();
-        e1AddressType.setExtendedFieldURI(ContactUtil.ptefEmail1AddressType);
-        e1AddressType.setValue("SMTP");
-        props.add(e1AddressType);
-        // Set the Email Address 1 Email Address.
-        ExtendedPropertyType e1Address = new ExtendedPropertyType();
-        e1Address.setExtendedFieldURI(ContactUtil.ptefEmail1EmailAddress);
-        e1Address.setValue(email);
-        props.add(e1Address);
-        // Set the Email Address 1 OriginalDisplayName.
-        ExtendedPropertyType e1OriginalDisplayName = new ExtendedPropertyType();
-        e1OriginalDisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalDisplayName);
-        e1OriginalDisplayName.setValue(String.format("%s (%s)", identity, email));
-        props.add(e1OriginalDisplayName);
-        // Set the Email Address 1 Original EntryId.
-        ExtendedPropertyType e1OriginalEntryID = new ExtendedPropertyType();
-        e1OriginalEntryID.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalEntryID);
-        e1OriginalEntryID.setValue(ContactUtil.createOneOffEntryIdInBase64(identity, email));
-        props.add(e1OriginalEntryID);
-        // Add all of the above to the extended properties field of the
-        // contact.
-        contactItem.getExtendedProperty().addAll(props);
+            // Set the Email Address 1 DisplayName and OriginalDisplayName.
+            ExtendedPropertyType e1DisplayName = new ExtendedPropertyType();
+            e1DisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1DisplayName);
+            ExtendedPropertyType e1OriginalDisplayName = new ExtendedPropertyType();
+            e1OriginalDisplayName.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalDisplayName);
+            if (identity.length() > 0) {
+                e1DisplayName.setValue(String.format("%s (%s)", identity, email));
+                e1OriginalDisplayName.setValue(String.format("%s (%s)", identity, email));
+
+            } else {
+                e1DisplayName.setValue(String.format("%s", email));
+                e1OriginalDisplayName.setValue(String.format("%s", email));
+            }
+            props.add(e1DisplayName);
+            props.add(e1OriginalDisplayName);
+            // Set the Email Address 1 Address Type (SMTP).
+            ExtendedPropertyType e1AddressType = new ExtendedPropertyType();
+            e1AddressType.setExtendedFieldURI(ContactUtil.ptefEmail1AddressType);
+            e1AddressType.setValue("SMTP");
+            props.add(e1AddressType);
+            // Set the Email Address 1 Email Address.
+            ExtendedPropertyType e1Address = new ExtendedPropertyType();
+            e1Address.setExtendedFieldURI(ContactUtil.ptefEmail1EmailAddress);
+            e1Address.setValue(email);
+            props.add(e1Address);
+            // Set the Email Address 1 Original EntryId.
+            ExtendedPropertyType e1OriginalEntryID = new ExtendedPropertyType();
+            e1OriginalEntryID.setExtendedFieldURI(ContactUtil.ptefEmail1OriginalEntryID);
+            e1OriginalEntryID.setValue(ContactUtil.createOneOffEntryIdInBase64(identity, email));
+            props.add(e1OriginalEntryID);
+            // Add all of the above to the extended properties field of the
+            // contact.
+            contactItem.getExtendedProperty().addAll(props);
+        }
 
         // Set the CompanyName to "o".
         contactItem.setCompanyName(getEntryAttribute(entry, "o"));
@@ -490,7 +499,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             contactItem.setBirthday(birthdate);
         }
 
-        logger.info(String.format("CREATE CONTACT: [ %16s ]", email));
+        logger.info(String.format("CREATE CONTACT: [%16s]", email));
         List<ItemType> retval = null;
         if ((retval = ContactUtil.createContact(user, contactItem, contactsFolderId)) != null) {
             for (ItemType item : retval) {
@@ -498,7 +507,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             }
             success = true;
         } else {
-            logger.warn(String.format("Error creating contact \"%s\"", entry.getDN()));
+            logger.warn(String.format("Error creating contact [%s]", entry.getDN()));
             user.getConversion().warnings++;
             success = false;
         }
@@ -514,30 +523,36 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         }
     }
 
-    protected ContactItemType findContact(String email) {
+    protected ContactItemType findContact(String email, String identity) {
         for (ItemType item : contacts) {
             if (item instanceof ContactItemType) {
-                if (!email.isEmpty() && ((ContactItemType)item).getEmailAddresses() != null) {
-                    for (EmailAddressDictionaryEntryType dictEntry : ((ContactItemType)item).getEmailAddresses().getEntry()) {
-                        if (dictEntry.getValue().isEmpty()) {
-                            continue;
-                        } else if (email.equalsIgnoreCase(dictEntry.getValue())) {
-                            return (ContactItemType)item;
+                if (!email.isEmpty()) {
+                    if ( ((ContactItemType)item).getEmailAddresses() != null) {
+                        // First, check the email address.
+                        for (EmailAddressDictionaryEntryType dictEntry : ((ContactItemType)item).getEmailAddresses().getEntry()) {
+                            if (dictEntry.getValue().isEmpty()) {
+                                continue;
+                            } else if (email.equalsIgnoreCase(dictEntry.getValue())) {
+                                return (ContactItemType)item;
+                            }
                         }
                     }
+                } else if ( ((ContactItemType)item).getSubject().equalsIgnoreCase(identity) ) {
+                    // Next search for the contact by identity.
+                    return (ContactItemType)item;
                 }
             }
         }
         return null;
     }
-    
+
     protected ItemType findDistributionList(String dlName) {
         ItemType retval = null;
         if (dlName.isEmpty()) {
             logger.warn("dlName was empty in findDistributionList");
             return null;
         }
-        
+
         for (ItemType item : contacts) {
             if (ContactUtil.DISTRIBUTION_LIST_ITEM_CLASS.equalsIgnoreCase(item.getItemClass())) {
                 if (dlName.equalsIgnoreCase(item.getSubject())) {
@@ -546,7 +561,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
             }
         }
-        
+
         return retval;
     }
 
@@ -652,7 +667,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         return response;
     }
-    
+
     protected String sanitizeString(String s) {
         return s.trim();
     }

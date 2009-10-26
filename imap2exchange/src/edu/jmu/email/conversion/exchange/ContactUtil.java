@@ -331,14 +331,14 @@ public class ContactUtil {
         int wrappedEntryIdsLength = 0;
         int oneOffEntryIdsLength = 0;
         for (ContactItemType member : members) {
-            logger.debug(String.format("ADD: [ %-16s ] to group [ %s ]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
+            logger.debug(String.format("ADD: [%-16s] to group [%s]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
             
             String entryId = createWrappedEntryId(user, member);
             wrappedEntryIds.getValue().add(Base64.encode(hexStringToByteArray(entryId)));
             wrappedEntryIdsLength += entryId.length();
             if (wrappedEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
                 logger.warn(String.format(
-                  "DL \"%s\" has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
+                  "DL [%s] has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
                   dlName, 
                   wrappedEntryIdsLength,
                   PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
@@ -350,7 +350,7 @@ public class ContactUtil {
             oneOffEntryIdsLength += oneoffEntryId.length();
             if (oneOffEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
                 logger.warn(String.format(
-                  "DL \"%s\" has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
+                  "DL [%s] has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
                   dlName, 
                   oneOffEntryIdsLength,
                   PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
@@ -359,7 +359,7 @@ public class ContactUtil {
 
         }
         
-        logger.info(String.format("DL \"%s\" contains %d members", dlName, wrappedEntryIds.getValue().size()));
+        logger.info(String.format("DL [%s] contains %d members", dlName, wrappedEntryIds.getValue().size()));
 
         List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
         
@@ -566,7 +566,7 @@ public class ContactUtil {
                 i++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn(e.getMessage());
             throw new RuntimeException("Exception creating contact on Exchange Server: " + e.getMessage(), e);
         } finally {
             if (Report.getReport().isStarted(Report.EXCHANGE_MIME))
