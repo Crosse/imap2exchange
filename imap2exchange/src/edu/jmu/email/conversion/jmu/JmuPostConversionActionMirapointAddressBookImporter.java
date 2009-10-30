@@ -685,7 +685,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     }
 
     protected String sanitizeString(String s) {
-        return s.trim();
+        return ContactUtil.sanitizeString(s);
     }
 
     /**

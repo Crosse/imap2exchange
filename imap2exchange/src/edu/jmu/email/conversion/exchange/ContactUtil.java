@@ -116,38 +116,38 @@ public class ContactUtil {
         ptefEmail1DisplayName.setPropertyId(PID_LID_EMAIL1_DISPLAY_NAME);
         ptefEmail1DisplayName.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefEmail1DisplayName.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefEmail1AddressType.setPropertyId(PID_LID_EMAIL1_ADDRESS_TYPE);
         ptefEmail1AddressType.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefEmail1AddressType.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefEmail1EmailAddress.setPropertyId(PID_LID_EMAIL1_EMAIL_ADDRESS);
         ptefEmail1EmailAddress.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefEmail1EmailAddress.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefEmail1OriginalDisplayName.setPropertyId(PID_LID_EMAIL1_ORIGINAL_DISPLAY_NAME);
         ptefEmail1OriginalDisplayName.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefEmail1OriginalDisplayName.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefEmail1OriginalEntryID.setPropertyId(PID_LID_EMAIL1_ORIGINAL_ENTRY_ID);
         ptefEmail1OriginalEntryID.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefEmail1OriginalEntryID.setPropertyType(MapiPropertyTypeType.BINARY);
-        
+
         ptefDisplayName.setPropertyTag("0x3001");
         ptefDisplayName.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefDistributionListName.setPropertyId(PID_LID_DISTRIBUTION_LIST_NAME);
         ptefDistributionListName.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefDistributionListName.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefFileUnder.setPropertyId(PID_LID_FILE_UNDER);
         ptefFileUnder.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefFileUnder.setPropertyType(MapiPropertyTypeType.STRING);
-        
+
         ptefMembers.setPropertyId(PID_LID_DISTRIBUTION_LIST_MEMBERS);
         ptefMembers.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
-        
+
         ptefOneOffMembers.setPropertyId(PID_LID_DISTRIBUTION_LIST_ONE_OFF_MEMBERS);
         ptefOneOffMembers.setDistinguishedPropertySetId(DistinguishedPropertySetType.ADDRESS);
         ptefOneOffMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
@@ -199,7 +199,7 @@ public class ContactUtil {
         List<BaseFolderIdType> ids = folderIds.getFolderIdOrDistinguishedFolderId();
         ids.add(contactsFolderId);
         finder.setParentFolderIds(folderIds);
-        
+
         // define response Objects and their holders
         FindItemResponseType findItemResponse = new FindItemResponseType();
         Holder<FindItemResponseType> responseHolder = new Holder<FindItemResponseType>(findItemResponse);
@@ -247,19 +247,19 @@ public class ContactUtil {
 
         return contacts;
     }
-    
+
     public static ContactItemType findContactByEntryId(User user, ItemIdType id) {
         ContactItemType contact = null;
-        
+
         GetItemType getItem = new GetItemType();
         ItemResponseShapeType itemShape = new ItemResponseShapeType();
         itemShape.setBaseShape(DefaultShapeNamesType.ALL_PROPERTIES);
         getItem.setItemShape(itemShape);
-        
+
         NonEmptyArrayOfBaseItemIdsType ids = new NonEmptyArrayOfBaseItemIdsType();
         ids.getItemIdOrOccurrenceItemIdOrRecurringMasterItemId().add(id);
         getItem.setItemIds(ids);
-        
+
         // define response Objects and their holders
         GetItemResponseType findItemResponse = new GetItemResponseType();
         Holder<GetItemResponseType> responseHolder = new Holder<GetItemResponseType>(findItemResponse);
@@ -309,120 +309,120 @@ public class ContactUtil {
             if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
                 Report.getReport().stop(Report.EXCHANGE_CONNECT);
         }
-        
+
         return contact;
     }
 
     public static ItemType createDistributionList(User user, String dlName, List<ContactItemType> members, BaseFolderIdType contactsFolderId) {
         dlName = sanitizeString(dlName);
-        
+
         ItemType list = new ItemType();
-        
+
         list.setItemClass(DISTRIBUTION_LIST_ITEM_CLASS);
         list.setSubject(dlName);
         list.setBody(new BodyType());
         list.getBody().setValue("");
         list.getBody().setBodyType(BodyTypeType.TEXT);
-        
+
         NonEmptyArrayOfPropertyValuesType wrappedEntryIds = new NonEmptyArrayOfPropertyValuesType();
         NonEmptyArrayOfPropertyValuesType oneOffEntryIds = new NonEmptyArrayOfPropertyValuesType();
-        
+
         int wrappedEntryIdsLength = 0;
         int oneOffEntryIdsLength = 0;
         for (ContactItemType member : members) {
             logger.debug(String.format("ADD: [%-16s] to group [%s]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
-            
+
             String entryId = createWrappedEntryId(user, member);
             wrappedEntryIds.getValue().add(Base64.encode(hexStringToByteArray(entryId)));
             wrappedEntryIdsLength += entryId.length();
             if (wrappedEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
                 logger.warn(String.format(
-                  "DL [%s] has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
-                  dlName, 
-                  wrappedEntryIdsLength,
-                  PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
+                                          "DL [%s] has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
+                                          dlName, 
+                                          wrappedEntryIdsLength,
+                                          PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
                 return null;
             }
-            
+
             String oneoffEntryId = createOneOffEntryId(member);
             oneOffEntryIds.getValue().add(Base64.encode(hexStringToByteArray(oneoffEntryId)));
             oneOffEntryIdsLength += oneoffEntryId.length();
             if (oneOffEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
                 logger.warn(String.format(
-                  "DL [%s] has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
-                  dlName, 
-                  oneOffEntryIdsLength,
-                  PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
+                                          "DL [%s] has grown to %d bytes in size, which is larger than the allowed limit (%d bytes); refusing to create.", 
+                                          dlName, 
+                                          oneOffEntryIdsLength,
+                                          PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH));
                 return null;
             }
 
         }
-        
+
         logger.info(String.format("DL [%s] contains %d members", dlName, wrappedEntryIds.getValue().size()));
 
         List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
-        
+
         ExtendedPropertyType displayName = new ExtendedPropertyType();
         displayName.setExtendedFieldURI(ptefDisplayName);
         displayName.setValue(dlName);
         props.add(displayName);
-        
+
         ExtendedPropertyType distributionListName = new ExtendedPropertyType();
         distributionListName.setExtendedFieldURI(ptefDistributionListName);
         distributionListName.setValue(dlName);
         props.add(distributionListName);
-        
+
         ExtendedPropertyType fileUnder = new ExtendedPropertyType();
         fileUnder.setExtendedFieldURI(ptefFileUnder);
         fileUnder.setValue(dlName);
         props.add(fileUnder);
-        
+
         ExtendedPropertyType dlMembers = new ExtendedPropertyType();
         dlMembers.setExtendedFieldURI(ptefMembers);
         dlMembers.setValues(wrappedEntryIds);
         props.add(dlMembers);
-        
+
         ExtendedPropertyType dlOneOffMembers = new ExtendedPropertyType();
         dlOneOffMembers.setExtendedFieldURI(ptefOneOffMembers);
         dlOneOffMembers.setValues(oneOffEntryIds);
         props.add(dlOneOffMembers);
-        
+
         list.getExtendedProperty().addAll(props);
-        
+
         CreateItemType creator = getCreator(contactsFolderId);
         creator.getItems().getItemOrMessageOrCalendarItem().add(list);
 
         return getCreateItemResponse(user, creator).get(0);
     }
-    
+
     public static String createWrappedEntryId(User user, ItemType entry) {
         String retval = "";
         String wrappedEntryIDPreamble = 
             ContactUtil.ENTRYID_FLAGS + 
             ContactUtil.WRAPPED_ENTRYID_PROVIDER_UID + 
             ContactUtil.WRAPPED_ENTRYID_TYPE_CONTACT_ENTRYID;
-        
+
         ConvertIdType convertReq = new ConvertIdType();
         convertReq.setDestinationFormat(IdFormatType.HEX_ENTRY_ID);
         convertReq.setSourceIds(new NonEmptyArrayOfAlternateIdsType());
-        
+
         AlternateIdType altId = new AlternateIdType();
         altId.setFormat(IdFormatType.ENTRY_ID);
         altId.setId(entry.getItemId().getId());
         altId.setMailbox(user.getPrimarySMTPAddress());
-        
+
         convertReq.getSourceIds().getAlternateIdOrAlternatePublicFolderIdOrAlternatePublicFolderItemId().add(altId);
-        
+
         try {
             ConvertIdResponseType convertIdResponse = new ConvertIdResponseType();
             Holder<ConvertIdResponseType> responseHolder = new Holder<ConvertIdResponseType>(convertIdResponse);
-            
+
             ServerVersionInfo serverVersion = new ServerVersionInfo();
             Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
-            
+
             RequestServerVersion requestVersion = new RequestServerVersion();
             requestVersion.setVersion(ExchangeVersionType.EXCHANGE_2007_SP_1);
-            
+
             ExchangeServicePortType proxy = null;
             List<JAXBElement<? extends ResponseMessageType>> responses = null;
             try {
@@ -471,19 +471,19 @@ public class ContactUtil {
         } catch (Exception e) {
             logger.warn("Could not create WrappedEntryId: " + e.getMessage());
         }
-        
+
         return retval;
     }
 
-    
+
     public static String createOneOffEntryId(String displayName, String emailAddress) {
         StringBuilder sb = new StringBuilder();
-        
+
         emailAddress = sanitizeString(emailAddress);
         String first = sanitizeString(displayName);
         String middle = "SMTP";
         String last = emailAddress;
-        
+
         sb.append(ENTRYID_FLAGS);
         sb.append(ONEOFF_ENTRYID_PROVIDER_UID);
         sb.append(ONEOFF_ENTRYID_VERSION);
@@ -494,35 +494,42 @@ public class ContactUtil {
         sb.append(ONEOFF_ENTRYID_PAD);
         sb.append(convertToHexString(last));
         sb.append(ONEOFF_ENTRYID_PAD);
-        
+
         //logger.debug(sb.toString());
         return sb.toString();
     }
-    
+
     public static String createOneOffEntryId(ContactItemType entry) {
         String emailAddress = sanitizeString(entry.getEmailAddresses().getEntry().get(0).getValue());
         String displayName = sanitizeString(entry.getDisplayName());
-        
+
         return createOneOffEntryId(displayName, emailAddress);
     }
-    
+
     public static String createOneOffEntryIdInBase64(String displayName, String emailAddress) {
         return Base64.encode(hexStringToByteArray(createOneOffEntryId(displayName, emailAddress)));
     }
-    
+
     public static String createOneOffEntryIdInBase64(ContactItemType entry) {
         return Base64.encode(hexStringToByteArray(createOneOffEntryId(entry)));
     }
-    
+
     private static String convertToHexString(String s) {
         StringBuilder sb = new StringBuilder();
         for (char c : s.toCharArray()) {
-            sb.append(Integer.toHexString(c));
+            if (c < 0x20) {
+                // Somehow the user encoded a control character into a string.
+                // Replace it with a space (0x20).
+                sb.append("20");
+            } else {
+                sb.append(Integer.toHexString(c));
+            }
+            // Append "00" because the string is supposed to be Unicode or something.
             sb.append("00");
         }
         return sb.toString();
     }
-    
+
     public static List<ItemType> getCreateItemResponse(User user, CreateItemType creator) {
         List<ItemType> items = new ArrayList<ItemType>();
         // define response Objects and their holders
@@ -576,7 +583,7 @@ public class ContactUtil {
 
         return items;
     }
-    
+
     private static byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte [len / 2];
@@ -584,12 +591,20 @@ public class ContactUtil {
             data[i / 2] = (byte)(
                     (Character.digit(s.charAt(i), 16) << 4) + 
                      Character.digit(s.charAt(i+1), 16));
+
         }
         return data;
     }
-    
-    private static String sanitizeString(String s) {
-        return s.trim();
-    }
 
+    public static String sanitizeString(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (c < 0x20) {
+                sb.append(" ");
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString().trim();
+    }
 }
