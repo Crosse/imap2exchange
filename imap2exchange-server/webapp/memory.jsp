@@ -49,6 +49,8 @@
    }
 %>
 
+<span class="hdr">Memory Graph</span><p />
+
 <script type="text/javascript">
 <!--
 <%=started ? ("setInterval('reloadImage()', " + rate + "*1000);") : ""%>

@@ -26,16 +26,4 @@
       <a href="memory.jsp">Memory Graph</a>
     </td>
   </tr>
-<!--
-  <tr>
-    <td<%=request.getRequestURI().endsWith("poFinder.jsp") ? " class=\"txt-bold\"" : ""%>>
-      <a href="poFinder.jsp">Find Central Po</a>
-    </td>
-  </tr>
--->
-  <tr>
-    <td<%=request.getRequestURI().endsWith("info.jsp") ? " class=\"txt-bold\"" : ""%>>
-      <a href="info.jsp">Server Config Info</a>
-    </td>
-  </tr>
 </table>

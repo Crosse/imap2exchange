@@ -15,8 +15,9 @@
 
 <% 
   String convId = request.getParameter("convId");
+  convId = convId.split("@")[0];
   ThreadAppender ta = (ThreadAppender)Logger.getLogger("edu.yale").getAppender("T");  
-  String logFile = ta.getOutputFolder() + convId;
+  String logFile = ta.getOutputFolder() + convId + "@";
   boolean logExists = new File(logFile).isFile();
 %>
 <script type="text/javascript">
@@ -49,7 +50,6 @@ if(!logExists){
     String startTime = null;
     StringBuilder sb = null;
     while((line = in.readLine()) != null){
-    
         if(!started){
             int idx = line.indexOf("Conversion Starting:");
             if(idx != -1){
@@ -75,10 +75,10 @@ if(!logExists){
                  </td>
                </tr> 
 <%          } else {
-                if(status.equals("Success") && line.indexOf(convId + "] WARN") != -1){
+                if(status.equals("Success") && line.indexOf("] WARN") != -1){
                    status = "Warning";
                 } else if((status.equals("Success") || status.equals("Warning"))
-                  && line.indexOf(convId + "] ERROR") != -1){
+                  && line.indexOf("] ERROR") != -1){
                   status = "Error";
                 }
                 sb.append(line).append("\n");

@@ -31,6 +31,7 @@
         List<ExchangeConversion> running = manager.getRunning();
 %>
 
+<span class="hdr">Active Conversions</span><br /><br />
 <!-- Queued Conversions --> 
 <span class="sub-hdr">
 Queued 
@@ -41,7 +42,7 @@ Queued
     <thead>
       <tr>
         <th>Position</th>
-        <th>uid@Po</th>
+        <th>eID</th>
       </tr> 
     </thead>
     <tbody>
@@ -54,7 +55,7 @@ Queued
 %>
         <tr>
                 <td align="center"><%=i++ %></td>
-                <td><%=conv.getId() %></td>
+                <td><%=conv.getId().split("@")[0] %></td>
         </tr>
 <%     } 
    } %>
@@ -72,7 +73,7 @@ Running
     <thead>
       <tr>
         <th>Started</th>
-        <th>uid@Po</th>
+        <th>eID</th>
       </tr>
     </thead>
     <tbody>
@@ -90,7 +91,7 @@ Running
 %>
         <tr>
                 <td><%=dtFmt.format(new Date(conv.getStart()))%></td>
-                <td><%=conv.getId() %></td>
+                <td><%=conv.getId().split("@")[0] %></td>
         </tr>
 <%    }
    } %>

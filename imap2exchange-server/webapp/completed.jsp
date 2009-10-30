@@ -16,7 +16,7 @@
 <jsp:include page="header.jsp" />
 <script src="js/sorttable.js"></script>
 <script src="js/tablefilter.js"></script>
-<span class="sub-hdr">Completed Conversions</span><br /><br />
+<span class="hdr">Completed Conversions</span><br /><br />
 <script language="javascript" type="text/javascript">
 //<![CDATA[
 function toggleFilterOnOff(){
@@ -41,7 +41,7 @@ function toggleFilterOnOff(){
     <thead>
       <tr class="txt">
         <th>Started</th>
-        <th>uid@Po</th>
+        <th>eID</th>
         <th>Success</th>
         <th>Duration</th>
         <th>Msgs Copied</th>
@@ -59,7 +59,7 @@ function toggleFilterOnOff(){
 %>
     <tr align="center" class="txt">
       <td><%=tokens[0]%></td>
-      <td><a href="viewLog.jsp?convId=<%=tokens[1] %>"><%=tokens[1] %></a></td>
+      <td><a href="viewLog.jsp?convId=<%=tokens[1] %>"><%=tokens[1].split("@")[0] %></a></td>
       <td><%if(tokens[2].equals("success")) out.print("<span class=\"txt-green\">Success</span>");
             if(tokens[2].equals("warning")) out.print("<span class=\"txt-orange\">Warning</span>");
             if(tokens[2].equals("error")) out.print("<span class=\"txt-red\">Error</span>");%></td>

@@ -107,10 +107,10 @@ function processResults(mailboxes){
 </script>
 
 <form id="file_upload_form" method="post" enctype="multipart/form-data" action="echo.jsp" onsubmit="changeTarget()">
+    <span class="hdr">Add Conversions</span><p />
 <span class="txt">
-        Please add Conversions below.  One per line.<br />
-        <b>Format:</b> eID@mailStore<br />
-        <b>Example:</b>  johndoe@mpmail2.jmu.edu<br />
+        Enter the eIDs of the users to migrate in the box below.<br />
+        imap2exchange will automatically try to find the correct mail store for the user.<br />
 </span>
     <table>
       <tr>
@@ -127,8 +127,9 @@ function processResults(mailboxes){
       <tr>
         <td>&nbsp; </td>
       </tr>
+  <!--
       <tr>
-        <td><span class="txt">Or upload a file with the same format.<br /></span></td>
+          <td><span class="txt">Or upload a file with the same format.<br /></span></td>
       </tr>
       <tr>
         <td>&nbsp; </td>
@@ -140,7 +141,8 @@ function processResults(mailboxes){
           <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;" ></iframe>
         </td>
       </tr>
-    </table>
+      -->
+  </table>
 
 </form>
 
