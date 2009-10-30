@@ -2,7 +2,6 @@ package edu.jmu.email.conversion.exchange;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.Holder;
 
@@ -182,8 +181,8 @@ public class ContactUtil {
         return creator;
     }
 
-    public static List<ItemType> getContacts(BaseFolderIdType contactsFolderId) {
-        List<ItemType> contacts = new ArrayList<ItemType>();
+    public static ArrayList<ItemType> getContacts(BaseFolderIdType contactsFolderId) {
+        ArrayList<ItemType> contacts = new ArrayList<ItemType>();
 
         // Form the FindItem request.
         FindItemType finder = new FindItemType();

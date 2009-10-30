@@ -291,7 +291,7 @@ import com.sun.mail.imap.IMAPFolder;
 		// Find the ones to remove
 		List<String> pathsToRemove = new ArrayList<String>(); 
 		for(String path : folders.keySet()){
-			if(isExcluded(path) && !isIncluded(path)){
+			if(isExcluded(folders.get(path).getFullName()) && !isIncluded(folders.get(path).getFullName())){
 				pathsToRemove.add(path);
 				continue;
 			}
@@ -299,7 +299,7 @@ import com.sun.mail.imap.IMAPFolder;
 		
 		// Actually remove them...
 		for(String path : pathsToRemove){
-			folders.remove(path);
+		    folders.remove(path);
 		}
 		
 		// Clear the removeBuffer and test opening them...
@@ -311,7 +311,7 @@ import com.sun.mail.imap.IMAPFolder;
 			}
 		}
 		
-		// Actually remove the one I can't open...
+		// Actually remove the ones I can't open...
 		for(String path : pathsToRemove){
 			folders.remove(path);
 		}
@@ -337,8 +337,9 @@ import com.sun.mail.imap.IMAPFolder;
 	}
 
 	protected boolean isIncluded(String folderName) {
-		if (this.getIncludedImapFolders() == null)
-			return true;
+		if (this.getIncludedImapFolders() == null) {
+			return false;
+		}
 		for (String include : this.getIncludedImapFolders()) {
 			if (includeExcludeMatcher.matches(include, folderName)) {
 				logger.info("Including " + folderName + " because it is in the inclusion list.");

@@ -14,8 +14,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -80,7 +80,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     private String importedContactsFolderName;
     private String loginUrl;
     private String addrBookUrl;
-    private List<ItemType> contacts;
+    private ArrayList<ItemType> contacts;
 
     @Override
     public boolean perform(ExchangeConversion conv) {
@@ -92,7 +92,12 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         }
 
         BaseFolderIdType contactsFolderId = createOrGetImportFolder(user);
-        logger.debug(String.format("Using folder [%s] as the Contacts import folder", importedContactsFolderName));
+        
+        if (importedContactsFolderName.isEmpty()) {
+            logger.debug("Using the default Contacts folder as the Contacts import folder");
+        } else {
+            logger.debug(String.format("Using folder [%s] as the Contacts import folder", importedContactsFolderName));
+        }
 
         importAddressBook(user, addrbook, contactsFolderId);
 
@@ -312,9 +317,16 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 if (contact == null) {
                     // For Mirapoint this should never happen, since groups
                     // may only contain items in the address book.
-                    // ...but, log it just in case.
-                    logger.warn(String.format("Group [%s] contains [%s], but it could not be found", cn, mail));
-                    continue;
+
+                    // Try to download a (hopefully) current list of contacts for the user.
+                    logger.warn(String.format("Could not find contact [%s] in local list.  Downloading current copy of user's contacts", mail));
+                    contacts = ContactUtil.getContacts(contactsFolderId);
+                    contact = findContact(mail, cn);
+                    if (contact == null) {
+                        // Still can't find contact.  Log it and go on.
+                        logger.warn(String.format("Group [%s] contains [%s], but it could not be found", cn, mail));
+                        continue;
+                    }
                 } else {
                     members.add(contact);
                 }
@@ -366,7 +378,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         if (findContact(email, identity) != null) {
             // Contact already exists. Stop processing.
-            logger.info(String.format("%-6s CONTACT: [%16s] already exists; refusing to duplicate", "SKIP", email));
+            logger.info(String.format("%-6s CONTACT: [%s (%s)] already exists; refusing to duplicate", "SKIP", identity, email));
             return true;
         }
         
@@ -499,11 +511,13 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             contactItem.setBirthday(birthdate);
         }
 
-        logger.info(String.format("CREATE CONTACT: [%16s]", email));
+        logger.info(String.format("CREATE CONTACT: [%s (%s)]", identity, email));
         List<ItemType> retval = null;
         if ((retval = ContactUtil.createContact(user, contactItem, contactsFolderId)) != null) {
             for (ItemType item : retval) {
-                contacts.add(ContactUtil.findContactByEntryId(user, item.getItemId()));
+                if (item instanceof ContactItemType) {
+                    contacts.add(ContactUtil.findContactByEntryId(user, item.getItemId()));
+                }
             }
             success = true;
         } else {
@@ -524,7 +538,9 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     }
 
     protected ContactItemType findContact(String email, String identity) {
-        for (ItemType item : contacts) {
+        Iterator<ItemType> iterator = contacts.iterator();
+        while (iterator.hasNext()) {
+            ItemType item = iterator.next();
             if (item instanceof ContactItemType) {
                 if (!email.isEmpty()) {
                     if ( ((ContactItemType)item).getEmailAddresses() != null) {

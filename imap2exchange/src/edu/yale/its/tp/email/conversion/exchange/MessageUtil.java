@@ -364,7 +364,9 @@ public class MessageUtil {
 				i++;
 			}
 		} catch (Exception e){
-			throw new RuntimeException("Exception creating messages on Exchange Server", e);
+		    logger.warn("Exception creating messages on Exchange server: " + e.getMessage());
+		    user.getConversion().warnings++;
+			//throw new RuntimeException("Exception creating messages on Exchange Server", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_MIME))
 				Report.getReport().stop(Report.EXCHANGE_MIME);

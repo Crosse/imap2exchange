@@ -2,7 +2,7 @@ package edu.yale.its.tp.email.conversion;
 
 import java.util.*;
 import edu.yale.its.tp.email.conversion.imap.*;
-import edu.yale.its.tp.email.conversion.util.StringEqualsMatcher;
+import edu.yale.its.tp.email.conversion.util.RegexMatcher;
 import edu.yale.its.tp.email.conversion.util.Matcher;
 
 /**
@@ -47,7 +47,7 @@ public class ExchangeConversionFactory {
 	FolderAltNames altNames;
 	List<String> excludedImapFolders;
 	List<String> includedImapFolders;
-	Matcher includeExcludeMatcher = new StringEqualsMatcher();  // Default.
+	Matcher includeExcludeMatcher = new RegexMatcher();  // Default.
 	
 	Map<String, PluggableConversionAction> pluggableConversionActions = new HashMap<String, PluggableConversionAction>();
 
