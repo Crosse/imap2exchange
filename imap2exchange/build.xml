@@ -54,9 +54,9 @@
         </copy>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="jar" depends="dist">
         <mkdir dir="${dist}/lib"/>
-        <jar destfile="${dist}/lib/imap2exchange-1.2.6.jar"
+        <jar destfile="${dist}/lib/imap2exchange-1.2.7.jar"
             basedir="${build}" />
     </target>
 
