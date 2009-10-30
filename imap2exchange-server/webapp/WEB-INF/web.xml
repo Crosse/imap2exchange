@@ -18,7 +18,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>		
             /WEB-INF/imap2exchange-config.xml	
-            /WEB-INF/imapservers.xml	
+            /WEB-INF/imap2exchange-jmu-config.xml
+            /WEB-INF/imapservers.xml
         </param-value>
     </context-param>
 
