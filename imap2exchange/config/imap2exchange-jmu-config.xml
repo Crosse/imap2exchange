@@ -13,6 +13,9 @@
         <property name="importedContactsFolderName" value="Imported Contacts" />
         -->
         <property name="importedContactsFolderName" value="" />
+        <!--
+        <property name="ldifDirectory" value="logs" />
+        -->
         <property name="loginUrl" value="/mc/xml/v1/login.xml" />
         <property name="addrBookUrl" value="/cgi-bin/addrbook.cgi/xab/v1/export.xml" />
     </bean>

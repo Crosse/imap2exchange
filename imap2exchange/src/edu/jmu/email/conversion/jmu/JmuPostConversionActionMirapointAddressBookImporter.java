@@ -1,15 +1,12 @@
 package edu.jmu.email.conversion.jmu;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -53,10 +50,7 @@ import edu.yale.its.tp.email.conversion.imap.ImapServerFactory;
 
 /**
  * <pre>
- * $URL$
- * $Author$
- * $Date$
- * $Rev$
+ * $Id$
  * 
  * Copyright (c) 2009 Seth Wright (wrightst@jmu.edu)
  * 
@@ -81,6 +75,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     private String loginUrl;
     private String addrBookUrl;
     private ArrayList<ItemType> contacts;
+//    private String ldifDirectory;
 
     @Override
     public boolean perform(ExchangeConversion conv) {
@@ -165,29 +160,29 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         BufferedReader br = new BufferedReader(new InputStreamReader(response));
 
-        Writer out = null;
-        try {
-            out = new BufferedWriter(new FileWriter(String.format("logs/%s.ldif", user.getUid())));
-        } catch (IOException e1) {
-        }
-
-        // Write out the versionLine for the file.  The stream will get it below.
-        if (out != null) {
-            try {
-                out.write(versionLine);
-            } catch (IOException e1) {
-                logger.warn(e1.getMessage());
-                e1.printStackTrace();
-            }
-        }
+//        Writer out = null;
+//        try {
+//            out = new BufferedWriter(new FileWriter(String.format("%s/%s.ldif", ldifDirectory, user.getUid())));
+//        } catch (IOException e1) {
+//        }
+//
+//        // Write out the versionLine for the file.  The stream will get it below.
+//        if (out != null) {
+//            try {
+//                out.write(versionLine);
+//            } catch (IOException e1) {
+//                logger.warn(e1.getMessage());
+//                e1.printStackTrace();
+//            }
+//        }
 
         String line = null;
         try {
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");
-                if (out != null) {
-                    out.write(line + "\n");
-                }
+//                if (out != null) {
+//                    out.write(line + "\n");
+//                }
             }
         } catch (IOException e) {
             logger.warn(e.getMessage());
@@ -196,7 +191,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             try {
                 br.close();
                 response.close();
-                out.close();
+//                out.close();
             } catch (IOException e) {
             }
         }
@@ -718,4 +713,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     public void setAddrBookUrl(String addrBookUrl) {
         this.addrBookUrl = addrBookUrl;
     }
+//    public String getLdifDirectory() {
+//        return ldifDirectory;
+//    }
+//
+//    public void setLdifDirectory(String ldifDirectory) {
+//        this.ldifDirectory = ldifDirectory;
+//    }
 }
