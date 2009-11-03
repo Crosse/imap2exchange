@@ -1,0 +1,86 @@
+@CHARSET "UTF-8";
+.txt {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        white-space: nowrap;
+}
+.txt-bold {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        white-space: nowrap;
+}
+.txt-red {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        white-space: nowrap;
+        color: red;
+}
+.txt-orange {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        white-space: nowrap;
+        color: orange;
+}
+.txt-green {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        white-space: nowrap;
+        color: green;
+}
+.txt-gray {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        white-space: nowrap;
+        color: gray;
+}
+.txt-blue {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        white-space: nowrap;
+        color: blue;
+}
+.hdr {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size:   16px;
+        font-weight: bold;
+        white-space: nowrap;
+}
+.sub-hdr {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size:   14px;
+        font-weight: bold;
+        white-space: nowrap;
+}
+.code{
+        border-width:     1px 1px 1px 1px;
+        border-style:     dashed; 
+        border-color:     blue; 
+        background-color: lightgrey; 
+        width:            800px;
+        height:           500px;
+        overflow-x:       scroll;
+        overflow-y:       scroll;
+        padding:          5px;
+}
+.hidden-code{
+	    display:          none;
+        border-width:     1px 1px 1px 1px;
+        border-style:     dashed; 
+        border-color:     blue; 
+        background-color: lightgrey; 
+        width:            800px;
+        height:           500px;
+        overflow-x:       scroll;
+        overflow-y:       scroll;
+        padding:          5px;
+}
+html,body{
+        margin:           5px;
+        padding:          0;
+        height:           100%;
+        border:           none
+}
+#fullheight{
+	    height:           100%
+}

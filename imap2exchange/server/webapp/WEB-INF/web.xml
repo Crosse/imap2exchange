@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC '-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN' 'http://java.sun.com/dtd/web-app_2_3.dtd'>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>Exchange Conversion Manager</display-name>
+    <description>Exchange Conversion Manager Application Server</description>
+
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>/WEB-INF/log4j.properties</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>		
+            /WEB-INF/imap2exchange-config.xml	
+            /WEB-INF/imap2exchange-jmu-config.xml
+            /WEB-INF/imapservers.xml
+        </param-value>
+    </context-param>
+
+    <!--
+    <security-constraint>
+        <display-name>SecurityConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>WRCollection</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>tomcatUsers</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/logon.jsp</form-login-page>
+            <form-error-page>/logonError.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+    <security-role>
+        <role-name>tomcatUsers</role-name>
+    </security-role>
+    -->
+
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--	
+    <servlet>
+        <servlet-name>exchange.conversion.startup</servlet-name>
+        <servlet-class>org.springframework.web.servlet.FrameworkServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    -->
+
+    <!-- Add Conversion Servlet     -->
+    <!--============================-->
+    <servlet>
+        <servlet-name>addConversion</servlet-name>
+        <servlet-class>edu.yale.its.tp.mail.imap2exchange.server.AddConversionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addConversion</servlet-name>
+        <url-pattern>/addConversion</url-pattern>
+    </servlet-mapping>
+
+    <!-- Memory Management Servlets -->
+    <!--============================-->
+    <servlet>
+        <servlet-name>JstatChart</servlet-name>
+        <servlet-class>edu.yale.its.tp.java.monitor.JStatChartServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JstatChart</servlet-name>
+        <url-pattern>/memoryChart.png</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GCMonitor</servlet-name>
+        <servlet-class>edu.yale.its.tp.java.monitor.GCMonitorServlet</servlet-class>
+        <init-param>
+            <param-name>memory.pool</param-name>
+            <param-value>CMS Old Gen</param-value>
+        </init-param>
+        <init-param>
+            <param-name>threshold</param-name>
+            <param-value>2048</param-value><!-- 2 Gb --> 
+        </init-param>
+        <init-param>
+            <param-name>max.cnt</param-name>
+            <param-value>3</param-value>
+        </init-param>
+        <init-param>
+            <param-name>interval</param-name>
+            <param-value>1800</param-value><!-- 1/2 hour -->
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>GCMonitor</servlet-name>
+        <url-pattern>/GCMonitor</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>
