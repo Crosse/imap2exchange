@@ -10,7 +10,10 @@
     ==========================================================-->
     <bean id="propertyOverrideConfigurer"
         class="edu.yale.its.tp.email.conversion.spring.MyPropertyOverrideConfigurer">
+        <!--
         <property name="location" value="file:${EXCHANGE_CONVERSION_HOME}/config/imap2exchange-config.properties"/>
+        -->
+        <property name="location" value="/WEB-INF/imap2exchange-config.properties"/>
         <property name="ignoreResourceNotFound" value="true"/>
     </bean>
 
@@ -79,7 +82,7 @@
         <!-- The list of IMAP folders to exclude from migration. -->
         <property name="excludedImapFolders">
             <list>
-                <value>deletedmessages</value>
+                <value>deletedmessages.*</value>
                 <!--
                 <value>INBOX.Deleted Items</value>
                 <value>INBOX.Trash</value>
