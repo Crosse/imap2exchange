@@ -14,7 +14,7 @@
       <tr>
         <td height="75"  align="center" valign="top" colspan="2">
           <span class="txt-gray">
-          imap2exchange - 1.2.6 (courtesy of Yale University)<br />
+          imap2exchange (courtesy of Yale University)<br />
           Technical Services<br />
           James Madison University<br />
           </span>
