@@ -1,17 +1,19 @@
 package edu.jmu.email.conversion.jmu;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -75,7 +77,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     private String loginUrl;
     private String addrBookUrl;
     private ArrayList<ItemType> contacts;
-//    private String ldifDirectory;
+    private String ldifDirectory;
 
     @Override
     public boolean perform(ExchangeConversion conv) {
@@ -99,7 +101,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return true;
     }
 
-    protected BaseFolderIdType createOrGetImportFolder(User user) {
+    protected synchronized BaseFolderIdType createOrGetImportFolder(User user) {
         BaseFolderIdType parentFolderId = ContactsFolderUtil.getRootContactsFolderId(user);
         BaseFolderIdType contactsFolderId = null;
 
@@ -126,7 +128,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return contactsFolderId;
     }
 
-    protected LDIFReader exportAddressBookFromMirapoint(User user) {
+    protected synchronized LDIFReader exportAddressBookFromMirapoint(User user) {
         // Get a session id.
         String sid = doLogin(user);
         logger.debug(String.format("Mirapoint Session Id (sid) is \"%s\"", sid));
@@ -139,7 +141,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return getAddressBook(user, sid);
     }
 
-    protected LDIFReader getAddressBook(User user, String sid) {
+    protected synchronized LDIFReader getAddressBook(User user, String sid) {
         String versionLine = "version: 1\n";
         LDIFReader reader = null;
 
@@ -160,29 +162,30 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
         BufferedReader br = new BufferedReader(new InputStreamReader(response));
 
-//        Writer out = null;
-//        try {
-//            out = new BufferedWriter(new FileWriter(String.format("%s/%s.ldif", ldifDirectory, user.getUid())));
-//        } catch (IOException e1) {
-//        }
-//
-//        // Write out the versionLine for the file.  The stream will get it below.
-//        if (out != null) {
-//            try {
-//                out.write(versionLine);
-//            } catch (IOException e1) {
-//                logger.warn(e1.getMessage());
-//                e1.printStackTrace();
-//            }
-//        }
+        Writer out = null;
+        try {
+            out = new BufferedWriter(new FileWriter(String.format("%s/%s.ldif", ldifDirectory, user.getUid())));
+        } catch (IOException e1) {
+            logger.warn("Could not create file:  " + e1.getMessage());
+        }
+
+        // Write out the versionLine for the file.  The stream will get it below.
+        if (out != null) {
+            try {
+                out.write(versionLine);
+            } catch (IOException e1) {
+                logger.warn(e1.getMessage());
+                e1.printStackTrace();
+            }
+        }
 
         String line = null;
         try {
             while ((line = br.readLine()) != null) {
                 sb.append(line + "\n");
-//                if (out != null) {
-//                    out.write(line + "\n");
-//                }
+                if (out != null) {
+                    out.write(line + "\n");
+                }
             }
         } catch (IOException e) {
             logger.warn(e.getMessage());
@@ -191,7 +194,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             try {
                 br.close();
                 response.close();
-//                out.close();
+                out.close();
             } catch (IOException e) {
             }
         }
@@ -215,7 +218,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return reader;
     }
 
-    protected void importAddressBook(User user, LDIFReader addrbook, BaseFolderIdType contactsFolderId) {
+    protected synchronized void importAddressBook(User user, LDIFReader addrbook, BaseFolderIdType contactsFolderId) {
         if (addrbook == null) {
             logger.warn("addrbook was null");
             return;
@@ -271,9 +274,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
     }
 
-    private void processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
-        String tag = ",mail=";
-
+    private synchronized void processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
         if (groups.size() < 1) {
             logger.warn("No groups to process.");
             return;
@@ -295,13 +296,20 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             logger.info(String.format("DL CREATE: [%s]", cn));
 
             if (group.getAttribute("member") == null) {
-                logger.warn(String.format("DL CREATE: [%s] has no members--not creating", cn));
+                logger.info(String.format("DL CREATE: [%s] has no members--not creating", cn));
                 continue;
             }
 
+            String tag = "mail=";
             for (String member : group.getAttribute("member").getStringValueArray()) {
                 int mailTag = member.indexOf(tag);
+                if (mailTag < 0) {
+                    // This "member" doesn't have an email address, and thus isn't
+                    // useful in a distribution list.
+                    continue;
+                }
                 String mail = sanitizeString(member.substring(mailTag + tag.length()));
+                logger.info("Looking for mail=" + mail);
                 if (mail.indexOf("@") < 0) {
                     mail += "@" + JmuSite.getInstance().getMailDomain();
                 }
@@ -327,19 +335,25 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
             }
 
-            ItemType dl = ContactUtil.createDistributionList(user, cn, members, contactsFolderId);
-            if (dl != null) {
-                logger.info(String.format("DL CREATE: successfully created [%s]", cn));
-                groupsCreated++;
+            // Sanity check.  If the members ArrayList is empty, don't try to
+            // create the distribution group.
+            if (!members.isEmpty()) {
+                ItemType dl = ContactUtil.createDistributionList(user, cn, members, contactsFolderId);
+                if (dl != null) {
+                    logger.info(String.format("DL CREATE: successfully created [%s]", cn));
+                    groupsCreated++;
+                } else {
+                    logger.warn(String.format("DL ERROR: could not create distribution list [%s]", cn));
+                    user.getConversion().warnings++;
+                }                
             } else {
-                logger.warn(String.format("DL ERROR: could not create distribution list [%s]", cn));
-                user.getConversion().warnings++;
+                logger.warn(String.format("DL ERROR:  could not find any members for distribution list [%s]", cn));
             }
         }
         logger.info(String.format("Created %d of %d distribution groups", groupsCreated, groups.size()));
     }
 
-    protected boolean createContact(User user, LDAPEntry entry, BaseFolderIdType contactsFolderId) {
+    protected synchronized boolean createContact(User user, LDAPEntry entry, BaseFolderIdType contactsFolderId) {
         boolean success = false;
 
         // Create the contact.
@@ -364,6 +378,9 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         } else if (!getEntryAttribute(entry, "displayname").isEmpty()) {
             // Use the displayName
             identity = getEntryAttribute(entry, "displayname");
+        } else { 
+            // Final try, just use the email address.
+            identity = email;
         }
 
         // Set the FileAs and Subject fields.
@@ -524,7 +541,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return success;
     }
 
-    protected String getEntryAttribute(LDAPEntry entry, String attribute) {
+    protected synchronized String getEntryAttribute(LDAPEntry entry, String attribute) {
         if (entry.getAttribute(attribute) != null) {
             return sanitizeString(entry.getAttribute(attribute).getStringValue());
         } else {
@@ -532,10 +549,8 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         }
     }
 
-    protected ContactItemType findContact(String email, String identity) {
-        Iterator<ItemType> iterator = contacts.iterator();
-        while (iterator.hasNext()) {
-            ItemType item = iterator.next();
+    protected synchronized ContactItemType findContact(String email, String identity) {
+        for (ItemType item : contacts) {
             if (item instanceof ContactItemType) {
                 if (!email.isEmpty()) {
                     if ( ((ContactItemType)item).getEmailAddresses() != null) {
@@ -557,7 +572,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return null;
     }
 
-    protected ItemType findDistributionList(String dlName) {
+    protected synchronized ItemType findDistributionList(String dlName) {
         ItemType retval = null;
         if (dlName.isEmpty()) {
             logger.warn("dlName was empty in findDistributionList");
@@ -576,7 +591,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return retval;
     }
 
-    protected XMLGregorianCalendar convertToXMLGregorianCalendar(String year, String month, String day) {
+    protected synchronized XMLGregorianCalendar convertToXMLGregorianCalendar(String year, String month, String day) {
         XMLGregorianCalendar calendar = null;
 
         try {
@@ -588,14 +603,16 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             calendar.setSecond(0);
             calendar.setMinute(0);
             calendar.setHour(0);
-
-            return calendar;
         } catch (Exception e) {
             return null;
         }
+
+        //TODO:  figure out how to pass dates to EWS.
+        //return calendar;
+        return null;
     }
 
-    protected String doLogin(User user) {
+    protected synchronized String doLogin(User user) {
         String sid = "";
 
         // Use this to get the adminUid and adminPwd for the mail store.
@@ -643,7 +660,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return sid;
     }
 
-    protected InputStream submitHttpRequest(String url, String postData) {
+    protected synchronized InputStream submitHttpRequest(String url, String postData) {
         InputStream response = null;
         URLConnection conn = null;
         OutputStreamWriter wr = null;
@@ -679,7 +696,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         return response;
     }
 
-    protected String sanitizeString(String s) {
+    protected synchronized String sanitizeString(String s) {
         return ContactUtil.sanitizeString(s);
     }
 
@@ -713,11 +730,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     public void setAddrBookUrl(String addrBookUrl) {
         this.addrBookUrl = addrBookUrl;
     }
-//    public String getLdifDirectory() {
-//        return ldifDirectory;
-//    }
-//
-//    public void setLdifDirectory(String ldifDirectory) {
-//        this.ldifDirectory = ldifDirectory;
-//    }
+    public String getLdifDirectory() {
+        return ldifDirectory;
+    }
+
+    public void setLdifDirectory(String ldifDirectory) {
+        this.ldifDirectory = ldifDirectory;
+    }
 }
