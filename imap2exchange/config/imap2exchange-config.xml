@@ -83,14 +83,14 @@
         <property name="excludedImapFolders">
             <list>
                 <value>deletedmessages.*</value>
-                <value>INBOX.Deleted Items</value>
-                <value>INBOX.Trash</value>
-                <value>INBOX.Junk Mail</value>
-                <value>INBOX.Junk E-mail</value>
-                <value>Deleted Items</value>
-                <value>Trash</value>
-                <value>Junk Mail</value>
-                <value>Junk E-mail</value>
+                <value>INBOX.Deleted Items.*</value>
+                <value>INBOX.Trash.*</value>
+                <value>INBOX.Junk Mail.*</value>
+                <value>INBOX.Junk E-mail.*</value>
+                <value>Deleted Items.*</value>
+                <value>Trash.*</value>
+                <value>Junk Mail.*</value>
+                <value>Junk E-mail.*</value>
             </list>
         </property>
     </bean>
@@ -111,13 +111,11 @@
         class="edu.jmu.email.conversion.jmu.JmuUserSetupAction"
         scope="singleton" />
 
-    <!--
+    <!--  Defined in imap2exchange-jmu-config.xml
     <bean id="preConversionAction"
         class="edu.yale.its.tp.email.conversion.yale.YalePreConversionAction"
         scope="singleton" />
-        -->
 
-    <!--  Defined in imap2exchange-jmu-config.xml
     <bean id="postConversionAction"
         class="edu.jmu.email.conversion.jmu.JmuPostConversionActionMirapointAddressBookImporter"
         scope="singleton">
