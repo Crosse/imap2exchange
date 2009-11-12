@@ -309,7 +309,6 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                     continue;
                 }
                 String mail = sanitizeString(member.substring(mailTag + tag.length()));
-                logger.info("Looking for mail=" + mail);
                 if (mail.indexOf("@") < 0) {
                     mail += "@" + JmuSite.getInstance().getMailDomain();
                 }
