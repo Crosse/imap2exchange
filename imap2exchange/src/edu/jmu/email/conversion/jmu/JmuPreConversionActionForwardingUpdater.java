@@ -40,19 +40,34 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
     
     private static Log logger = LogFactory.getLog(JmuPreConversionActionForwardingUpdater.class);
     private String proxyDomain;
+    private String ldapUserObject;
+    private String netidAttribute;
+    private static final String FORWARDING_ADDRESS = "miForwardingAddress";
+    private static final String DELIVERY_OPTION = "miDeliveryOption";
+//    private boolean forwardAlreadySet;
     
     @Override
     public boolean perform(ExchangeConversion conv) {
         User user = conv.getUser();
         
+        logger.info("----------------");
+        logger.info("Current forwarding information:");
         if (!getCurrentValues(user)) {
             return false;
         }
+        logger.info("----------------");
+        
+//        if (forwardAlreadySet) {
+//            logger.info("Forward already set appropriately; no need to update");
+//            return true;
+//        }
         
         if (modifyForwarding(user)) {
             // Print out the new values, in order to verify that everything
             // got set right.
+            logger.info("New forwarding information:");
             getCurrentValues(user);
+            logger.info("----------------");
         } else {
             logger.error("Could not set forwarding");
             return false;
@@ -63,15 +78,15 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
 
     private synchronized boolean getCurrentValues(User user) {
         DirContext directory = JmuLdap.getInstance().getLdap();
-        String filterExpr = String.format("(cn=%s)", user.getUid());
+        String filterExpr = String.format("(%s=%s)", netidAttribute, user.getUid());
         SearchControls cons = new SearchControls();
         cons.setSearchScope(SearchControls.SUBTREE_SCOPE);
-        String[] attrs = { "miForwardingAddress", "miDeliveryOption" };
+        String[] attrs = { FORWARDING_ADDRESS, DELIVERY_OPTION };
         cons.setReturningAttributes(attrs);
         SearchResult result = null;
 
         try {
-            NamingEnumeration<SearchResult> answer = directory.search("cn=" + user.getUid(), filterExpr, cons);
+            NamingEnumeration<SearchResult> answer = directory.search(ldapUserObject, filterExpr, cons);
             if (answer.hasMore()) {
                 result = (SearchResult) answer.next();
             }
@@ -83,13 +98,17 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
                     Attribute attr = ne.next();
                     for (int i = 0; i < attr.size(); i++) {
                         logger.info(String.format("%s: %s", attr.getID(), attr.get(i)));
+//                        if (FORWARDING_ADDRESS.equalsIgnoreCase(attr.getID()) && 
+//                                String.format("%s@%s", user.getUid(), proxyDomain).equalsIgnoreCase((String) attr.get(i))) {
+//                            forwardAlreadySet = true;
+//                        }
                     }
                 }
             } else { 
                 return false;
             }
         } catch (NamingException e) {
-            logger.warn(e.getMessage());
+            logger.warn(String.format("Error getting current values:  %s", e.getMessage()));
             return false;
         }
         return true;
@@ -108,7 +127,7 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
         mods[1] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, deliveryOption);
 
         try {
-            directory.modifyAttributes(String.format("cn=%s", user.getUid()), mods);
+            directory.modifyAttributes(String.format("%s=%s,%s", netidAttribute, user.getUid(), ldapUserObject), mods);
         } catch (NamingException e) {
             logger.warn("Error setting mail forward:  " + e.getMessage());
             return false;
@@ -125,6 +144,19 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
     public void setProxyDomain(String proxyDomain) {
         this.proxyDomain = proxyDomain;
     }
+    public String getLdapUserObject() {
+        return ldapUserObject;
+    }
 
+    public void setLdapUserObject(String ldapUserObject) {
+        this.ldapUserObject = ldapUserObject;
+    }
 
+    public String getNetidAttribute() {
+        return netidAttribute;
+    }
+
+    public void setNetidAttribute(String netidAttribute) {
+        this.netidAttribute = netidAttribute;
+    }
 }
