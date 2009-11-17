@@ -10,6 +10,8 @@
         class="edu.jmu.email.conversion.jmu.JmuPreConversionActionForwardingUpdater"
         scope="singleton" >
         <property name="proxyDomain" value="ad.jmu.edu" />
+        <property name="netidAttribute" value="cn" />
+        <property name="ldapUserObject" value="OU=People" />
     </bean>
 
     <bean id="postConversionAction"

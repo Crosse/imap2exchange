@@ -67,11 +67,10 @@
                 <entry key="userSetupAction">
                     <ref bean="userSetupAction"/>
                 </entry>
-                <!--
+
                 <entry key="preConversionAction">
                     <ref bean="preConversionAction"/>
                 </entry>
-                -->
 
                 <entry key="postConversionAction">
                     <ref bean="postConversionAction"/>
