@@ -61,12 +61,16 @@ public class JmuPreConversionAction extends PluggableConversionAction {
     
     @Override
     public boolean perform(ExchangeConversion conv) {
-        if ( !createWelcomeMessage(conv) ) {
-            return false;
-        }
+        logger.info("Setting forwarding information for Mirapoint");
         if ( !setForwardingInformation(conv) ) {
             return false;
         }
+        
+        logger.info("Attempting to create the Welcome message");
+        if ( !createWelcomeMessage(conv) ) {
+            return false;
+        }
+        
         return true;
     }
     
@@ -169,7 +173,7 @@ public class JmuPreConversionAction extends PluggableConversionAction {
             source = new FileInputStream(emlFile);
         } catch (FileNotFoundException e) {
             logger.warn(e.getMessage());
-            return false;
+            conv.warnings++;
         }
 
         Store store = ImapServerFactory.getInstance().getImapStore(conv.getUser());
@@ -190,8 +194,9 @@ public class JmuPreConversionAction extends PluggableConversionAction {
                 logger.info("Welcome message already exists in mail store");
             }
         } catch (MessagingException e) {
+            logger.warn("Could not create Welcome message");
             logger.warn(e.getMessage());
-            return false;
+            conv.warnings++;
         } finally {
             if (rootFolder != null && rootFolder.isOpen()) {
                 try {
