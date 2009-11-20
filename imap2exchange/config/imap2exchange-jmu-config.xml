@@ -6,12 +6,29 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <bean id="preConversionAction"
+    <!--
+    <bean id="jmuPreConversionActionForwardingUpdater"
         class="edu.jmu.email.conversion.jmu.JmuPreConversionActionForwardingUpdater"
         scope="singleton" >
         <property name="proxyDomain" value="ad.jmu.edu" />
         <property name="netidAttribute" value="cn" />
-        <property name="ldapUserObject" value="OU=People" />
+        <property name="ldapUserObject" value="OU=UtilityAccounts" />
+    </bean>
+
+    <bean id="jmuPreConversionActionWelcomeLetter"
+        class="edu.jmu.email.conversion.jmu.JmuPreConversionActionWelcomeLetter"
+        scope="singleton" >
+        <property name="welcomeFile" value="imap2exchange/WEB-INF/welcome.eml" />
+    </bean>
+    -->
+
+    <bean id="preConversionAction"
+        class="edu.jmu.email.conversion.jmu.JmuPreConversionAction"
+        scope="singleton"  >
+        <property name="proxyDomain" value="ad.jmu.edu" />
+        <property name="netidAttribute" value="cn" />
+        <property name="ldapUserObject" value="OU=People " />
+        <property name="welcomeFile" value="webapps/imap2exchange/WEB-INF/welcome.eml" />
     </bean>
 
     <bean id="postConversionAction"

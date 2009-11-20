@@ -1,5 +1,16 @@
 package edu.jmu.email.conversion.jmu;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Store;
+import javax.mail.internet.MimeMessage;
+import javax.mail.search.SubjectTerm;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -15,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import edu.yale.its.tp.email.conversion.ExchangeConversion;
 import edu.yale.its.tp.email.conversion.PluggableConversionAction;
 import edu.yale.its.tp.email.conversion.User;
+import edu.yale.its.tp.email.conversion.imap.ImapServerFactory;
 
 /**
  * <pre>
@@ -36,23 +48,34 @@ import edu.yale.its.tp.email.conversion.User;
  * </pre>
  * 
  */
-public class JmuPreConversionActionForwardingUpdater extends PluggableConversionAction {
+public class JmuPreConversionAction extends PluggableConversionAction {
     
-    private static Log logger = LogFactory.getLog(JmuPreConversionActionForwardingUpdater.class);
+    private static Log logger = LogFactory.getLog(JmuPreConversionAction.class);
     private String proxyDomain;
     private String ldapUserObject;
     private String netidAttribute;
+    private String welcomeFile;
     private static final String FORWARDING_ADDRESS = "miForwardingAddress";
     private static final String DELIVERY_OPTION = "miDeliveryOption";
 //    private boolean forwardAlreadySet;
     
     @Override
     public boolean perform(ExchangeConversion conv) {
+        if ( !createWelcomeMessage(conv) ) {
+            return false;
+        }
+        if ( !setForwardingInformation(conv) ) {
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean setForwardingInformation(ExchangeConversion conv) {
         User user = conv.getUser();
         
         logger.info("----------------");
         logger.info("Current forwarding information:");
-        if (!getCurrentValues(user)) {
+        if (!getCurrentForwardingValues(user)) {
             return false;
         }
         logger.info("----------------");
@@ -66,17 +89,18 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
             // Print out the new values, in order to verify that everything
             // got set right.
             logger.info("New forwarding information:");
-            getCurrentValues(user);
+            getCurrentForwardingValues(user);
             logger.info("----------------");
         } else {
-            logger.error("Could not set forwarding");
-            return false;
+            logger.warn("COULD NOT SET FORWARDING ADDRESS--MANUALLY SET IT AND RE-RUN THIS CONVERSION");
+            logger.warn("(If you've already set the forward address, disregard this message)");
+            conv.warnings++;
         }
         
         return true;
     }
 
-    private synchronized boolean getCurrentValues(User user) {
+    private synchronized boolean getCurrentForwardingValues(User user) {
         DirContext directory = JmuLdap.getInstance().getLdap();
         String filterExpr = String.format("(%s=%s)", netidAttribute, user.getUid());
         SearchControls cons = new SearchControls();
@@ -135,6 +159,55 @@ public class JmuPreConversionActionForwardingUpdater extends PluggableConversion
 
         logger.info(String.format("Modified forwarding attributes for %s", user.getUid()));
         return true;
+    }
+    
+    private synchronized boolean createWelcomeMessage(ExchangeConversion conv) {
+
+        File emlFile = new File(welcomeFile);
+        InputStream source = null;
+        try {
+            source = new FileInputStream(emlFile);
+        } catch (FileNotFoundException e) {
+            logger.warn(e.getMessage());
+            return false;
+        }
+
+        Store store = ImapServerFactory.getInstance().getImapStore(conv.getUser());
+        Folder rootFolder = null;
+        try {
+            rootFolder = store.getDefaultFolder().getFolder("INBOX");
+            if (!rootFolder.isOpen()) {
+                rootFolder.open(Folder.READ_WRITE);
+            }
+            Message[] messages = new Message[1];
+
+            messages[0] = new MimeMessage(null, source);
+            SubjectTerm subjTerm = new SubjectTerm(messages[0].getSubject());
+            if ((rootFolder.search(subjTerm)).length == 0) {
+                rootFolder.appendMessages(messages);
+                logger.info("Created welcome message");
+            } else {
+                logger.info("Welcome message already exists in mail store");
+            }
+        } catch (MessagingException e) {
+            logger.warn(e.getMessage());
+            return false;
+        } finally {
+            if (rootFolder != null && rootFolder.isOpen()) {
+                try {
+                    rootFolder.close(false);
+                } catch (MessagingException e) { }
+            }
+        }
+        return true;
+    }
+
+    public String getWelcomeFile() {
+        return welcomeFile;
+    }
+
+    public void setWelcomeFile(String welcomeFile) {
+        this.welcomeFile = welcomeFile;
     }
 
     public String getProxyDomain() {
