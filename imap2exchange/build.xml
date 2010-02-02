@@ -158,7 +158,7 @@
             war="file:${dist}/imap2exchange-server.war" />
     </target>
 
-    <target name="undeploy" description="Undeploy imap2exchang-server">
+    <target name="undeploy" description="Undeploy imap2exchange-server">
         <undeploy 
             url="${server.url}" 
             username="${server.username}"

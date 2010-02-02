@@ -1,17 +1,17 @@
-<project name="imap2exchange" default="dist" basedir=".">
+<project name="imap2live" default="dist" basedir=".">
     <description>
-        builds imap2exchange.
+        builds imap2live.
     </description>
     <!-- set global properties for this build -->
     <property name="src"        location="src"/>
     <property name="build"      location="build" />
-    <property name="app.build"  location="${build}/imap2exchange" />
+    <property name="app.build"  location="${build}/imap2live" />
     <property name="dist"       location="dist"/>
     <property name="lib"        location="lib"/>
     <property name="config"     location="config"/>
     <property name="wsdl"       location="wsdl" />
     <property name="server"     location="server" />
-    <property name="server.build" location="${build}/imap2exchange-server" />
+    <property name="server.build" location="${build}/imap2live-server" />
 
     <!-- Include relevant properties for deploying the webapp -->
     <property file="tomcat.properties" />
@@ -82,7 +82,7 @@
     <target name="jar" depends="dist">
         <mkdir dir="${dist}/lib"/>
         <jar 
-            destfile="${dist}/lib/imap2exchange-1.2.7.jar"
+            destfile="${dist}/lib/imap2live-1.2.7.jar"
             basedir="${app.build}"
         />
     </target>
@@ -96,7 +96,7 @@
     </target>
 
     <target name="build-server" depends="jar" 
-        description="Build imap2exchange-server">
+        description="Build imap2live-server">
 
         <mkdir dir="${server.build}" />
         <mkdir dir="${server.build}/WEB-INF/classes" />
@@ -137,8 +137,8 @@
     </target>
 
     <target name="war" depends="build-server" 
-        description="Build the imap2exchange-server.war file" >
-        <war destfile="${dist}/imap2exchange-server.war"
+        description="Build the imap2live-server.war file" >
+        <war destfile="${dist}/imap2live-server.war"
              webxml="${server.build}/WEB-INF/web.xml">
             <fileset dir="${server.build}">
                 <include name="**/*.*"/>
@@ -148,17 +148,17 @@
     </target>
 
     <!-- The following targets are to control Tomcat, etc. -->
-    <target name="deploy" description="Deploy imap2exchange-server"
+    <target name="deploy" description="Deploy imap2live-server"
         depends="war">
         <deploy 
             url="${server.url}" 
             username="${server.username}" 
             password="${server.password}"
             path="${server.path}"
-            war="file:${dist}/imap2exchange-server.war" />
+            war="file:${dist}/imap2live-server.war" />
     </target>
 
-    <target name="undeploy" description="Undeploy imap2exchang-server">
+    <target name="undeploy" description="Undeploy imap2live-server">
         <undeploy 
             url="${server.url}" 
             username="${server.username}"
@@ -166,7 +166,7 @@
             path="${server.path}" />
     </target>
 
-    <target name="reload" description="Reload imap2exchange-server">
+    <target name="reload" description="Reload imap2live-server">
         <reload
             url="${server.url}" 
             username="${server.username}"
@@ -174,7 +174,7 @@
             path="${server.path}" />
     </target>
 
-    <target name="redeploy" description="Redeploy imap2exchange-server"
+    <target name="redeploy" description="Redeploy imap2live-server"
         depends="undeploy">
         <antcall target="deploy"/>
     </target>
