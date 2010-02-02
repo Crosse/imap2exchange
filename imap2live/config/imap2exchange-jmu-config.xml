@@ -18,7 +18,7 @@
     <bean id="jmuPreConversionActionWelcomeLetter"
         class="edu.jmu.email.conversion.jmu.JmuPreConversionActionWelcomeLetter"
         scope="singleton" >
-        <property name="welcomeFile" value="imap2exchange/WEB-INF/welcome.eml" />
+        <property name="welcomeFile" value="imap2live/WEB-INF/welcome.eml" />
     </bean>
     -->
 
@@ -28,7 +28,7 @@
         <property name="proxyDomain" value="ad.jmu.edu" />
         <property name="netidAttribute" value="cn" />
         <property name="ldapUserObject" value="OU=People " />
-        <property name="welcomeFile" value="webapps/imap2exchange/WEB-INF/welcome.eml" />
+        <property name="welcomeFile" value="webapps/imap2live/WEB-INF/welcome.eml" />
     </bean>
 
     <bean id="postConversionAction"
@@ -38,7 +38,7 @@
         <property name="importedContactsFolderName" value="Imported Contacts" />
         -->
         <property name="importedContactsFolderName" value="" />
-        <property name="ldifDirectory" value="logs/imap2exchange" />
+        <property name="ldifDirectory" value="logs/imap2live" />
         <property name="loginUrl" value="/mc/xml/v1/login.xml" />
         <property name="addrBookUrl" value="/cgi-bin/addrbook.cgi/xab/v1/export.xml" />
     </bean>
