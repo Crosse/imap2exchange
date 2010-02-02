@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# set them if you want, or use these hacks to find them
+#################################################
+JAVA_HOME=`ls -1d /usr/java/jdk* | sort -r | head -1`
+export EXCHANGE_CONVERSION_HOME=`echo $(cd $(dirname $0); pwd) | sed 's/\/bin//g'` 
+
+echo "====================================================="
+echo JAVA_HOME=$JAVA_HOME
+echo EXCHANGE_CONVERSION_HOME=$EXCHANGE_CONVERSION_HOME
+echo "====================================================="
+
+# Name the main class
+#################################################
+CLASSNAME=edu.yale.its.tp.email.conversion.yale.YaleExchangeConversionCmdLineUtil
+
+# Set the Classpath
+#################################################
+for i in $(ls ${EXCHANGE_CONVERSION_HOME}/lib/ | grep .*\.jar$);
+do
+  CP=${CP}${EXCHANGE_CONVERSION_HOME}/lib/${i}:
+done
+
+# Set Java Args
+#################################################
+OPTS="-Xms2g"
+OPTS="${OPTS} -Xmx2g"
+OPTS="${OPTS} -Xmn1g"
+OPTS="${OPTS} -Xss128k"
+OPTS="${OPTS} -XX:ParallelGCThreads=20"
+OPTS="${OPTS} -XX:+UseConcMarkSweepGC"
+OPTS="${OPTS} -XX:+UseParNewGC"
+OPTS="${OPTS} -XX:SurvivorRatio=8"
+OPTS="${OPTS} -XX:TargetSurvivorRatio=90"
+OPTS="${OPTS} -XX:MaxTenuringThreshold=31"
+OPTS="${OPTS} -DEXCHANGE_CONVERSION_HOME=${EXCHANGE_CONVERSION_HOME}"
+OPTS="${OPTS} -Dlog4j.configuration=file:${EXCHANGE_CONVERSION_HOME}/config/log4j.properties"
+
+$JAVA_HOME/bin/java $OPTS -cp $CP $CLASSNAME $@

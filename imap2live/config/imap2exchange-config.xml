@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:utils="http://www.chariotsolutions.com/spring/schema/utils"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- Property Overrider
+    ==========================================================-->
+    <bean id="propertyOverrideConfigurer"
+        class="edu.yale.its.tp.email.conversion.spring.MyPropertyOverrideConfigurer">
+        <!--
+        <property name="location" value="file:${EXCHANGE_CONVERSION_HOME}/config/imap2exchange-config.properties"/>
+        -->
+        <property name="location" value="/WEB-INF/imap2exchange-config.properties"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <!-- JMU-specific values
+    These values are set in imap2Exchange-config.properties
+    for ease of use.
+    ==========================================================-->
+    <bean id="jmuSite" 
+        class="edu.jmu.email.conversion.jmu.JmuSite"
+        scope="singleton"/>
+
+    <!-- JMU Batch Loader
+    ==========================================================-->
+    <bean id="jmuBatchLoader"
+        class="edu.jmu.email.conversion.jmu.JmuBatchLoader"
+        scope="singleton"/>
+
+    <!-- Exchange Conversion Manager
+    Each Conversion is its own thread, so this is a Thread Manager
+    ==========================================================-->
+    <bean id="exchangeConversionManager"
+        class="edu.yale.its.tp.email.conversion.ExchangeConversionManager"
+        scope="singleton">
+        <property name="maxCachedThreads" value="1024" />
+        <property name="maxRunningThreads" value="5" />
+    </bean>
+
+    <!-- Exchange Server Port Factory
+    These values are set in imap2Exchange-config.properties
+    for ease of use.
+    ==========================================================-->
+    <bean id="exchangeServer" 
+        class="edu.yale.its.tp.email.conversion.yale.YaleExchangeServerPortFactory"
+        scope="singleton"/>
+
+    <!-- Exchange Conversion Factory
+    ==========================================================-->
+    <bean id="exchangeConversionFactory"
+        class="edu.yale.its.tp.email.conversion.ExchangeConversionFactory"
+        scope="singleton">
+        <property name="maxMessageGrpSize" value="5242880" />
+        <!--
+        <property name="maxMessageGrpSize" value="512" />
+        -->
+        <property name="maxMessageSize" value="41943040" />
+        <property name="altNames" ref="altNames" /> 
+
+        <property name="pluggableConversionActions">
+            <map>
+
+                <entry key="userSetupAction">
+                    <ref bean="userSetupAction"/>
+                </entry>
+
+                <entry key="preConversionAction">
+                    <ref bean="preConversionAction"/>
+                </entry>
+
+                <entry key="postConversionAction">
+                    <ref bean="postConversionAction"/>
+                </entry>
+            </map>
+        </property>
+
+        <!-- The list of IMAP folders to exclude from migration. -->
+        <property name="excludedImapFolders">
+            <list>
+                <value>deletedmessages.*</value>
+                <value>INBOX.Deleted Items.*</value>
+                <value>INBOX.Trash.*</value>
+                <value>INBOX.Junk Mail.*</value>
+                <value>INBOX.Junk E-mail.*</value>
+                <value>Deleted Items.*</value>
+                <value>Trash.*</value>
+                <value>Junk Mail.*</value>
+                <value>Junk E-mail.*</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Pluggable Conversion Actions
+    ==========================================================-->
+    <!--     
+    <bean name="userSetupAction"
+        class="edu.yale.its.tp.email.conversion.yale.YaleUserSetupAction"
+        scope="singleton" />
+    -->
+    <!--
+    <bean name="userSetupAction"
+        class="edu.yale.its.tp.email.conversion.util.GenericUserSetupAction"
+        scope="singleton" />
+    -->
+    <bean name="userSetupAction"
+        class="edu.jmu.email.conversion.jmu.JmuUserSetupAction"
+        scope="singleton" />
+
+    <!--  Defined in imap2exchange-jmu-config.xml
+    <bean id="preConversionAction"
+        class="edu.yale.its.tp.email.conversion.yale.YalePreConversionAction"
+        scope="singleton" />
+
+    <bean id="postConversionAction"
+        class="edu.jmu.email.conversion.jmu.JmuPostConversionActionMirapointAddressBookImporter"
+        scope="singleton">
+        <property name="importedContactsFolderName" value="Imported Contacts" />
+        <property name="loginUrl" value="/mc/xml/v1/login.xml" />
+        <property name="addrBookUrl" value="/cgi-bin/addrbook.cgi/xab/v1/export.xml" />
+    </bean>
+    -->
+
+    <!-- User Factory
+    ==========================================================-->
+    <bean id="userFactory"
+        class="edu.yale.its.tp.email.conversion.yale.YaleUserFactory"
+        scope="singleton"/>
+
+    <!-- AD Factory and Pool
+    These values are set in imap2Exchange-config.properties
+    for ease of use.
+    ==========================================================-->
+    <bean id="ad" 
+        class="edu.jmu.email.conversion.jmu.JmuAD"
+        scope="singleton" />
+
+    <!-- AD Factory and Pool
+    These values are set in imap2Exchange-config.properties
+    for ease of use.
+    ==========================================================-->
+    <bean id="ldap" 
+        class="edu.jmu.email.conversion.jmu.JmuLdap"
+        scope="singleton" />
+
+    <!-- Folder Alt Names
+    This section is used to define imap folders that are to be merged
+    into Exchange system folders.
+    ==========================================================-->
+    <bean id="altNames"
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltNames"
+        scope="singleton">
+        <property name="altNames">
+            <list>
+                <!--
+                <ref local="deletedAltName"/>
+                <ref local="spamAltName"/>
+                -->
+                <ref local="sentAltName"/>
+                <ref local="draftAltName"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="deletedAltName"
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Deleted Items"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Trash</value>
+                <value>INBOX.Trash</value>
+                <value>Deleted Items</value>
+                <value>INBOX.Deleted Items</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="draftAltName"
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Drafts"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Draft</value>
+                <value>INBOX.Draft</value>
+                <value>Drafts</value>
+                <value>INBOX.Drafts</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="spamAltName"
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Junk E-Mail"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Junk Mail</value>
+                <value>Junk E-mail</value>
+                <value>INBOX.Junk Mail</value>
+                <value>INBOX.Junk E-mail</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="sentAltName"
+        class="edu.yale.its.tp.email.conversion.imap.FolderAltName">
+        <property name="exchangeFolderName" value="Sent Items"/>
+        <property name="imapFolderNames">
+            <list>
+                <value>Sent</value>
+                <value>sent-mail</value>
+                <value>INBOX.Sent</value>
+                <value>INBOX.sent-mail</value>
+            </list>
+        </property>
+    </bean>
+</beans>
