@@ -6,7 +6,7 @@
 %>
 <jsp:include page="header.jsp" />
 
-<span class="hdr">Welcome to the imap2exchange Conversion Utility</span>
+<span class="hdr">Welcome to the imap2live Conversion Utility</span>
 <br />
 <br />
 This utility will copy a user's email from the Mirapoint email system<br />

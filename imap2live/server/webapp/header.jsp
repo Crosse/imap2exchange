@@ -48,7 +48,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <title>imap2exchange Conversion Utility</title>
+    <title>imap2live Conversion Utility</title>
   </head> 
 
   <body>

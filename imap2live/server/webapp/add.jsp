@@ -110,7 +110,7 @@ function processResults(mailboxes){
     <span class="hdr">Add Conversions</span><p />
 <span class="txt">
         Enter the eIDs of the users to migrate in the box below.<br />
-        imap2exchange will automatically try to find the correct mail store for the user.<br />
+        imap2live will automatically try to find the correct mail store for the user.<br />
 </span>
     <table>
       <tr>
