@@ -91,7 +91,7 @@ public class Report {
 		
 		public void stop(){
 			if(!started){
-				logger.warn("Timer [" + name + "]is already Stopped.");
+				logger.warn("Timer [" + name + "] is already Stopped.");
 				return;
 			}				
 			long dur = System.currentTimeMillis() - ts;
@@ -110,7 +110,7 @@ public class Report {
 	public boolean isStarted(String timer){
 		Timer t = timers.get(timer);
 		if(t == null){
-			logger.warn("isStarted? Timer [" + timer + "was not found.");
+			logger.warn("isStarted? Timer [" + timer + "] was not found.");
 			return false;
 		}
 		return t.started;		
@@ -129,7 +129,7 @@ public class Report {
 	public void stop(String timer){
 		Timer t = timers.get(timer);
 		if(t == null){
-			logger.warn("Timer [" + timer + "was not found.");
+			logger.warn("Timer [" + timer + "] was not found.");
 			return;
 		}
 		t.stop();		
