@@ -1019,7 +1019,7 @@
   </wsdl:binding>
     <wsdl:service name="ExchangeServices">
      <wsdl:port name="ExchangeServicePort" binding="tns:ExchangeServiceBinding">
-       <soap:address location="https://it-exhub.ad.jmu.edu/EWS/Exchange.asmx"/>
+       <soap:address location="https://pod51004.outlook.com/EWS/Exchange.asmx"/>
      </wsdl:port>
    </wsdl:service>
   
