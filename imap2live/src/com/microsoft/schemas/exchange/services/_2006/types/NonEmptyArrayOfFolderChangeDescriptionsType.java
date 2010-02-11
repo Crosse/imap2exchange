@@ -38,9 +38,9 @@ import javax.xml.bind.annotation.XmlType;
 public class NonEmptyArrayOfFolderChangeDescriptionsType {
 
     @XmlElements({
-        @XmlElement(name = "AppendToFolderField", type = AppendToFolderFieldType.class),
+        @XmlElement(name = "SetFolderField", type = SetFolderFieldType.class),
         @XmlElement(name = "DeleteFolderField", type = DeleteFolderFieldType.class),
-        @XmlElement(name = "SetFolderField", type = SetFolderFieldType.class)
+        @XmlElement(name = "AppendToFolderField", type = AppendToFolderFieldType.class)
     })
     protected List<FolderChangeDescriptionType> appendToFolderFieldOrSetFolderFieldOrDeleteFolderField;
 
@@ -62,9 +62,9 @@ public class NonEmptyArrayOfFolderChangeDescriptionsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link AppendToFolderFieldType }
-     * {@link DeleteFolderFieldType }
      * {@link SetFolderFieldType }
+     * {@link DeleteFolderFieldType }
+     * {@link AppendToFolderFieldType }
      * 
      * 
      */

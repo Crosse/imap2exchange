@@ -39,8 +39,8 @@ public class NonEmptyArrayOfItemChangeDescriptionsType {
 
     @XmlElements({
         @XmlElement(name = "DeleteItemField", type = DeleteItemFieldType.class),
-        @XmlElement(name = "AppendToItemField", type = AppendToItemFieldType.class),
-        @XmlElement(name = "SetItemField", type = SetItemFieldType.class)
+        @XmlElement(name = "SetItemField", type = SetItemFieldType.class),
+        @XmlElement(name = "AppendToItemField", type = AppendToItemFieldType.class)
     })
     protected List<ItemChangeDescriptionType> appendToItemFieldOrSetItemFieldOrDeleteItemField;
 
@@ -63,8 +63,8 @@ public class NonEmptyArrayOfItemChangeDescriptionsType {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DeleteItemFieldType }
-     * {@link AppendToItemFieldType }
      * {@link SetItemFieldType }
+     * {@link AppendToItemFieldType }
      * 
      * 
      */
