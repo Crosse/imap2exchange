@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="IncludeMimeContent" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="BodyType" type="{http://schemas.microsoft.com/exchange/services/2006/types}BodyTypeResponseType" minOccurs="0"/>
+ *         &lt;element name="FilterHtmlContent" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="AdditionalProperties" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfPathsToElementType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "AttachmentResponseShapeType", propOrder = {
     "includeMimeContent",
     "bodyType",
+    "filterHtmlContent",
     "additionalProperties"
 })
 public class AttachmentResponseShapeType {
@@ -40,6 +42,8 @@ public class AttachmentResponseShapeType {
     protected Boolean includeMimeContent;
     @XmlElement(name = "BodyType")
     protected BodyTypeResponseType bodyType;
+    @XmlElement(name = "FilterHtmlContent")
+    protected Boolean filterHtmlContent;
     @XmlElement(name = "AdditionalProperties")
     protected NonEmptyArrayOfPathsToElementType additionalProperties;
 
@@ -89,6 +93,30 @@ public class AttachmentResponseShapeType {
      */
     public void setBodyType(BodyTypeResponseType value) {
         this.bodyType = value;
+    }
+
+    /**
+     * Gets the value of the filterHtmlContent property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isFilterHtmlContent() {
+        return filterHtmlContent;
+    }
+
+    /**
+     * Sets the value of the filterHtmlContent property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setFilterHtmlContent(Boolean value) {
+        this.filterHtmlContent = value;
     }
 
     /**
