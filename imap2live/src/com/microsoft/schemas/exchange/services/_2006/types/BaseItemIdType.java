@@ -28,11 +28,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BaseItemIdType")
 @XmlSeeAlso({
-    RecurringMasterItemIdType.class,
     RootItemIdType.class,
+    ItemIdType.class,
+    RecurringMasterItemIdType.class,
     RequestAttachmentIdType.class,
-    OccurrenceItemIdType.class,
-    ItemIdType.class
+    OccurrenceItemIdType.class
 })
 public abstract class BaseItemIdType {
 
