@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="folder:ManagedFolderInformation"/>
  *     &lt;enumeration value="folder:PermissionSet"/>
  *     &lt;enumeration value="folder:EffectiveRights"/>
+ *     &lt;enumeration value="folder:SharingEffectiveRights"/>
  *     &lt;enumeration value="item:ItemId"/>
  *     &lt;enumeration value="item:ParentFolderId"/>
  *     &lt;enumeration value="item:ItemClass"/>
@@ -38,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="item:Importance"/>
  *     &lt;enumeration value="item:InReplyTo"/>
  *     &lt;enumeration value="item:InternetMessageHeaders"/>
+ *     &lt;enumeration value="item:IsAssociated"/>
  *     &lt;enumeration value="item:IsDraft"/>
  *     &lt;enumeration value="item:IsFromMe"/>
  *     &lt;enumeration value="item:IsResend"/>
@@ -57,6 +59,10 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="item:EffectiveRights"/>
  *     &lt;enumeration value="item:LastModifiedName"/>
  *     &lt;enumeration value="item:LastModifiedTime"/>
+ *     &lt;enumeration value="item:ConversationId"/>
+ *     &lt;enumeration value="item:UniqueBody"/>
+ *     &lt;enumeration value="item:WebClientReadFormQueryString"/>
+ *     &lt;enumeration value="item:WebClientEditFormQueryString"/>
  *     &lt;enumeration value="message:ConversationIndex"/>
  *     &lt;enumeration value="message:ConversationTopic"/>
  *     &lt;enumeration value="message:InternetMessageId"/>
@@ -121,6 +127,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="calendar:UID"/>
  *     &lt;enumeration value="calendar:RecurrenceId"/>
  *     &lt;enumeration value="calendar:DateTimeStamp"/>
+ *     &lt;enumeration value="calendar:StartTimeZone"/>
+ *     &lt;enumeration value="calendar:EndTimeZone"/>
  *     &lt;enumeration value="task:ActualWork"/>
  *     &lt;enumeration value="task:AssignedTime"/>
  *     &lt;enumeration value="task:BillingInformation"/>
@@ -174,6 +182,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="contacts:SpouseName"/>
  *     &lt;enumeration value="contacts:Surname"/>
  *     &lt;enumeration value="contacts:WeddingAnniversary"/>
+ *     &lt;enumeration value="contacts:HasPicture"/>
+ *     &lt;enumeration value="distributionlist:Members"/>
  *     &lt;enumeration value="postitem:PostedTime"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -206,6 +216,8 @@ public enum UnindexedFieldURIType {
     FOLDER_PERMISSION_SET("folder:PermissionSet"),
     @XmlEnumValue("folder:EffectiveRights")
     FOLDER_EFFECTIVE_RIGHTS("folder:EffectiveRights"),
+    @XmlEnumValue("folder:SharingEffectiveRights")
+    FOLDER_SHARING_EFFECTIVE_RIGHTS("folder:SharingEffectiveRights"),
     @XmlEnumValue("item:ItemId")
     ITEM_ITEM_ID("item:ItemId"),
     @XmlEnumValue("item:ParentFolderId")
@@ -232,6 +244,8 @@ public enum UnindexedFieldURIType {
     ITEM_IN_REPLY_TO("item:InReplyTo"),
     @XmlEnumValue("item:InternetMessageHeaders")
     ITEM_INTERNET_MESSAGE_HEADERS("item:InternetMessageHeaders"),
+    @XmlEnumValue("item:IsAssociated")
+    ITEM_IS_ASSOCIATED("item:IsAssociated"),
     @XmlEnumValue("item:IsDraft")
     ITEM_IS_DRAFT("item:IsDraft"),
     @XmlEnumValue("item:IsFromMe")
@@ -270,6 +284,14 @@ public enum UnindexedFieldURIType {
     ITEM_LAST_MODIFIED_NAME("item:LastModifiedName"),
     @XmlEnumValue("item:LastModifiedTime")
     ITEM_LAST_MODIFIED_TIME("item:LastModifiedTime"),
+    @XmlEnumValue("item:ConversationId")
+    ITEM_CONVERSATION_ID("item:ConversationId"),
+    @XmlEnumValue("item:UniqueBody")
+    ITEM_UNIQUE_BODY("item:UniqueBody"),
+    @XmlEnumValue("item:WebClientReadFormQueryString")
+    ITEM_WEB_CLIENT_READ_FORM_QUERY_STRING("item:WebClientReadFormQueryString"),
+    @XmlEnumValue("item:WebClientEditFormQueryString")
+    ITEM_WEB_CLIENT_EDIT_FORM_QUERY_STRING("item:WebClientEditFormQueryString"),
     @XmlEnumValue("message:ConversationIndex")
     MESSAGE_CONVERSATION_INDEX("message:ConversationIndex"),
     @XmlEnumValue("message:ConversationTopic")
@@ -398,6 +420,10 @@ public enum UnindexedFieldURIType {
     CALENDAR_RECURRENCE_ID("calendar:RecurrenceId"),
     @XmlEnumValue("calendar:DateTimeStamp")
     CALENDAR_DATE_TIME_STAMP("calendar:DateTimeStamp"),
+    @XmlEnumValue("calendar:StartTimeZone")
+    CALENDAR_START_TIME_ZONE("calendar:StartTimeZone"),
+    @XmlEnumValue("calendar:EndTimeZone")
+    CALENDAR_END_TIME_ZONE("calendar:EndTimeZone"),
     @XmlEnumValue("task:ActualWork")
     TASK_ACTUAL_WORK("task:ActualWork"),
     @XmlEnumValue("task:AssignedTime")
@@ -504,6 +530,10 @@ public enum UnindexedFieldURIType {
     CONTACTS_SURNAME("contacts:Surname"),
     @XmlEnumValue("contacts:WeddingAnniversary")
     CONTACTS_WEDDING_ANNIVERSARY("contacts:WeddingAnniversary"),
+    @XmlEnumValue("contacts:HasPicture")
+    CONTACTS_HAS_PICTURE("contacts:HasPicture"),
+    @XmlEnumValue("distributionlist:Members")
+    DISTRIBUTIONLIST_MEMBERS("distributionlist:Members"),
     @XmlEnumValue("postitem:PostedTime")
     POSTITEM_POSTED_TIME("postitem:PostedTime");
     private final String value;
