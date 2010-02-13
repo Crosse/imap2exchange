@@ -69,8 +69,8 @@ public class SyncFolderItemsChangesType {
      * Objects of the following type(s) are allowed in the list
      * {@link JAXBElement }{@code <}{@link SyncFolderItemsDeleteType }{@code >}
      * {@link JAXBElement }{@code <}{@link SyncFolderItemsCreateOrUpdateType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SyncFolderItemsCreateOrUpdateType }{@code >}
      * {@link JAXBElement }{@code <}{@link SyncFolderItemsReadFlagType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SyncFolderItemsCreateOrUpdateType }{@code >}
      * 
      * 
      */

@@ -8,12 +8,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for SearchExpressionType complex type.
+ * <p>Java class for ServiceConfiguration complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="SearchExpressionType">
+ * &lt;complexType name="ServiceConfiguration">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *     &lt;/restriction>
@@ -24,16 +24,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SearchExpressionType")
+@XmlType(name = "ServiceConfiguration")
 @XmlSeeAlso({
-    ContainsExpressionType.class,
-    ExcludesType.class,
-    NotType.class,
-    ExistsType.class,
-    MultipleOperandBooleanExpressionType.class,
-    TwoOperandExpressionType.class
+    MailTipsServiceConfiguration.class,
+    UnifiedMessageServiceConfiguration.class,
+    ProtectionRulesServiceConfiguration.class
 })
-public abstract class SearchExpressionType {
+public class ServiceConfiguration {
 
 
 }
