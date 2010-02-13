@@ -30,10 +30,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResponseObjectType")
 @XmlSeeAlso({
+    SmartResponseBaseType.class,
     ReferenceItemResponseType.class,
     RemoveItemType.class,
     PostReplyItemBaseType.class,
-    SmartResponseBaseType.class,
     WellKnownResponseObjectType.class
 })
 public abstract class ResponseObjectType

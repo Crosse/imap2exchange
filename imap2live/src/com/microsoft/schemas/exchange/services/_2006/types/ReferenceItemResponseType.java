@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ReferenceItemResponseType")
 @XmlSeeAlso({
+    AcceptSharingInvitationType.class,
     SuppressReadReceiptType.class
 })
 public class ReferenceItemResponseType
