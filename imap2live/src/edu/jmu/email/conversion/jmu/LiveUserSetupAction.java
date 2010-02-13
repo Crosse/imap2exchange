@@ -79,7 +79,7 @@ public class LiveUserSetupAction extends PluggableConversionAction {
      */
     public void updateUser(User user) {
 
-        String email = user.getUid() + "@dukes.jmu.edu";
+        String email = String.format("%s@%s", user.getUid(), JmuSite.getInstance().getTargetMailDomain());
         user.setPrimarySMTPAddress(email);
         user.setUPN(email);
 

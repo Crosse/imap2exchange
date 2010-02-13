@@ -125,8 +125,8 @@ public class JmuImapServerFactory extends ImapServerFactory {
 
             /* wrightst, 8/20/2009 */
             String authzId = user.getUid();
-            if (!"".equals(JmuSite.getInstance().getMailDomain())) {
-                authzId += "@" + JmuSite.getInstance().getMailDomain();
+            if (!"".equals(JmuSite.getInstance().getSourceMailDomain())) {
+                authzId += "@" + JmuSite.getInstance().getSourceMailDomain();
             }
             /* end edits */
 

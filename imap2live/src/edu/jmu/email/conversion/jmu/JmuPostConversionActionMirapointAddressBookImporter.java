@@ -310,7 +310,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
                 String mail = sanitizeString(member.substring(mailTag + tag.length()));
                 if (mail.indexOf("@") < 0) {
-                    mail += "@" + JmuSite.getInstance().getMailDomain();
+                    mail += "@" + JmuSite.getInstance().getSourceMailDomain();
                 }
                 mail = sanitizeString(mail);
 
@@ -363,7 +363,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         // contact's email address.
         if (email.length() > 0) {
             if (!(email.contains((CharSequence) "@"))) {
-                email = email.concat(String.format("@%s", JmuSite.getInstance().getMailDomain()));
+                email = email.concat(String.format("@%s", JmuSite.getInstance().getSourceMailDomain()));
             }
         }
 

@@ -107,7 +107,7 @@
         scope="singleton" />
     -->
     <bean name="userSetupAction"
-        class="edu.jmu.email.conversion.jmu.JmuUserSetupAction"
+        class="edu.jmu.email.conversion.jmu.LiveUserSetupAction"
         scope="singleton" />
 
     <!--  Defined in imap2exchange-jmu-config.xml

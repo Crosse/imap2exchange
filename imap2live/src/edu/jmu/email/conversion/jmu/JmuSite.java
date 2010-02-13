@@ -29,7 +29,8 @@ public class JmuSite {
 
     private static JmuSite instance;
 
-    private String mailDomain;
+    private String sourceMailDomain;
+    private String targetMailDomain;
 
     public JmuSite() {
         instance = this;
@@ -39,11 +40,20 @@ public class JmuSite {
         return instance;
     }
 
-    public String getMailDomain() {
-        return mailDomain;
+    public String getTargetMailDomain() {
+        return targetMailDomain;
     }
 
-    public void setMailDomain(String mailDomain) {
-        this.mailDomain = mailDomain;
+    public void setTargetMailDomain(String targetMailDomain) {
+        this.targetMailDomain = targetMailDomain;
     }
+
+    public String getSourceMailDomain() {
+        return sourceMailDomain;
+    }
+
+    public void setSourceMailDomain(String sourceMailDomain) {
+        this.sourceMailDomain = sourceMailDomain;
+    }
+
 }
