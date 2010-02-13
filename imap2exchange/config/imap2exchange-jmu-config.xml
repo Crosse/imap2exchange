@@ -27,8 +27,8 @@
         scope="singleton"  >
         <property name="proxyDomain" value="ad.jmu.edu" />
         <property name="netidAttribute" value="cn" />
-        <property name="ldapUserObject" value="OU=People " />
-        <property name="welcomeFile" value="webapps/imap2exchange/WEB-INF/welcome.eml" />
+        <property name="ldapUserObject" value="OU=People" />
+        <property name="welcomeFile" value="webapps/imap2exchange/WEB-INF/Welcome.eml" />
     </bean>
 
     <bean id="postConversionAction"

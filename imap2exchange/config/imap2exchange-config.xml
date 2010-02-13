@@ -38,7 +38,7 @@
         class="edu.yale.its.tp.email.conversion.ExchangeConversionManager"
         scope="singleton">
         <property name="maxCachedThreads" value="1024" />
-        <property name="maxRunningThreads" value="5" />
+        <property name="maxRunningThreads" value="7" />
     </bean>
 
     <!-- Exchange Server Port Factory
