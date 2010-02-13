@@ -10,9 +10,9 @@ import com.microsoft.schemas.exchange.services._2006.types.AlternateIdBaseType;
 
 /**
  * 
- *         Response Message for a single id conversion in the ConvertId web method.  Note
- *         that the AlternateId element will be missing in the case of an error.
- *       
+ *                 Response Message for a single id conversion in the ConvertId web method.  Note
+ *                 that the AlternateId element will be missing in the case of an error.
+ *             
  * 
  * <p>Java class for ConvertIdResponseMessageType complex type.
  * 

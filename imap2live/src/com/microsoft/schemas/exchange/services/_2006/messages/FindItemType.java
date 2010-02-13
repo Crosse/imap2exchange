@@ -43,6 +43,7 @@ import com.microsoft.schemas.exchange.services._2006.types.RestrictionType;
  *         &lt;element name="Restriction" type="{http://schemas.microsoft.com/exchange/services/2006/types}RestrictionType" minOccurs="0"/>
  *         &lt;element name="SortOrder" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfFieldOrdersType" minOccurs="0"/>
  *         &lt;element name="ParentFolderIds" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfBaseFolderIdsType"/>
+ *         &lt;element name="QueryString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="Traversal" use="required" type="{http://schemas.microsoft.com/exchange/services/2006/types}ItemQueryTraversalType" />
  *     &lt;/extension>
@@ -63,7 +64,8 @@ import com.microsoft.schemas.exchange.services._2006.types.RestrictionType;
     "distinguishedGroupBy",
     "restriction",
     "sortOrder",
-    "parentFolderIds"
+    "parentFolderIds",
+    "queryString"
 })
 public class FindItemType
     extends BaseRequestType
@@ -89,6 +91,8 @@ public class FindItemType
     protected NonEmptyArrayOfFieldOrdersType sortOrder;
     @XmlElement(name = "ParentFolderIds", required = true)
     protected NonEmptyArrayOfBaseFolderIdsType parentFolderIds;
+    @XmlElement(name = "QueryString")
+    protected String queryString;
     @XmlAttribute(name = "Traversal", required = true)
     protected ItemQueryTraversalType traversal;
 
@@ -330,6 +334,30 @@ public class FindItemType
      */
     public void setParentFolderIds(NonEmptyArrayOfBaseFolderIdsType value) {
         this.parentFolderIds = value;
+    }
+
+    /**
+     * Gets the value of the queryString property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getQueryString() {
+        return queryString;
+    }
+
+    /**
+     * Sets the value of the queryString property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setQueryString(String value) {
+        this.queryString = value;
     }
 
     /**

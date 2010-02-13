@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import com.microsoft.schemas.exchange.services._2006.types.ArrayOfBaseItemIdsType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemResponseShapeType;
+import com.microsoft.schemas.exchange.services._2006.types.SyncFolderItemsScopeType;
 import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
 
 
@@ -25,6 +26,7 @@ import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
  *         &lt;element name="SyncState" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Ignore" type="{http://schemas.microsoft.com/exchange/services/2006/types}ArrayOfBaseItemIdsType" minOccurs="0"/>
  *         &lt;element name="MaxChangesReturned" type="{http://schemas.microsoft.com/exchange/services/2006/types}MaxSyncChangesReturnedType"/>
+ *         &lt;element name="SyncScope" type="{http://schemas.microsoft.com/exchange/services/2006/types}SyncFolderItemsScopeType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -39,7 +41,8 @@ import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
     "syncFolderId",
     "syncState",
     "ignore",
-    "maxChangesReturned"
+    "maxChangesReturned",
+    "syncScope"
 })
 public class SyncFolderItemsType
     extends BaseRequestType
@@ -55,6 +58,8 @@ public class SyncFolderItemsType
     protected ArrayOfBaseItemIdsType ignore;
     @XmlElement(name = "MaxChangesReturned")
     protected int maxChangesReturned;
+    @XmlElement(name = "SyncScope")
+    protected SyncFolderItemsScopeType syncScope;
 
     /**
      * Gets the value of the itemShape property.
@@ -166,6 +171,30 @@ public class SyncFolderItemsType
      */
     public void setMaxChangesReturned(int value) {
         this.maxChangesReturned = value;
+    }
+
+    /**
+     * Gets the value of the syncScope property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link SyncFolderItemsScopeType }
+     *     
+     */
+    public SyncFolderItemsScopeType getSyncScope() {
+        return syncScope;
+    }
+
+    /**
+     * Sets the value of the syncScope property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SyncFolderItemsScopeType }
+     *     
+     */
+    public void setSyncScope(SyncFolderItemsScopeType value) {
+        this.syncScope = value;
     }
 
 }

@@ -36,8 +36,8 @@ import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
     "folderIds"
 })
 @XmlSeeAlso({
-    CopyFolderType.class,
-    MoveFolderType.class
+    MoveFolderType.class,
+    CopyFolderType.class
 })
 public class BaseMoveCopyFolderType
     extends BaseRequestType

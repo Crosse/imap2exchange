@@ -34,9 +34,9 @@ import com.microsoft.schemas.exchange.services._2006.types.EmailAddressType;
 })
 @XmlSeeAlso({
     AddDelegateType.class,
+    UpdateDelegateType.class,
     GetDelegateType.class,
-    RemoveDelegateType.class,
-    UpdateDelegateType.class
+    RemoveDelegateType.class
 })
 public abstract class BaseDelegateType
     extends BaseRequestType
