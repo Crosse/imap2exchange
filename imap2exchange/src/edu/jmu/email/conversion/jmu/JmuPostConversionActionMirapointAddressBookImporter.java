@@ -397,7 +397,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         String category = getEntryAttribute(entry, "category");
         if (!category.isEmpty()) {
             ArrayOfStringsType categories = new ArrayOfStringsType();
-            categories.getString().add(category);
+            for (String c : category.split(",")) {
+                c = c.trim();
+                categories.getString().add(c);
+            }
             contactItem.setCategories(categories);
         }
 

@@ -27,7 +27,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.yale.its.tp.email.conversion.ExchangeConversion;
 import edu.yale.its.tp.email.conversion.ExchangeConversionFactory;
+import edu.yale.its.tp.email.conversion.Report;
 import edu.yale.its.tp.email.conversion.User;
 import edu.yale.its.tp.email.conversion.yale.YaleUser;
 
@@ -46,11 +48,14 @@ public class JmuContactsImport {
             // Set the Uid to the first command-line arg.
             user.setUid(args[0]);
             user.setConversion(ExchangeConversionFactory.getInstance().makeExchangeConversion(user));
+            ExchangeConversion.setConv(user.getConversion());
             user.getConversion().performUserSetupAction();
+            user.getConversion().setUser(user);
 //            user.setSourceImapPo("mpmail3.jmu.edu");
 //            user.setUPN("miguser@ad.jmu.edu");
 //            user.setPrimarySMTPAddress("miguser@jmu.edu");            
             //user.getConversion().setReport(new Report());
+            new Report();
 
             logger.debug(String.format("User: %s@%s", user.getUid(), user.getSourceImapPo()));
             user.getConversion().performPostConversionAction();
