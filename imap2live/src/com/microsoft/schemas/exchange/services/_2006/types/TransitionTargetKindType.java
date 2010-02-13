@@ -7,34 +7,31 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ItemQueryTraversalType.
+ * <p>Java class for TransitionTargetKindType.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="ItemQueryTraversalType">
+ * &lt;simpleType name="TransitionTargetKindType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="Shallow"/>
- *     &lt;enumeration value="SoftDeleted"/>
- *     &lt;enumeration value="Associated"/>
+ *     &lt;enumeration value="Period"/>
+ *     &lt;enumeration value="Group"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "ItemQueryTraversalType")
+@XmlType(name = "TransitionTargetKindType")
 @XmlEnum
-public enum ItemQueryTraversalType {
+public enum TransitionTargetKindType {
 
-    @XmlEnumValue("Shallow")
-    SHALLOW("Shallow"),
-    @XmlEnumValue("SoftDeleted")
-    SOFT_DELETED("SoftDeleted"),
-    @XmlEnumValue("Associated")
-    ASSOCIATED("Associated");
+    @XmlEnumValue("Period")
+    PERIOD("Period"),
+    @XmlEnumValue("Group")
+    GROUP("Group");
     private final String value;
 
-    ItemQueryTraversalType(String v) {
+    TransitionTargetKindType(String v) {
         value = v;
     }
 
@@ -42,8 +39,8 @@ public enum ItemQueryTraversalType {
         return value;
     }
 
-    public static ItemQueryTraversalType fromValue(String v) {
-        for (ItemQueryTraversalType c: ItemQueryTraversalType.values()) {
+    public static TransitionTargetKindType fromValue(String v) {
+        for (TransitionTargetKindType c: TransitionTargetKindType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

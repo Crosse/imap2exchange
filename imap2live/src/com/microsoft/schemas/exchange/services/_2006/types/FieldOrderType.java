@@ -45,10 +45,10 @@ public class FieldOrderType {
      * 
      * @return
      *     possible object is
+     *     {@link JAXBElement }{@code <}{@link PathToIndexedFieldType }{@code >}
+     *     {@link JAXBElement }{@code <}{@link BasePathToElementType }{@code >}
      *     {@link JAXBElement }{@code <}{@link PathToExtendedFieldType }{@code >}
      *     {@link JAXBElement }{@code <}{@link PathToUnindexedFieldType }{@code >}
-     *     {@link JAXBElement }{@code <}{@link BasePathToElementType }{@code >}
-     *     {@link JAXBElement }{@code <}{@link PathToIndexedFieldType }{@code >}
      *     
      */
     public JAXBElement<? extends BasePathToElementType> getPath() {
@@ -60,10 +60,10 @@ public class FieldOrderType {
      * 
      * @param value
      *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link PathToIndexedFieldType }{@code >}
+     *     {@link JAXBElement }{@code <}{@link BasePathToElementType }{@code >}
      *     {@link JAXBElement }{@code <}{@link PathToExtendedFieldType }{@code >}
      *     {@link JAXBElement }{@code <}{@link PathToUnindexedFieldType }{@code >}
-     *     {@link JAXBElement }{@code <}{@link BasePathToElementType }{@code >}
-     *     {@link JAXBElement }{@code <}{@link PathToIndexedFieldType }{@code >}
      *     
      */
     public void setPath(JAXBElement<? extends BasePathToElementType> value) {

@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;extension base="{http://schemas.microsoft.com/exchange/services/2006/types}BaseFolderType">
  *       &lt;sequence>
+ *         &lt;element name="SharingEffectiveRights" type="{http://schemas.microsoft.com/exchange/services/2006/types}PermissionReadAccessType" minOccurs="0"/>
  *         &lt;element name="PermissionSet" type="{http://schemas.microsoft.com/exchange/services/2006/types}PermissionSetType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -28,14 +29,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ContactsFolderType", propOrder = {
+    "sharingEffectiveRights",
     "permissionSet"
 })
 public class ContactsFolderType
     extends BaseFolderType
 {
 
+    @XmlElement(name = "SharingEffectiveRights")
+    protected PermissionReadAccessType sharingEffectiveRights;
     @XmlElement(name = "PermissionSet")
     protected PermissionSetType permissionSet;
+
+    /**
+     * Gets the value of the sharingEffectiveRights property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PermissionReadAccessType }
+     *     
+     */
+    public PermissionReadAccessType getSharingEffectiveRights() {
+        return sharingEffectiveRights;
+    }
+
+    /**
+     * Sets the value of the sharingEffectiveRights property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PermissionReadAccessType }
+     *     
+     */
+    public void setSharingEffectiveRights(PermissionReadAccessType value) {
+        this.sharingEffectiveRights = value;
+    }
 
     /**
      * Gets the value of the permissionSet property.

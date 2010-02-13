@@ -55,6 +55,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="ModifiedOccurrences" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfOccurrenceInfoType" minOccurs="0"/>
  *         &lt;element name="DeletedOccurrences" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfDeletedOccurrencesType" minOccurs="0"/>
  *         &lt;element name="MeetingTimeZone" type="{http://schemas.microsoft.com/exchange/services/2006/types}TimeZoneType" minOccurs="0"/>
+ *         &lt;element name="StartTimeZone" type="{http://schemas.microsoft.com/exchange/services/2006/types}TimeZoneDefinitionType" minOccurs="0"/>
+ *         &lt;element name="EndTimeZone" type="{http://schemas.microsoft.com/exchange/services/2006/types}TimeZoneDefinitionType" minOccurs="0"/>
  *         &lt;element name="ConferenceType" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="AllowNewTimeProposal" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="IsOnlineMeeting" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
@@ -106,6 +108,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "modifiedOccurrences",
     "deletedOccurrences",
     "meetingTimeZone",
+    "startTimeZone",
+    "endTimeZone",
     "conferenceType",
     "allowNewTimeProposal",
     "isOnlineMeeting",
@@ -194,6 +198,10 @@ public class CalendarItemType
     protected NonEmptyArrayOfDeletedOccurrencesType deletedOccurrences;
     @XmlElement(name = "MeetingTimeZone")
     protected TimeZoneType meetingTimeZone;
+    @XmlElement(name = "StartTimeZone")
+    protected TimeZoneDefinitionType startTimeZone;
+    @XmlElement(name = "EndTimeZone")
+    protected TimeZoneDefinitionType endTimeZone;
     @XmlElement(name = "ConferenceType")
     protected Integer conferenceType;
     @XmlElement(name = "AllowNewTimeProposal")
@@ -1067,6 +1075,54 @@ public class CalendarItemType
      */
     public void setMeetingTimeZone(TimeZoneType value) {
         this.meetingTimeZone = value;
+    }
+
+    /**
+     * Gets the value of the startTimeZone property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TimeZoneDefinitionType }
+     *     
+     */
+    public TimeZoneDefinitionType getStartTimeZone() {
+        return startTimeZone;
+    }
+
+    /**
+     * Sets the value of the startTimeZone property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TimeZoneDefinitionType }
+     *     
+     */
+    public void setStartTimeZone(TimeZoneDefinitionType value) {
+        this.startTimeZone = value;
+    }
+
+    /**
+     * Gets the value of the endTimeZone property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TimeZoneDefinitionType }
+     *     
+     */
+    public TimeZoneDefinitionType getEndTimeZone() {
+        return endTimeZone;
+    }
+
+    /**
+     * Sets the value of the endTimeZone property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TimeZoneDefinitionType }
+     *     
+     */
+    public void setEndTimeZone(TimeZoneDefinitionType value) {
+        this.endTimeZone = value;
     }
 
     /**

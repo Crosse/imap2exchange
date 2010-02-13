@@ -16,11 +16,12 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="ConnectingSIDType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="PrincipalName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="SID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="PrimarySmtpAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *       &lt;/sequence>
+ *       &lt;choice>
+ *         &lt;element name="PrincipalName" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyStringType"/>
+ *         &lt;element name="SID" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyStringType"/>
+ *         &lt;element name="PrimarySmtpAddress" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyStringType"/>
+ *         &lt;element name="SmtpAddress" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyStringType"/>
+ *       &lt;/choice>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ConnectingSIDType", propOrder = {
     "principalName",
     "sid",
-    "primarySmtpAddress"
+    "primarySmtpAddress",
+    "smtpAddress"
 })
 public class ConnectingSIDType {
 
@@ -42,6 +44,8 @@ public class ConnectingSIDType {
     protected String sid;
     @XmlElement(name = "PrimarySmtpAddress")
     protected String primarySmtpAddress;
+    @XmlElement(name = "SmtpAddress")
+    protected String smtpAddress;
 
     /**
      * Gets the value of the principalName property.
@@ -113,6 +117,30 @@ public class ConnectingSIDType {
      */
     public void setPrimarySmtpAddress(String value) {
         this.primarySmtpAddress = value;
+    }
+
+    /**
+     * Gets the value of the smtpAddress property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSmtpAddress() {
+        return smtpAddress;
+    }
+
+    /**
+     * Sets the value of the smtpAddress property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSmtpAddress(String value) {
+        this.smtpAddress = value;
     }
 
 }
