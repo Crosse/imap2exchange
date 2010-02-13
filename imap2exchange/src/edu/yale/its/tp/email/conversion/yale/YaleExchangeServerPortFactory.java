@@ -3,6 +3,9 @@ package edu.yale.its.tp.email.conversion.yale;
 import java.net.*;
 
 import javax.xml.namespace.QName;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 //import org.apache.log4j.*;
 import edu.yale.its.tp.email.conversion.exchange.*;
 import edu.yale.its.tp.email.conversion.trust.*;
@@ -47,7 +50,7 @@ import com.microsoft.schemas.exchange.services._2006.messages.*;
  */
 public class YaleExchangeServerPortFactory extends ExchangeServerPortFactory {
 	
-//	private final static Logger logger = Logger.getLogger(YaleExchangeServerPortFactory.class);
+    public static final Log logger = LogFactory.getLog(YaleExchangeServerPortFactory.class);
 
 	String uri;
 	String adDomain;
@@ -68,10 +71,14 @@ public class YaleExchangeServerPortFactory extends ExchangeServerPortFactory {
 		if(basicAuth == null){
 			basicAuth = new Authenticator(){
 				protected PasswordAuthentication getPasswordAuthentication(){
-					String superUid = YaleExchangeServerPortFactory.this.adDomain
-					                + "\\" 
-					                + YaleExchangeServerPortFactory.this.uid;
+				    String superUid = "";
+				    if (!adDomain.isEmpty()) {
+				        superUid = YaleExchangeServerPortFactory.this.adDomain + "\\";
+				    }
+					superUid += YaleExchangeServerPortFactory.this.uid;
 					String superPwd = YaleExchangeServerPortFactory.this.pwd;
+					logger.debug("superUid = \"" + superUid + "\"");
+					logger.debug("superPwd = \"" + superPwd + "\"");
 					return new PasswordAuthentication(superUid
 							                         ,superPwd.toCharArray());
 				}
