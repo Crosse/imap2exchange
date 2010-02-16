@@ -43,6 +43,7 @@ public class ExchangeConversionFactory {
 	
 	int maxMessageSize;
 	int maxMessageGrpSize;
+	int pageSize;
 	boolean isCleaner;
 	FolderAltNames altNames;
 	List<String> excludedImapFolders;
@@ -100,6 +101,7 @@ public class ExchangeConversionFactory {
 		conv.setAltNames(altNames);
 		conv.setMaxMessageSize(maxMessageSize);
 		conv.setMaxMessageGrpSize(maxMessageGrpSize);
+		conv.setPageSize(pageSize);
 		conv.setPluggableConversionActions(pluggableConversionActions);
 		conv.setExcludedImapFolders(excludedImapFolders);
 		conv.setIncludedImapFolders(this.includedImapFolders);
@@ -153,6 +155,11 @@ public class ExchangeConversionFactory {
 		this.includeExcludeMatcher = includeExcludeMatcher;
 	}
 
+    public int getPageSize() {
+        return pageSize;
+    }
 
-
+    public void setPageSize(int maxPageSize) {
+        this.pageSize = maxPageSize;
+    }
 }
