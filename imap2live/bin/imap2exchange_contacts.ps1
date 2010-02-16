@@ -33,6 +33,6 @@ $OPTS += '"-XX:ParallelGCThreads=20" "-XX:+UseConcMarkSweepGC" "-XX:+UseParNewGC
 $OPTS += '"-XX:SurvivorRatio=8" "-XX:TargetSurvivorRatio=90" "-XX:MaxTenuringThreshold=31" '
 $OPTS += "`"-Dlog4j.configuration=file:///$($EXCHANGE_CONVERSION_HOME)\config\log4j_allConsole.properties`" "
 $OPTS += "`"-DEXCHANGE_CONVERSION_HOME=$($EXCHANGE_CONVERSION_HOME)`" "
-#$OPTS+='-Dhttp.auth.preference="basic" '
+$OPTS += "-Dhttp.auth.preference=basic "
 
 java.exe $OPTS -cp $cp $CLASSNAME $args
