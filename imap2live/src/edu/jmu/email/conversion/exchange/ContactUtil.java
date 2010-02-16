@@ -33,6 +33,8 @@ import com.microsoft.schemas.exchange.services._2006.types.ExchangeVersionType;
 import com.microsoft.schemas.exchange.services._2006.types.ExtendedPropertyType;
 import com.microsoft.schemas.exchange.services._2006.types.FolderIdType;
 import com.microsoft.schemas.exchange.services._2006.types.IdFormatType;
+import com.microsoft.schemas.exchange.services._2006.types.IndexBasePointType;
+import com.microsoft.schemas.exchange.services._2006.types.IndexedPageViewType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemIdType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemQueryTraversalType;
 import com.microsoft.schemas.exchange.services._2006.types.ItemResponseShapeType;
@@ -153,20 +155,34 @@ public class ContactUtil {
         ptefOneOffMembers.setPropertyType(MapiPropertyTypeType.BINARY_ARRAY);
     }
 
-    public static List<ItemType> createContact(User user, ContactItemType contact, BaseFolderIdType contactsFolderId) {
+    public static List<ContactItemType> createContact(User user, ContactItemType contact, BaseFolderIdType contactsFolderId) {
         CreateItemType creator = getCreator(contactsFolderId);
         creator.getItems().getItemOrMessageOrCalendarItem().add(contact);
 
         return getCreateItemResponse(user, creator);
     }
 
-    public static List<ItemType> createContact(User user, ContactItemType contact, DistinguishedFolderIdType folderId) {
+    public static List<ContactItemType> createContact(User user, ContactItemType contact, DistinguishedFolderIdType folderId) {
         CreateItemType creator = getCreator(folderId);
         creator.getItems().getItemOrMessageOrCalendarItem().add(contact);
 
         return getCreateItemResponse(user, creator);
     }
+    
+    public static List<ContactItemType> createContacts(User user, List<ContactItemType> contacts, BaseFolderIdType contactsFolderId) {
+        CreateItemType creator = getCreator(contactsFolderId);
+        creator.getItems().getItemOrMessageOrCalendarItem().addAll(contacts);
+        
+        return getCreateItemResponse(user, creator);
+    }
 
+    public static List<ContactItemType> createContacts(User user, List<ContactItemType> contacts, DistinguishedFolderIdType folderId) {
+        CreateItemType creator = getCreator(folderId);
+        creator.getItems().getItemOrMessageOrCalendarItem().addAll(contacts);
+
+        return getCreateItemResponse(user, creator);
+    }
+    
     private static CreateItemType getCreator(BaseFolderIdType contactsFolderId) {
         CreateItemType creator = new CreateItemType();
         creator.setSavedItemFolderId(new TargetFolderIdType());
@@ -182,7 +198,12 @@ public class ContactUtil {
     }
 
     public static ArrayList<ItemType> getContacts(BaseFolderIdType contactsFolderId) {
-        ArrayList<ItemType> contacts = new ArrayList<ItemType>();
+        User user = ExchangeConversion.getConv().getUser();
+        
+        int pageSize = user.getConversion().getPageSize(); 
+
+        ArrayList<ItemType> totalContacts = new ArrayList<ItemType>();
+        ArrayList<ItemType> tmpContacts = new ArrayList<ItemType>();
 
         // Form the FindItem request.
         FindItemType finder = new FindItemType();
@@ -195,57 +216,78 @@ public class ContactUtil {
         // Choose the traversal mode.
         finder.setTraversal(ItemQueryTraversalType.SHALLOW);
 
+        IndexedPageViewType index = new IndexedPageViewType();
+        index.setBasePoint(IndexBasePointType.BEGINNING);
+        index.setMaxEntriesReturned(pageSize);
+        index.setOffset(0);
+
+        finder.setIndexedPageItemView(index);
+
         NonEmptyArrayOfBaseFolderIdsType folderIds = new NonEmptyArrayOfBaseFolderIdsType();
         List<BaseFolderIdType> ids = folderIds.getFolderIdOrDistinguishedFolderId();
         ids.add(contactsFolderId);
         finder.setParentFolderIds(folderIds);
 
-        // define response Objects and their holders
-        FindItemResponseType findItemResponse = new FindItemResponseType();
-        Holder<FindItemResponseType> responseHolder = new Holder<FindItemResponseType>(findItemResponse);
-
-        ServerVersionInfo serverVersion = new ServerVersionInfo();
-        Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
-
         ExchangeServicePortType proxy = null;
-        List<JAXBElement<? extends ResponseMessageType>> responses = null;
-        User user = ExchangeConversion.getConv().getUser();
-        try {
-            Report.getReport().start(Report.EXCHANGE_CONNECT);
-            proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-            Report.getReport().stop(Report.EXCHANGE_CONNECT);
-            Report.getReport().start(Report.EXCHANGE_META);
-            proxy.findItem(finder, user.getImpersonation(), responseHolder, serverVersionHolder);
-            responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-            Report.getReport().stop(Report.EXCHANGE_META);
+        Report.getReport().start(Report.EXCHANGE_CONNECT);
+        proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
+        Report.getReport().stop(Report.EXCHANGE_CONNECT);
+        
+        do {
+            // define response Objects and their holders
+            FindItemResponseType findItemResponse = new FindItemResponseType();
+            Holder<FindItemResponseType> responseHolder = new Holder<FindItemResponseType>(findItemResponse);
 
-            for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
-                ResponseMessageType response = jaxResponse.getValue();
-                if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
-                    logger.warn("Get Messages Response Error: " + response.getMessageText());
-                    user.getConversion().warnings++;
-                } else if (response.getResponseClass().equals(ResponseClassType.WARNING)) {
-                    logger.warn("Get Messages Response Warning: " + response.getMessageText());
-                    user.getConversion().warnings++;
-                } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
-                    FindItemResponseMessageType findResponse = (FindItemResponseMessageType) response;
-                    for (ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()) {
-                        contacts.add(item);
+            ServerVersionInfo serverVersion = new ServerVersionInfo();
+            Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
+
+            List<JAXBElement<? extends ResponseMessageType>> responses = null;
+            try {
+                tmpContacts.clear();
+                Report.getReport().start(Report.EXCHANGE_META);
+                proxy.findItem(finder, user.getImpersonation(), responseHolder, serverVersionHolder);
+                responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
+                Report.getReport().stop(Report.EXCHANGE_META);
+
+                for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
+                    ResponseMessageType response = jaxResponse.getValue();
+                    if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
+                        logger.warn("Get Messages Response Error: " + response.getMessageText());
+                        user.getConversion().warnings++;
+                    } else if (response.getResponseClass().equals(ResponseClassType.WARNING)) {
+                        logger.warn("Get Messages Response Warning: " + response.getMessageText());
+                        user.getConversion().warnings++;
+                    } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
+                        FindItemResponseMessageType findResponse = (FindItemResponseMessageType) response;
+                        for (ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()) {
+                            tmpContacts.add(item);
+                        }
                     }
                 }
+                // Add the new messages to the totalMessages array.
+                totalContacts.addAll(tmpContacts);
+                if (tmpContacts.size() >= pageSize) {
+                    // Bump the offset and go another round.
+                    int prevOffset = finder.getIndexedPageItemView().getOffset();
+                    finder.getIndexedPageItemView().setOffset(pageSize + prevOffset);
+                    logger.debug("Setting new offset = " + finder.getIndexedPageItemView().getOffset());
+                    logger.info("retrieved " + tmpContacts.size() + " contacts (" + totalContacts.size() + " so far)");
+                }
+                
+            } catch (Exception e) {
+                logger.debug(e.getMessage());
+                //e.printStackTrace();
+                throw new RuntimeException("Exception performing getContacts", e);
+            } finally {
+                if (Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
             }
-        } catch (Exception e) {
-            logger.debug(e.getMessage());
-            //e.printStackTrace();
-            throw new RuntimeException("Exception performing getContacts", e);
-        } finally {
-            if (Report.getReport().isStarted(Report.EXCHANGE_META))
-                Report.getReport().stop(Report.EXCHANGE_META);
-            if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
-                Report.getReport().stop(Report.EXCHANGE_CONNECT);
-        }
 
-        return contacts;
+        } while (tmpContacts.size() >= pageSize);
+
+        return totalContacts;
     }
 
     public static ContactItemType findContactByEntryId(User user, ItemIdType id) {
@@ -333,6 +375,10 @@ public class ContactUtil {
             logger.debug(String.format("ADD: [%-16s] to group [%s]", member.getEmailAddresses().getEntry().get(0).getValue(), dlName));
 
             String entryId = createWrappedEntryId(user, member);
+            if (entryId == null || entryId.length() == 0) {
+                logger.warn("Returned entryId was null; skipping DL member " + member.getEmailAddresses().getEntry().get(0).getValue());
+                continue;
+            }
             wrappedEntryIds.getValue().add(Base64.encode(hexStringToByteArray(entryId)));
             wrappedEntryIdsLength += entryId.length();
             if (wrappedEntryIdsLength > PID_LID_DISTRIBUTION_LIST_MEMBERS_MAX_LENGTH) {
@@ -359,6 +405,11 @@ public class ContactUtil {
         }
 
         logger.info(String.format("DL [%s] contains %d members", dlName, wrappedEntryIds.getValue().size()));
+        
+        if (wrappedEntryIds.getValue().size() == 0) {
+            logger.warn(String.format("DL [%s] contains no members; refusing to create", dlName));
+            return null;
+        }
 
         List<ExtendedPropertyType> props = new ArrayList<ExtendedPropertyType>();
 
@@ -396,6 +447,9 @@ public class ContactUtil {
     }
 
     public static String createWrappedEntryId(User user, ItemType entry) {
+        String itemId = entry.getItemId().getId();
+        logger.info("itemId = " + itemId);
+        
         String retval = "";
         String wrappedEntryIDPreamble = 
             ContactUtil.ENTRYID_FLAGS + 
@@ -408,20 +462,20 @@ public class ContactUtil {
 
         AlternateIdType altId = new AlternateIdType();
         altId.setFormat(IdFormatType.ENTRY_ID);
-        altId.setId(entry.getItemId().getId());
+        altId.setId(itemId);
         altId.setMailbox(user.getPrimarySMTPAddress());
 
         convertReq.getSourceIds().getAlternateIdOrAlternatePublicFolderIdOrAlternatePublicFolderItemId().add(altId);
-
+        
         try {
             ConvertIdResponseType convertIdResponse = new ConvertIdResponseType();
             Holder<ConvertIdResponseType> responseHolder = new Holder<ConvertIdResponseType>(convertIdResponse);
-
+            
             ServerVersionInfo serverVersion = new ServerVersionInfo();
             Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
 
             RequestServerVersion requestVersion = new RequestServerVersion();
-            requestVersion.setVersion(ExchangeVersionType.EXCHANGE_2007_SP_1);
+            requestVersion.setVersion(ExchangeVersionType.EXCHANGE_2010);
 
             ExchangeServicePortType proxy = null;
             List<JAXBElement<? extends ResponseMessageType>> responses = null;
@@ -431,7 +485,6 @@ public class ContactUtil {
                 Report.getReport().stop(Report.EXCHANGE_CONNECT);
                 Report.getReport().start(Report.EXCHANGE_MIME);
                 proxy.convertId(convertReq, requestVersion, responseHolder, serverVersionHolder);
-                // proxy.convertId(convertReq, responseHolder, serverVersionHolder);
                 responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
                 Report.getReport().stop(Report.EXCHANGE_MIME);
                 for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
@@ -530,8 +583,8 @@ public class ContactUtil {
         return sb.toString();
     }
 
-    public static List<ItemType> getCreateItemResponse(User user, CreateItemType creator) {
-        List<ItemType> items = new ArrayList<ItemType>();
+    public static List<ContactItemType> getCreateItemResponse(User user, CreateItemType creator) {
+        List<ContactItemType> contacts = new ArrayList<ContactItemType>();
         // define response Objects and their holders
         CreateItemResponseType createItemResponse = new CreateItemResponseType();
         Holder<CreateItemResponseType> responseHolder = new Holder<CreateItemResponseType>(createItemResponse);
@@ -546,10 +599,11 @@ public class ContactUtil {
             proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
             Report.getReport().stop(Report.EXCHANGE_CONNECT);
             Report.getReport().start(Report.EXCHANGE_MIME);
+            logger.info("Submitting request to server");
             proxy.createItem(creator, user.getImpersonation(), responseHolder, serverVersionHolder);
             responses = responseHolder.value.getResponseMessages().getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
             Report.getReport().stop(Report.EXCHANGE_MIME);
-            int i = 0;
+            logger.info("Processing " + responses.size() + " server response(s)");
             for (JAXBElement<? extends ResponseMessageType> jaxResponse : responses) {
                 ResponseMessageType response = jaxResponse.getValue();
                 if (response.getResponseClass().equals(ResponseClassType.ERROR)) {
@@ -566,11 +620,13 @@ public class ContactUtil {
                     user.getConversion().warnings++;
                 } else if (response.getResponseClass().equals(ResponseClassType.SUCCESS)) {
                     for (ItemType item : ((ItemInfoResponseMessageType) response).getItems().getItemOrMessageOrCalendarItem()) {
-                        items.add(item);
+                        if (item instanceof ContactItemType) {
+                            contacts.add((ContactItemType)item);
+                        }
                     }
                 }
-                i++;
             }
+            logger.info("Finished processing server response(s)");
         } catch (Exception e) {
             logger.warn(e.getMessage());
             throw new RuntimeException("Exception creating contact on Exchange Server: " + e.getMessage(), e);
@@ -581,7 +637,7 @@ public class ContactUtil {
                 Report.getReport().stop(Report.EXCHANGE_CONNECT);
         }
 
-        return items;
+        return contacts;
     }
 
     private static byte[] hexStringToByteArray(String s) {
