@@ -1,2 +1,2 @@
-<Context path="/imap2exchange" antiJARLocking="true" antiResourceLocking="true" />
+<Context path="/imap2live" antiJARLocking="true" antiResourceLocking="true" />
 
