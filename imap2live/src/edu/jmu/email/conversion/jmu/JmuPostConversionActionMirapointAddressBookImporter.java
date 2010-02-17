@@ -281,7 +281,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
 
     }
 
-    private synchronized void processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
+    protected synchronized void processGroups(User user, List<LDAPEntry> groups, BaseFolderIdType contactsFolderId) {
         if (groups.size() < 1) {
             logger.warn("No groups to process.");
             return;
