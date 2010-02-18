@@ -448,7 +448,7 @@ public class ContactUtil {
 
     public static String createWrappedEntryId(User user, ItemType entry) {
         String itemId = entry.getItemId().getId();
-        logger.info("itemId = " + itemId);
+        //logger.info("itemId = " + itemId);
         
         String retval = "";
         String wrappedEntryIDPreamble = 
@@ -464,7 +464,7 @@ public class ContactUtil {
         altId.setFormat(IdFormatType.ENTRY_ID);
         altId.setId(itemId);
         altId.setMailbox(user.getPrimarySMTPAddress());
-
+        
         convertReq.getSourceIds().getAlternateIdOrAlternatePublicFolderIdOrAlternatePublicFolderItemId().add(altId);
         
         try {
@@ -480,6 +480,7 @@ public class ContactUtil {
             ExchangeServicePortType proxy = null;
             List<JAXBElement<? extends ResponseMessageType>> responses = null;
             try {
+                
                 Report.getReport().start(Report.EXCHANGE_CONNECT);
                 proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
                 Report.getReport().stop(Report.EXCHANGE_CONNECT);

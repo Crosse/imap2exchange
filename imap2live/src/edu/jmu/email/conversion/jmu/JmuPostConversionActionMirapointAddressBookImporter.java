@@ -269,9 +269,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
             }
 
+            /*
             if (groups.size() > 0) {
                 processGroups(user, groups, contactsFolderId);
             }
+            */
 
         } catch (Exception e) {
             logger.warn("Could not import user's address book: " + e.getMessage());
