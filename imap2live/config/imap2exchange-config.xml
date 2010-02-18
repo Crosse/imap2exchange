@@ -39,7 +39,6 @@
         scope="singleton">
         <property name="maxCachedThreads" value="1024" />
         <property name="maxRunningThreads" value="5" />
-        <property name="pageSize" value="1000" />
     </bean>
 
     <!-- Exchange Server Port Factory
@@ -56,9 +55,6 @@
         class="edu.yale.its.tp.email.conversion.ExchangeConversionFactory"
         scope="singleton">
         <property name="maxMessageGrpSize" value="5242880" />
-        <!--
-        <property name="maxMessageGrpSize" value="512" />
-        -->
         <property name="maxMessageSize" value="41943040" />
         <property name="pageSize" value="1000" />
         <property name="altNames" ref="altNames" /> 
