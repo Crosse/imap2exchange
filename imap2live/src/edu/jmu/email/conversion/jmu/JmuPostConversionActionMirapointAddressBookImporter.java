@@ -263,17 +263,19 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 List<ContactItemType> created = createContacts(user, contactsToCreate, contactsFolderId);
                 if (created != null) {
                     logger.info(String.format("Imported %d contacts", created.size()));
-                    contacts.addAll(created);
+                    //contacts.addAll(created);
                 } else { 
                     logger.warn("Could not create contacts");
                 }
             }
 
-            /*
+            // Repopulate the contacts list from the server to ensure that all
+            // needed attributes come back to us.
+            contacts = ContactUtil.getContacts(contactsFolderId);
+
             if (groups.size() > 0) {
                 processGroups(user, groups, contactsFolderId);
             }
-            */
 
         } catch (Exception e) {
             logger.warn("Could not import user's address book: " + e.getMessage());
@@ -408,7 +410,10 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
         String category = getEntryAttribute(entry, "category");
         if (!category.isEmpty()) {
             ArrayOfStringsType categories = new ArrayOfStringsType();
-            categories.getString().add(category);
+            for (String c : category.split(",")) {
+                c = c.trim();
+                categories.getString().add(c);
+            }
             contactItem.setCategories(categories);
         }
 
@@ -535,16 +540,15 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
     }
     
     protected synchronized List<ContactItemType> createContacts(User user, List<ContactItemType> contacts, BaseFolderIdType contactsFolderId) {
-        List<ContactItemType> retval = null;
+        List<ContactItemType> retval = new ArrayList<ContactItemType>();
+        List<ItemType> temp = null;
         logger.info("Creating contacts on server...");
-        if ((retval = ContactUtil.createContacts(user, contacts, contactsFolderId)) != null) {
-            /*
-            for (ItemType item : retval) {
+        if ((temp = ContactUtil.createContacts(user, contacts, contactsFolderId)) != null) {
+            for (ItemType item : temp) {
                 if (item instanceof ContactItemType) {
-                    contacts.add(ContactUtil.findContactByEntryId(user, item.getItemId()));
+                    retval.add((ContactItemType)item);
                 }
             }
-            */
         } else {
             logger.warn("Error creating contacts");
             user.getConversion().warnings++;

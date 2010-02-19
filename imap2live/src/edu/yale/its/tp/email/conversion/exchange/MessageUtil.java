@@ -775,14 +775,18 @@ public class MessageUtil {
 	                    }
 	                }
 	            }
+
 	            // Add the new messages to the totalMessages array.
 	            totalMessages.addAll(tmpMessages);
-	            if (tmpMessages.size() >= pageSize) {
+	            if (tmpMessages.size() > 0) {
+	                logger.info("Retrieved " + totalMessages.size() + " total messages from the server");
+	                
 	                // Bump the offset and go another round.
 	                int prevOffset = finder.getIndexedPageItemView().getOffset();
-	                finder.getIndexedPageItemView().setOffset(pageSize + prevOffset);
+	                finder.getIndexedPageItemView().setOffset(prevOffset + tmpMessages.size());
 	                logger.debug("Setting new offset = " + finder.getIndexedPageItemView().getOffset());
-	                logger.info("retrieved " + tmpMessages.size() + " messages (" + totalMessages.size() + " so far)");
+	            } else {
+	                logger.debug("Finished retrieving messages for this folder");
 	            }
 
 	        } catch (Exception e){
@@ -794,7 +798,7 @@ public class MessageUtil {
 	                Report.getReport().stop(Report.EXCHANGE_CONNECT);
 	        }
 
-	    } while (tmpMessages.size() >= pageSize);
+	    } while (tmpMessages.size() > 0);
 
 	    return totalMessages;
 	}
