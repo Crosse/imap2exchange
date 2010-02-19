@@ -159,7 +159,7 @@ public class ExchangeConversionFactory {
         return pageSize;
     }
 
-    public void setPageSize(int maxPageSize) {
-        this.pageSize = maxPageSize;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }
