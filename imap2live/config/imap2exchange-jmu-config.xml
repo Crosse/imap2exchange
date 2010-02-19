@@ -25,7 +25,7 @@
     <bean id="preConversionAction"
         class="edu.jmu.email.conversion.jmu.JmuPreConversionAction"
         scope="singleton"  >
-        <property name="proxyDomain" value="ad.jmu.edu" />
+        <property name="proxyDomain" value="dukes.jmu.edu" />
         <property name="netidAttribute" value="cn" />
         <property name="ldapUserObject" value="OU=People " />
         <property name="welcomeFile" value="webapps/imap2live/WEB-INF/welcome.eml" />

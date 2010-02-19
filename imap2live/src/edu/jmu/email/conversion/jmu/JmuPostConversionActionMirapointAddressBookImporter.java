@@ -269,6 +269,11 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
                 }
             }
 
+            /* Decision was made to NOT migrate groups, since it doesn't actually
+             * work right now.  Therefore the call to processGroups() is commented
+             * out, and since we're not doing that we don't need to pull the 
+             * contacts list from the server.
+             * 
             // Repopulate the contacts list from the server to ensure that all
             // needed attributes come back to us.
             contacts = ContactUtil.getContacts(contactsFolderId);
@@ -276,6 +281,7 @@ public class JmuPostConversionActionMirapointAddressBookImporter extends Pluggab
             if (groups.size() > 0) {
                 processGroups(user, groups, contactsFolderId);
             }
+            */
 
         } catch (Exception e) {
             logger.warn("Could not import user's address book: " + e.getMessage());
