@@ -59,6 +59,7 @@
         <property name="maxMessageGrpSize" value="512" />
         -->
         <property name="maxMessageSize" value="41943040" />
+        <property name="pageSize" value="1000" />
         <property name="altNames" ref="altNames" /> 
 
         <property name="pluggableConversionActions">

@@ -31,7 +31,7 @@ import edu.yale.its.tp.email.conversion.ExchangeConversion;
 import edu.yale.its.tp.email.conversion.ExchangeConversionFactory;
 import edu.yale.its.tp.email.conversion.Report;
 import edu.yale.its.tp.email.conversion.User;
-import edu.yale.its.tp.email.conversion.yale.YaleUser;
+import edu.yale.its.tp.email.conversion.UserFactory;
 
 /**
  * @author wrightst
@@ -44,17 +44,16 @@ public class JmuContactsImport {
         wireSpring();
         
         if (args.length == 1) {
-            User user = new YaleUser();
-            // Set the Uid to the first command-line arg.
-            user.setUid(args[0]);
-            user.setConversion(ExchangeConversionFactory.getInstance().makeExchangeConversion(user));
-            ExchangeConversion.setConv(user.getConversion());
+            User user = UserFactory.getInstance().createUser(args[0].trim(), "");
+
+            ExchangeConversionFactory convFactory = ExchangeConversionFactory.getInstance();
+            ExchangeConversion.setConv(convFactory.makeExchangeConversion(user));
+            user.setConversion(ExchangeConversion.getConv());
+
+            logger.info("pageSize = " + convFactory.getPageSize());
+            
             user.getConversion().performUserSetupAction();
             user.getConversion().setUser(user);
-//            user.setSourceImapPo("mpmail3.jmu.edu");
-//            user.setUPN("miguser@ad.jmu.edu");
-//            user.setPrimarySMTPAddress("miguser@jmu.edu");            
-            //user.getConversion().setReport(new Report());
             new Report();
 
             logger.debug(String.format("User: %s@%s", user.getUid(), user.getSourceImapPo()));

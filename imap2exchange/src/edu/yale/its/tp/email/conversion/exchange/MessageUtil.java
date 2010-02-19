@@ -698,86 +698,109 @@ public class MessageUtil {
 	 * @return
 	 */
 	public static List<MessageType> getMessages(BaseFolderIdType folderId){
-		
-		FindItemType finder = new FindItemType();
-	
-		NonEmptyArrayOfPathsToElementType paths = new NonEmptyArrayOfPathsToElementType();
-		paths.getPath().add(CONVERSION_UID_PATH);
-		paths.getPath().add(IS_READ_PATH);
-//		paths.getPath().add(IS_IMPORTANT_PATH);
-		paths.getPath().add(PrMessageFlags.PR_MESSAGE_FLAGS_PATH);
-//		paths.getPath().add(PrMsgStatus.PR_MSG_STATUS_PATH);
-//		paths.getPath().add(IMAP_UID_PATH);
+	    int pageSize = ExchangeConversion.getConv().getPageSize();
+	    
+	    List<MessageType> totalMessages = new ArrayList<MessageType>();
+	    List<MessageType> tmpMessages = new ArrayList<MessageType>();
+
+	    FindItemType finder = new FindItemType();
+
+	    NonEmptyArrayOfPathsToElementType paths = new NonEmptyArrayOfPathsToElementType();
+	    paths.getPath().add(CONVERSION_UID_PATH);
+	    paths.getPath().add(IS_READ_PATH);
+	    //		paths.getPath().add(IS_IMPORTANT_PATH);
+	    paths.getPath().add(PrMessageFlags.PR_MESSAGE_FLAGS_PATH);
+	    //		paths.getPath().add(PrMsgStatus.PR_MSG_STATUS_PATH);
+	    //		paths.getPath().add(IMAP_UID_PATH);
 
 	    ItemResponseShapeType itemShape = new ItemResponseShapeType();		
-		itemShape.setBaseShape(DefaultShapeNamesType.ID_ONLY);
-		itemShape.setAdditionalProperties(paths);
-		finder.setItemShape(itemShape);
-	
-		finder.setTraversal(ItemQueryTraversalType.SHALLOW);
-		
-		IndexedPageViewType index = new IndexedPageViewType();
-		index.setBasePoint(IndexBasePointType.BEGINNING);
-		index.setOffset(0);
-		
-		finder.setIndexedPageItemView(index);
-		
-		NonEmptyArrayOfBaseFolderIdsType folderIds = new NonEmptyArrayOfBaseFolderIdsType();
-		List<BaseFolderIdType> ids = folderIds.getFolderIdOrDistinguishedFolderId();
-		ids.add(folderId);
-		finder.setParentFolderIds(folderIds);
-		
-		// define response Objects and their holders
-		FindItemResponseType findItemResponse = new FindItemResponseType();
-		Holder<FindItemResponseType> responseHolder = new Holder<FindItemResponseType>(findItemResponse);
-	
-		ServerVersionInfo serverVersion = new ServerVersionInfo();
-		Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
-	
-		User user = ExchangeConversion.getConv().getUser();
-		ExchangeServicePortType proxy = null;
-		List<MessageType> messages = new ArrayList<MessageType>();
-		List<JAXBElement <? extends ResponseMessageType>> responses = null;
-		try{
-			Report.getReport().start(Report.EXCHANGE_CONNECT);
-			proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
-			Report.getReport().stop(Report.EXCHANGE_CONNECT);
-			Report.getReport().start(Report.EXCHANGE_META);
-			proxy.findItem(finder, user.getImpersonation() ,responseHolder, serverVersionHolder);
-			responses = responseHolder.value.getResponseMessages()
-	                   .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
-			Report.getReport().stop(Report.EXCHANGE_META);
-			
-			for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
-				ResponseMessageType response = jaxResponse.getValue();
-				if(response.getResponseClass().equals(ResponseClassType.ERROR)){
-					logger.warn("Get Messages Response Error: " + response.getMessageText());
-					user.getConversion().warnings++;
-				} else if(response.getResponseClass().equals(ResponseClassType.WARNING)){
-					logger.warn("Get Messages Response Warning: " + response.getMessageText());
-					user.getConversion().warnings++;
-				} else if(response.getResponseClass().equals(ResponseClassType.SUCCESS)){
-					FindItemResponseMessageType findResponse = (FindItemResponseMessageType)response;
-					for(ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()){
-						// This filters out all the messages not moved by an earlier conversion...
-						if((item.getExtendedProperty() != null) 
-						&& !(item.getExtendedProperty().isEmpty())
-						&& item instanceof MessageType){
-							messages.add((MessageType)item);
-						}
-					}
-				}
-			}
-	
-		} catch (Exception e){
-			throw new RuntimeException("Exception performing getMessages", e);
-		} finally {
-			if(Report.getReport().isStarted(Report.EXCHANGE_META))
-				Report.getReport().stop(Report.EXCHANGE_META);
-			if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
-				Report.getReport().stop(Report.EXCHANGE_CONNECT);
-		} 
-		return messages;
+	    itemShape.setBaseShape(DefaultShapeNamesType.ID_ONLY);
+	    itemShape.setAdditionalProperties(paths);
+	    finder.setItemShape(itemShape);
+
+	    finder.setTraversal(ItemQueryTraversalType.SHALLOW);
+
+	    IndexedPageViewType index = new IndexedPageViewType();
+	    index.setBasePoint(IndexBasePointType.BEGINNING);
+	    index.setMaxEntriesReturned(pageSize);
+	    index.setOffset(0);
+
+	    finder.setIndexedPageItemView(index);
+
+	    NonEmptyArrayOfBaseFolderIdsType folderIds = new NonEmptyArrayOfBaseFolderIdsType();
+	    List<BaseFolderIdType> ids = folderIds.getFolderIdOrDistinguishedFolderId();
+	    ids.add(folderId);
+	    finder.setParentFolderIds(folderIds);
+
+	    User user = ExchangeConversion.getConv().getUser();
+        ExchangeServicePortType proxy = null;
+	    Report.getReport().start(Report.EXCHANGE_CONNECT);
+        proxy = ExchangeServerPortFactory.getInstance().getExchangeServerPort();
+        Report.getReport().stop(Report.EXCHANGE_CONNECT);
+        
+        do {
+	        // define response Objects and their holders
+	        FindItemResponseType findItemResponse = new FindItemResponseType();
+	        Holder<FindItemResponseType> responseHolder = new Holder<FindItemResponseType>(findItemResponse);
+
+	        ServerVersionInfo serverVersion = new ServerVersionInfo();
+	        Holder<ServerVersionInfo> serverVersionHolder = new Holder<ServerVersionInfo>(serverVersion);
+
+	        List<JAXBElement <? extends ResponseMessageType>> responses = null;
+	        try{
+	            tmpMessages.clear();
+	            Report.getReport().start(Report.EXCHANGE_META);
+	            proxy.findItem(finder, user.getImpersonation() ,responseHolder, serverVersionHolder);
+	            responses = responseHolder.value.getResponseMessages()
+	            .getCreateItemResponseMessageOrDeleteItemResponseMessageOrGetItemResponseMessage();
+	            Report.getReport().stop(Report.EXCHANGE_META);
+
+	            for(JAXBElement <? extends ResponseMessageType> jaxResponse : responses){
+	                ResponseMessageType response = jaxResponse.getValue();
+	                if(response.getResponseClass().equals(ResponseClassType.ERROR)){
+	                    logger.warn("Get Messages Response Error: " + response.getMessageText());
+	                    user.getConversion().warnings++;
+	                } else if(response.getResponseClass().equals(ResponseClassType.WARNING)){
+	                    logger.warn("Get Messages Response Warning: " + response.getMessageText());
+	                    user.getConversion().warnings++;
+	                } else if(response.getResponseClass().equals(ResponseClassType.SUCCESS)){
+	                    FindItemResponseMessageType findResponse = (FindItemResponseMessageType)response;
+	                    for(ItemType item : findResponse.getRootFolder().getItems().getItemOrMessageOrCalendarItem()){
+	                        // This filters out all the messages not moved by an earlier conversion...
+	                        if((item.getExtendedProperty() != null) 
+	                                && !(item.getExtendedProperty().isEmpty())
+	                                && item instanceof MessageType){
+	                            tmpMessages.add((MessageType)item);
+	                        }
+	                    }
+	                }
+	            }
+
+	            // Add the new messages to the totalMessages array.
+	            totalMessages.addAll(tmpMessages);
+	            if (tmpMessages.size() > 0) {
+	                logger.info("Retrieved " + totalMessages.size() + " total messages from the server");
+	                
+	                // Bump the offset and go another round.
+	                int prevOffset = finder.getIndexedPageItemView().getOffset();
+	                finder.getIndexedPageItemView().setOffset(prevOffset + tmpMessages.size());
+	                logger.debug("Setting new offset = " + finder.getIndexedPageItemView().getOffset());
+	            } else {
+	                logger.debug("Finished retrieving messages for this folder");
+	            }
+
+	        } catch (Exception e){
+	            throw new RuntimeException("Exception performing getMessages", e);
+	        } finally {
+	            if(Report.getReport().isStarted(Report.EXCHANGE_META))
+	                Report.getReport().stop(Report.EXCHANGE_META);
+	            if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+	                Report.getReport().stop(Report.EXCHANGE_CONNECT);
+	        }
+
+	    } while (tmpMessages.size() > 0);
+
+	    return totalMessages;
 	}
 	
 

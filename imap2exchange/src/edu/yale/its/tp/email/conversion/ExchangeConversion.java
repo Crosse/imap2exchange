@@ -72,6 +72,7 @@ import com.sun.mail.imap.IMAPFolder;
 	Map<String, PluggableConversionAction> pluggableConversionActions = new HashMap<String, PluggableConversionAction>();
 	int maxMessageSize;
 	int maxMessageGrpSize;
+	int pageSize;
 	boolean isCleaner = false;
 	long start = -1;
 	long end = -1;
@@ -661,6 +662,14 @@ import com.sun.mail.imap.IMAPFolder;
 	public void setIncludeExcludeMatcher(Matcher includeExcludeMatcher) {
 		this.includeExcludeMatcher = includeExcludeMatcher;
 	}
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 	
 	
 	

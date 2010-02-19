@@ -61,7 +61,8 @@ userSetupAction.userObject=
 ###################################################
 # JMU Specific Configuration Items follow...
 ###################################################
-jmuSite.mailDomain=jmu.edu
+jmuSite.sourceMailDomain=jmu.edu
+jmuSite.targetMailDomain=jmu.edu
 userSetupAction.mailHostAttribute=mailHost
 userSetupAction.ldapUserObject=
 userSetupAction.ldapNetidAttribute=uid

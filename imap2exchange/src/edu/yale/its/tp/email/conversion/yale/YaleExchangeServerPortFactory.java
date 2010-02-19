@@ -71,6 +71,9 @@ public class YaleExchangeServerPortFactory extends ExchangeServerPortFactory {
 		if(basicAuth == null){
 			basicAuth = new Authenticator(){
 				protected PasswordAuthentication getPasswordAuthentication(){
+				    String scheme = getRequestingScheme();
+				    logger.info("Requested authentication scheme was: " + scheme);
+				    
 				    String superUid = "";
 				    if (!adDomain.isEmpty()) {
 				        superUid = YaleExchangeServerPortFactory.this.adDomain + "\\";
