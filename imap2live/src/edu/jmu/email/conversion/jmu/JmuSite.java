@@ -55,5 +55,4 @@ public class JmuSite {
     public void setSourceMailDomain(String sourceMailDomain) {
         this.sourceMailDomain = sourceMailDomain;
     }
-
 }

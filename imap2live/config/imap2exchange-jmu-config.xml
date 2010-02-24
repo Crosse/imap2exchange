@@ -6,29 +6,18 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <!--
-    <bean id="jmuPreConversionActionForwardingUpdater"
-        class="edu.jmu.email.conversion.jmu.JmuPreConversionActionForwardingUpdater"
-        scope="singleton" >
-        <property name="proxyDomain" value="ad.jmu.edu" />
-        <property name="netidAttribute" value="cn" />
-        <property name="ldapUserObject" value="OU=UtilityAccounts" />
-    </bean>
-
-    <bean id="jmuPreConversionActionWelcomeLetter"
-        class="edu.jmu.email.conversion.jmu.JmuPreConversionActionWelcomeLetter"
-        scope="singleton" >
-        <property name="welcomeFile" value="imap2live/WEB-INF/welcome.eml" />
-    </bean>
-    -->
-
     <bean id="preConversionAction"
         class="edu.jmu.email.conversion.jmu.JmuPreConversionAction"
         scope="singleton"  >
         <property name="proxyDomain" value="dukes.jmu.edu" />
+        <property name="ignoredDomains">
+            <list>
+                <value>ad.jmu.edu</list>
+            </list>
+        </property>
         <property name="netidAttribute" value="cn" />
-        <property name="ldapUserObject" value="OU=People " />
-        <property name="welcomeFile" value="webapps/imap2live/WEB-INF/welcome.eml" />
+        <property name="ldapUserObject" value="OU=People" />
+        <property name="welcomeFile" value="webapps/imap2live/WEB-INF/StudentsWelcome.eml" />
     </bean>
 
     <bean id="postConversionAction"
@@ -38,7 +27,7 @@
         <property name="importedContactsFolderName" value="Imported Contacts" />
         -->
         <property name="importedContactsFolderName" value="" />
-        <property name="ldifDirectory" value="logs/imap2live" />
+        <property name="ldifDirectory" value="logs/imap2live/ldifs" />
         <property name="loginUrl" value="/mc/xml/v1/login.xml" />
         <property name="addrBookUrl" value="/cgi-bin/addrbook.cgi/xab/v1/export.xml" />
     </bean>

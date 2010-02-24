@@ -145,7 +145,24 @@ public class FolderUtil {
 			}
 
 		} catch (Exception e){
-			throw new RuntimeException("Exception Performing getChildFolders", e);
+		    if (e.getMessage().contains("The server cannot service this request right now")) {
+	            if(Report.getReport().isStarted(Report.EXCHANGE_META))
+	                Report.getReport().stop(Report.EXCHANGE_META);
+	            if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+	                Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+	            logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+		        try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+		        mailFolders = getChildFolders(parentFolderId);
+		    } else {
+		        throw new RuntimeException("Exception Performing getChildFolders", e);
+		    }
 		} finally{
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
 				Report.getReport().stop(Report.EXCHANGE_META);
@@ -242,7 +259,22 @@ public class FolderUtil {
 				}
 			}
 		} catch (Exception e){
-			throw new RuntimeException("Exception performing CreateFolder", e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            }
+            throw new RuntimeException("Exception performing CreateFolder", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
 				Report.getReport().stop(Report.EXCHANGE_META);
@@ -305,6 +337,21 @@ public class FolderUtil {
 				}
 			}
 		} catch (Exception e){
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            }
 			throw new RuntimeException("Exception Performing DeleteFolder", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
@@ -478,6 +525,21 @@ public class FolderUtil {
 				}
 			}
 		} catch (Exception e){
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            }
 			throw new RuntimeException("Exception Performing MoveFolder", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))

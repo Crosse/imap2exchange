@@ -278,9 +278,25 @@ public class ContactUtil {
                 }
                 
             } catch (Exception e) {
-                logger.debug(e.getMessage());
-                //e.printStackTrace();
-                throw new RuntimeException("Exception performing getContacts", e);
+                if (e.getMessage().contains("The server cannot service this request right now")) {
+                    if (Report.getReport().isStarted(Report.EXCHANGE_META))
+                        Report.getReport().stop(Report.EXCHANGE_META);
+                    if (Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                        Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                    logger.warn("Throttling error:  " + e.getMessage());
+                    user.getConversion().warnings++;
+                    // Back off and try again...
+                    try {
+                        Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                    } catch (InterruptedException e1) {
+                        throw new RuntimeException("Exception sleeping in thread", e);
+                    }
+                    tmpContacts.clear();
+                    totalContacts = getContacts(contactsFolderId);
+                } else { 
+                    throw new RuntimeException("Exception performing getContacts", e);
+                }
             } finally {
                 if (Report.getReport().isStarted(Report.EXCHANGE_META))
                     Report.getReport().stop(Report.EXCHANGE_META);
@@ -345,9 +361,24 @@ public class ContactUtil {
                 }
             }
         } catch (Exception e) {
-            logger.debug(e.getMessage());
-            //e.printStackTrace();
-            throw new RuntimeException("Exception performing getContactsByItemId", e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+                contact = findContactByEntryId(user, id);
+            } else {
+                throw new RuntimeException("Exception performing getContactsByItemId", e);
+            }
         } finally {
             if (Report.getReport().isStarted(Report.EXCHANGE_META))
                 Report.getReport().stop(Report.EXCHANGE_META);
@@ -515,8 +546,24 @@ public class ContactUtil {
                     }
                 } 
             } catch (Exception e) {
-                logger.warn(e.getMessage());
-                throw new RuntimeException("Exception calling ConvertId on Exchange Server: " + e.getMessage(), e);
+                if (e.getMessage().contains("The server cannot service this request right now")) {
+                    if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                        Report.getReport().stop(Report.EXCHANGE_META);
+                    if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                        Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                    logger.warn("Throttling error:  " + e.getMessage());
+                    user.getConversion().warnings++;
+                    // Back off and try again...
+                    try {
+                        Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                    } catch (InterruptedException e1) {
+                        throw new RuntimeException("Exception sleeping in thread", e);
+                    }
+                    retval = createWrappedEntryId(user, entry);
+                } else {
+                    throw new RuntimeException("Exception calling ConvertId on Exchange Server: " + e.getMessage(), e);
+                }
             } finally {
                 if (Report.getReport().isStarted(Report.EXCHANGE_MIME))
                     Report.getReport().stop(Report.EXCHANGE_MIME);
@@ -628,8 +675,23 @@ public class ContactUtil {
             }
             logger.info("Finished processing server response(s)");
         } catch (Exception e) {
-            logger.warn(e.getMessage());
-            throw new RuntimeException("Exception creating contact on Exchange Server: " + e.getMessage(), e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            } else {
+                throw new RuntimeException("Exception creating contact on Exchange Server: " + e.getMessage(), e);
+            }
         } finally {
             if (Report.getReport().isStarted(Report.EXCHANGE_MIME))
                 Report.getReport().stop(Report.EXCHANGE_MIME);

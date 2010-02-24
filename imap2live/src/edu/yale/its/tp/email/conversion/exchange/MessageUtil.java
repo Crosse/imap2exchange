@@ -14,6 +14,7 @@ import java.io.*;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.util.*;
+
 import edu.yale.its.tp.email.conversion.*;
 import edu.yale.its.tp.email.conversion.exchange.flags.*;
 import com.microsoft.schemas.exchange.services._2006.types.*;
@@ -364,9 +365,23 @@ public class MessageUtil {
 				i++;
 			}
 		} catch (Exception e){
-		    logger.warn("Exception creating messages on Exchange server: " + e.getMessage());
-		    user.getConversion().warnings++;
-			//throw new RuntimeException("Exception creating messages on Exchange Server", e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            } else {
+                logger.warn("Exception creating messages on Exchange server: " + e.getMessage());
+	          }
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_MIME))
 				Report.getReport().stop(Report.EXCHANGE_MIME);
@@ -468,7 +483,24 @@ public class MessageUtil {
 				}
 			}
 		} catch (Exception e){
-			throw new RuntimeException("Exception gettting the Exchange Message body", e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+                messages = getCompleteMessages(ids);
+            } else {
+                throw new RuntimeException("Exception gettting the Exchange Message body", e);
+            }
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
 				Report.getReport().stop(Report.EXCHANGE_META);
@@ -680,7 +712,22 @@ public class MessageUtil {
 			}
 
 		} catch (Exception e){
-			throw new RuntimeException("Exception deleting messages", e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            }
+            throw new RuntimeException("Exception deleting messages", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
 				Report.getReport().stop(Report.EXCHANGE_META);
@@ -790,7 +837,25 @@ public class MessageUtil {
 	            }
 
 	        } catch (Exception e){
-	            throw new RuntimeException("Exception performing getMessages", e);
+	            if (e.getMessage().contains("The server cannot service this request right now")) {
+	                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+	                    Report.getReport().stop(Report.EXCHANGE_META);
+	                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+	                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+	                logger.warn("Throttling error:  " + e.getMessage());
+	                user.getConversion().warnings++;
+	                // Back off and try again...
+	                try {
+	                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+	                } catch (InterruptedException e1) {
+	                    throw new RuntimeException("Exception sleeping in thread", e);
+	                }
+	                tmpMessages.clear();
+	                totalMessages = getMessages(folderId);
+	            } else {
+	                throw new RuntimeException("Exception performing getMessages", e);
+	            }
 	        } finally {
 	            if(Report.getReport().isStarted(Report.EXCHANGE_META))
 	                Report.getReport().stop(Report.EXCHANGE_META);
@@ -1161,6 +1226,21 @@ public class MessageUtil {
 			}
 	
 		} catch (Exception e){
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            }
 			throw new RuntimeException("Exception performing UpdateMessageTypesMetadata", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
@@ -1251,7 +1331,22 @@ public class MessageUtil {
 			}
 	
 		} catch (Exception e){
-			throw new RuntimeException("Exception performing UpdateMessageTypesMetadata", e);
+            if (e.getMessage().contains("The server cannot service this request right now")) {
+                if(Report.getReport().isStarted(Report.EXCHANGE_META))
+                    Report.getReport().stop(Report.EXCHANGE_META);
+                if(Report.getReport().isStarted(Report.EXCHANGE_CONNECT))
+                    Report.getReport().stop(Report.EXCHANGE_CONNECT);
+
+                logger.warn("Throttling error:  " + e.getMessage());
+                user.getConversion().warnings++;
+                // Back off and try again...
+                try {
+                    Thread.sleep(user.getConversion().getBackOffSeconds() * 1000);
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException("Exception sleeping in thread", e);
+                }
+            }
+            throw new RuntimeException("Exception performing UpdateMessageTypesMetadata", e);
 		} finally {
 			if(Report.getReport().isStarted(Report.EXCHANGE_META))
 				Report.getReport().stop(Report.EXCHANGE_META);

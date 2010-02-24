@@ -57,6 +57,7 @@
         <property name="maxMessageGrpSize" value="5242880" />
         <property name="maxMessageSize" value="41943040" />
         <property name="pageSize" value="1000" />
+        <property name="backOffSeconds" value="60" />
         <property name="altNames" ref="altNames" /> 
 
         <property name="pluggableConversionActions">
@@ -66,11 +67,9 @@
                     <ref bean="userSetupAction"/>
                 </entry>
 
-                <!--
                 <entry key="preConversionAction">
                     <ref bean="preConversionAction"/>
                 </entry>
-                -->
 
                 <entry key="postConversionAction">
                     <ref bean="postConversionAction"/>
