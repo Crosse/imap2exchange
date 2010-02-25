@@ -12,7 +12,7 @@
         <property name="proxyDomain" value="dukes.jmu.edu" />
         <property name="ignoredDomains">
             <list>
-                <value>ad.jmu.edu</list>
+                <value>ad.jmu.edu</value>
             </list>
         </property>
         <property name="netidAttribute" value="cn" />
