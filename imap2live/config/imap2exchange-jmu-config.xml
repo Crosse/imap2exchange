@@ -13,10 +13,11 @@
         <property name="ignoredDomains">
             <list>
                 <value>ad.jmu.edu</value>
+                <value>cisat.jmu.edu</value>
             </list>
         </property>
         <property name="netidAttribute" value="cn" />
-        <property name="ldapUserObject" value="OU=People" />
+        <property name="ldapUserObject" value="" />
         <property name="welcomeFile" value="webapps/imap2live/WEB-INF/StudentsWelcome.eml" />
     </bean>
 
