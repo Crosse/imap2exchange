@@ -79,7 +79,8 @@
         </copy>
     </target>
 
-    <target name="jar" depends="dist">
+    <target name="jar" depends="dist"
+        description="Create the JAR file for imap2exchange.">
         <mkdir dir="${dist}/lib"/>
         <jar 
             destfile="${dist}/lib/imap2exchange-1.2.8-jmu.jar"
@@ -159,11 +160,13 @@
     </target>
 
     <target name="undeploy" description="Undeploy imap2exchange-server">
+        <!--
         <undeploy 
             url="${server.url}" 
             username="${server.username}"
             password="${server.password}"
             path="${server.path}" />
+        -->
     </target>
 
     <target name="reload" description="Reload imap2exchange-server">
