@@ -55,18 +55,34 @@ import org.w3c.dom.Element;
     "messageXml"
 })
 @XmlSeeAlso({
+    GetPhoneCallInformationResponseMessageType.class,
+    GetMailTipsResponseMessageType.class,
+    PlayOnPhoneResponseMessageType.class,
+    FindMessageTrackingReportResponseMessageType.class,
+    DisconnectPhoneCallResponseMessageType.class,
+    GetMessageTrackingReportResponseMessageType.class,
+    GetServiceConfigurationResponseMessageType.class,
+    GetSharingFolderResponseMessageType.class,
+    GetRoomListsResponseMessageType.class,
+    RefreshSharingFolderResponseMessageType.class,
+    GetRoomsResponseMessageType.class,
+    GetSharingMetadataResponseMessageType.class,
     ConvertIdResponseMessageType.class,
     FindItemResponseMessageType.class,
     SyncFolderHierarchyResponseMessageType.class,
     ResolveNamesResponseMessageType.class,
     DelegateUserResponseMessageType.class,
+    ServiceConfigurationResponseMessageType.class,
     BaseDelegateResponseMessageType.class,
+    GetUserConfigurationResponseMessageType.class,
     GetEventsResponseMessageType.class,
     SendNotificationResponseMessageType.class,
     SyncFolderItemsResponseMessageType.class,
     DeleteAttachmentResponseMessageType.class,
+    MailTipsResponseMessageType.class,
     AttachmentInfoResponseMessageType.class,
     FolderInfoResponseMessageType.class,
+    GetServerTimeZonesResponseMessageType.class,
     FindFolderResponseMessageType.class,
     SubscribeResponseMessageType.class,
     ItemInfoResponseMessageType.class,
@@ -252,8 +268,8 @@ public class ResponseMessageType {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Element }
          * {@link Object }
+         * {@link Element }
          * 
          * 
          */

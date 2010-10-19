@@ -32,11 +32,11 @@ import javax.xml.bind.annotation.XmlType;
     "interval"
 })
 @XmlSeeAlso({
+    WeeklyRecurrencePatternType.class,
     DailyRecurrencePatternType.class,
     RelativeMonthlyRecurrencePatternType.class,
-    AbsoluteMonthlyRecurrencePatternType.class,
-    WeeklyRecurrencePatternType.class,
-    RegeneratingPatternBaseType.class
+    RegeneratingPatternBaseType.class,
+    AbsoluteMonthlyRecurrencePatternType.class
 })
 public abstract class IntervalRecurrencePatternBaseType
     extends RecurrencePatternBaseType

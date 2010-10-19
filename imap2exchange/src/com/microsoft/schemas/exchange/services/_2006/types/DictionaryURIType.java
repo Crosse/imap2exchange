@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="contacts:PhysicalAddress:PostalCode"/>
  *     &lt;enumeration value="contacts:PhoneNumber"/>
  *     &lt;enumeration value="contacts:EmailAddress"/>
+ *     &lt;enumeration value="distributionlist:Members:Member"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -49,7 +50,9 @@ public enum DictionaryURIType {
     @XmlEnumValue("contacts:PhoneNumber")
     CONTACTS_PHONE_NUMBER("contacts:PhoneNumber"),
     @XmlEnumValue("contacts:EmailAddress")
-    CONTACTS_EMAIL_ADDRESS("contacts:EmailAddress");
+    CONTACTS_EMAIL_ADDRESS("contacts:EmailAddress"),
+    @XmlEnumValue("distributionlist:Members:Member")
+    DISTRIBUTIONLIST_MEMBERS_MEMBER("distributionlist:Members:Member");
     private final String value;
 
     DictionaryURIType(String v) {

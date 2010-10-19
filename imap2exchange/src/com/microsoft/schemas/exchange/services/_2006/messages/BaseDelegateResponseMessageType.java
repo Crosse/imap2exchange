@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.XmlType;
 })
 @XmlSeeAlso({
     UpdateDelegateResponseMessageType.class,
-    AddDelegateResponseMessageType.class,
     RemoveDelegateResponseMessageType.class,
-    GetDelegateResponseMessageType.class
+    GetDelegateResponseMessageType.class,
+    AddDelegateResponseMessageType.class
 })
 public abstract class BaseDelegateResponseMessageType
     extends ResponseMessageType

@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RegeneratingPatternBaseType")
 @XmlSeeAlso({
-    MonthlyRegeneratingPatternType.class,
-    WeeklyRegeneratingPatternType.class,
     YearlyRegeneratingPatternType.class,
-    DailyRegeneratingPatternType.class
+    DailyRegeneratingPatternType.class,
+    MonthlyRegeneratingPatternType.class,
+    WeeklyRegeneratingPatternType.class
 })
 public abstract class RegeneratingPatternBaseType
     extends IntervalRecurrencePatternBaseType

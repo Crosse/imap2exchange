@@ -3,6 +3,7 @@ package com.microsoft.schemas.exchange.services._2006.types;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
@@ -18,10 +19,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="FolderIds" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfBaseFolderIdsType"/>
+ *         &lt;element name="FolderIds" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfBaseFolderIdsType" minOccurs="0"/>
  *         &lt;element name="EventTypes" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfNotificationEventTypesType"/>
  *         &lt;element name="Watermark" type="{http://schemas.microsoft.com/exchange/services/2006/types}WatermarkType" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="SubscribeToAllFolders" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -41,12 +43,14 @@ import javax.xml.bind.annotation.XmlType;
 })
 public abstract class BaseSubscriptionRequestType {
 
-    @XmlElement(name = "FolderIds", required = true)
+    @XmlElement(name = "FolderIds")
     protected NonEmptyArrayOfBaseFolderIdsType folderIds;
     @XmlElement(name = "EventTypes", required = true)
     protected NonEmptyArrayOfNotificationEventTypesType eventTypes;
     @XmlElement(name = "Watermark")
     protected String watermark;
+    @XmlAttribute(name = "SubscribeToAllFolders")
+    protected Boolean subscribeToAllFolders;
 
     /**
      * Gets the value of the folderIds property.
@@ -118,6 +122,30 @@ public abstract class BaseSubscriptionRequestType {
      */
     public void setWatermark(String value) {
         this.watermark = value;
+    }
+
+    /**
+     * Gets the value of the subscribeToAllFolders property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isSubscribeToAllFolders() {
+        return subscribeToAllFolders;
+    }
+
+    /**
+     * Sets the value of the subscribeToAllFolders property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setSubscribeToAllFolders(Boolean value) {
+        this.subscribeToAllFolders = value;
     }
 
 }

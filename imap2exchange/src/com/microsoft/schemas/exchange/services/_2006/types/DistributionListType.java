@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="DisplayName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="FileAs" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ContactSource" type="{http://schemas.microsoft.com/exchange/services/2006/types}ContactSourceType" minOccurs="0"/>
+ *         &lt;element name="Members" type="{http://schemas.microsoft.com/exchange/services/2006/types}MembersListType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "DistributionListType", propOrder = {
     "displayName",
     "fileAs",
-    "contactSource"
+    "contactSource",
+    "members"
 })
 public class DistributionListType
     extends ItemType
@@ -44,6 +46,8 @@ public class DistributionListType
     protected String fileAs;
     @XmlElement(name = "ContactSource")
     protected ContactSourceType contactSource;
+    @XmlElement(name = "Members")
+    protected MembersListType members;
 
     /**
      * Gets the value of the displayName property.
@@ -115,6 +119,30 @@ public class DistributionListType
      */
     public void setContactSource(ContactSourceType value) {
         this.contactSource = value;
+    }
+
+    /**
+     * Gets the value of the members property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link MembersListType }
+     *     
+     */
+    public MembersListType getMembers() {
+        return members;
+    }
+
+    /**
+     * Sets the value of the members property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link MembersListType }
+     *     
+     */
+    public void setMembers(MembersListType value) {
+        this.members = value;
     }
 
 }

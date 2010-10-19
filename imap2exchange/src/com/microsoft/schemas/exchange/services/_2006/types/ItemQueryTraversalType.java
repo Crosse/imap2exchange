@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="Shallow"/>
  *     &lt;enumeration value="SoftDeleted"/>
+ *     &lt;enumeration value="Associated"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -28,7 +29,9 @@ public enum ItemQueryTraversalType {
     @XmlEnumValue("Shallow")
     SHALLOW("Shallow"),
     @XmlEnumValue("SoftDeleted")
-    SOFT_DELETED("SoftDeleted");
+    SOFT_DELETED("SoftDeleted"),
+    @XmlEnumValue("Associated")
+    ASSOCIATED("Associated");
     private final String value;
 
     ItemQueryTraversalType(String v) {

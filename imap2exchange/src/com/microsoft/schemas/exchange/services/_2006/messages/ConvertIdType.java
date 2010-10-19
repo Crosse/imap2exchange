@@ -12,9 +12,9 @@ import com.microsoft.schemas.exchange.services._2006.types.NonEmptyArrayOfAltern
 
 /**
  * 
- *         Converts the passed source ids into the destination format.  Change keys are not
- *         returned.
- *       
+ *                 Converts the passed source ids into the destination format.  Change keys are not
+ *                 returned.
+ *             
  * 
  * <p>Java class for ConvertIdType complex type.
  * 

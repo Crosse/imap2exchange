@@ -32,10 +32,10 @@ import javax.xml.bind.annotation.XmlType;
     "newBodyContent"
 })
 @XmlSeeAlso({
-    CancelCalendarItemType.class,
     ReplyAllToItemType.class,
     ReplyToItemType.class,
-    ForwardItemType.class
+    ForwardItemType.class,
+    CancelCalendarItemType.class
 })
 public class SmartResponseType
     extends SmartResponseBaseType

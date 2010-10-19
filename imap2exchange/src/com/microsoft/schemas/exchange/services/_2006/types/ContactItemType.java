@@ -49,6 +49,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="SpouseName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Surname" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="WeddingAnniversary" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="HasPicture" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -88,7 +89,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "profession",
     "spouseName",
     "surname",
-    "weddingAnniversary"
+    "weddingAnniversary",
+    "hasPicture"
 })
 public class ContactItemType
     extends ItemType
@@ -157,6 +159,8 @@ public class ContactItemType
     @XmlElement(name = "WeddingAnniversary")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar weddingAnniversary;
+    @XmlElement(name = "HasPicture")
+    protected Boolean hasPicture;
 
     /**
      * Gets the value of the fileAs property.
@@ -876,6 +880,30 @@ public class ContactItemType
      */
     public void setWeddingAnniversary(XMLGregorianCalendar value) {
         this.weddingAnniversary = value;
+    }
+
+    /**
+     * Gets the value of the hasPicture property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isHasPicture() {
+        return hasPicture;
+    }
+
+    /**
+     * Sets the value of the hasPicture property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setHasPicture(Boolean value) {
+        this.hasPicture = value;
     }
 
 }

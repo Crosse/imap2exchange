@@ -39,8 +39,8 @@ public class NonEmptyArrayOfBaseItemIdsType {
 
     @XmlElements({
         @XmlElement(name = "ItemId", type = ItemIdType.class),
-        @XmlElement(name = "RecurringMasterItemId", type = RecurringMasterItemIdType.class),
-        @XmlElement(name = "OccurrenceItemId", type = OccurrenceItemIdType.class)
+        @XmlElement(name = "OccurrenceItemId", type = OccurrenceItemIdType.class),
+        @XmlElement(name = "RecurringMasterItemId", type = RecurringMasterItemIdType.class)
     })
     protected List<BaseItemIdType> itemIdOrOccurrenceItemIdOrRecurringMasterItemId;
 
@@ -63,8 +63,8 @@ public class NonEmptyArrayOfBaseItemIdsType {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ItemIdType }
-     * {@link RecurringMasterItemIdType }
      * {@link OccurrenceItemIdType }
+     * {@link RecurringMasterItemIdType }
      * 
      * 
      */

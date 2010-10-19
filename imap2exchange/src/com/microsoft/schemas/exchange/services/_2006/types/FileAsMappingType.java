@@ -27,6 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="LastSpaceFirstCompany"/>
  *     &lt;enumeration value="CompanyLastSpaceFirst"/>
  *     &lt;enumeration value="LastSpaceFirst"/>
+ *     &lt;enumeration value="DisplayName"/>
+ *     &lt;enumeration value="FirstName"/>
+ *     &lt;enumeration value="LastFirstMiddleSuffix"/>
+ *     &lt;enumeration value="LastName"/>
+ *     &lt;enumeration value="Empty"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -61,7 +66,17 @@ public enum FileAsMappingType {
     @XmlEnumValue("CompanyLastSpaceFirst")
     COMPANY_LAST_SPACE_FIRST("CompanyLastSpaceFirst"),
     @XmlEnumValue("LastSpaceFirst")
-    LAST_SPACE_FIRST("LastSpaceFirst");
+    LAST_SPACE_FIRST("LastSpaceFirst"),
+    @XmlEnumValue("DisplayName")
+    DISPLAY_NAME("DisplayName"),
+    @XmlEnumValue("FirstName")
+    FIRST_NAME("FirstName"),
+    @XmlEnumValue("LastFirstMiddleSuffix")
+    LAST_FIRST_MIDDLE_SUFFIX("LastFirstMiddleSuffix"),
+    @XmlEnumValue("LastName")
+    LAST_NAME("LastName"),
+    @XmlEnumValue("Empty")
+    EMPTY("Empty");
     private final String value;
 
     FileAsMappingType(String v) {

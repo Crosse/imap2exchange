@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="PrimarySmtpAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="DisplayName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="DistinguishedUser" type="{http://schemas.microsoft.com/exchange/services/2006/types}DistinguishedUserType" minOccurs="0"/>
+ *         &lt;element name="ExternalUserIdentity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +35,8 @@ import javax.xml.bind.annotation.XmlType;
     "sid",
     "primarySmtpAddress",
     "displayName",
-    "distinguishedUser"
+    "distinguishedUser",
+    "externalUserIdentity"
 })
 public class UserIdType {
 
@@ -46,6 +48,8 @@ public class UserIdType {
     protected String displayName;
     @XmlElement(name = "DistinguishedUser")
     protected DistinguishedUserType distinguishedUser;
+    @XmlElement(name = "ExternalUserIdentity")
+    protected String externalUserIdentity;
 
     /**
      * Gets the value of the sid property.
@@ -141,6 +145,30 @@ public class UserIdType {
      */
     public void setDistinguishedUser(DistinguishedUserType value) {
         this.distinguishedUser = value;
+    }
+
+    /**
+     * Gets the value of the externalUserIdentity property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getExternalUserIdentity() {
+        return externalUserIdentity;
+    }
+
+    /**
+     * Sets the value of the externalUserIdentity property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setExternalUserIdentity(String value) {
+        this.externalUserIdentity = value;
     }
 
 }

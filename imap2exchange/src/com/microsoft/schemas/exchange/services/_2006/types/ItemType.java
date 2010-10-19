@@ -57,6 +57,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="EffectiveRights" type="{http://schemas.microsoft.com/exchange/services/2006/types}EffectiveRightsType" minOccurs="0"/>
  *         &lt;element name="LastModifiedName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="LastModifiedTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="IsAssociated" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="WebClientReadFormQueryString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="WebClientEditFormQueryString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="ConversationId" type="{http://schemas.microsoft.com/exchange/services/2006/types}ItemIdType" minOccurs="0"/>
+ *         &lt;element name="UniqueBody" type="{http://schemas.microsoft.com/exchange/services/2006/types}BodyType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -99,13 +104,18 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "culture",
     "effectiveRights",
     "lastModifiedName",
-    "lastModifiedTime"
+    "lastModifiedTime",
+    "isAssociated",
+    "webClientReadFormQueryString",
+    "webClientEditFormQueryString",
+    "conversationId",
+    "uniqueBody"
 })
 @XmlSeeAlso({
-    CalendarItemType.class,
     TaskType.class,
     PostItemType.class,
     ContactItemType.class,
+    CalendarItemType.class,
     MessageType.class,
     DistributionListType.class
 })
@@ -184,6 +194,16 @@ public class ItemType {
     @XmlElement(name = "LastModifiedTime")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastModifiedTime;
+    @XmlElement(name = "IsAssociated")
+    protected Boolean isAssociated;
+    @XmlElement(name = "WebClientReadFormQueryString")
+    protected String webClientReadFormQueryString;
+    @XmlElement(name = "WebClientEditFormQueryString")
+    protected String webClientEditFormQueryString;
+    @XmlElement(name = "ConversationId")
+    protected ItemIdType conversationId;
+    @XmlElement(name = "UniqueBody")
+    protected BodyType uniqueBody;
 
     /**
      * Gets the value of the mimeContent property.
@@ -980,6 +1000,126 @@ public class ItemType {
      */
     public void setLastModifiedTime(XMLGregorianCalendar value) {
         this.lastModifiedTime = value;
+    }
+
+    /**
+     * Gets the value of the isAssociated property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsAssociated() {
+        return isAssociated;
+    }
+
+    /**
+     * Sets the value of the isAssociated property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsAssociated(Boolean value) {
+        this.isAssociated = value;
+    }
+
+    /**
+     * Gets the value of the webClientReadFormQueryString property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getWebClientReadFormQueryString() {
+        return webClientReadFormQueryString;
+    }
+
+    /**
+     * Sets the value of the webClientReadFormQueryString property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setWebClientReadFormQueryString(String value) {
+        this.webClientReadFormQueryString = value;
+    }
+
+    /**
+     * Gets the value of the webClientEditFormQueryString property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getWebClientEditFormQueryString() {
+        return webClientEditFormQueryString;
+    }
+
+    /**
+     * Sets the value of the webClientEditFormQueryString property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setWebClientEditFormQueryString(String value) {
+        this.webClientEditFormQueryString = value;
+    }
+
+    /**
+     * Gets the value of the conversationId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ItemIdType }
+     *     
+     */
+    public ItemIdType getConversationId() {
+        return conversationId;
+    }
+
+    /**
+     * Sets the value of the conversationId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ItemIdType }
+     *     
+     */
+    public void setConversationId(ItemIdType value) {
+        this.conversationId = value;
+    }
+
+    /**
+     * Gets the value of the uniqueBody property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BodyType }
+     *     
+     */
+    public BodyType getUniqueBody() {
+        return uniqueBody;
+    }
+
+    /**
+     * Sets the value of the uniqueBody property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BodyType }
+     *     
+     */
+    public void setUniqueBody(BodyType value) {
+        this.uniqueBody = value;
     }
 
 }

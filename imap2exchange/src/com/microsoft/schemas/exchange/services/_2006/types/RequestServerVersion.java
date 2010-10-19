@@ -21,7 +21,7 @@ import javax.xml.namespace.QName;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="Version" use="required" type="{http://schemas.microsoft.com/exchange/services/2006/types}ExchangeVersionType" fixed="Exchange2007_SP1" />
+ *       &lt;attribute name="Version" use="required" type="{http://schemas.microsoft.com/exchange/services/2006/types}ExchangeVersionType" fixed="Exchange2010" />
  *       &lt;anyAttribute namespace='http://schemas.xmlsoap.org/soap/envelope/'/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -50,7 +50,7 @@ public class RequestServerVersion {
      */
     public ExchangeVersionType getVersion() {
         if (version == null) {
-            return ExchangeVersionType.EXCHANGE_2007_SP_1;
+            return ExchangeVersionType.EXCHANGE_2010;
         } else {
             return version;
         }

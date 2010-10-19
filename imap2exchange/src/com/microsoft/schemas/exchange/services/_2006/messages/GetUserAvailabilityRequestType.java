@@ -21,7 +21,7 @@ import com.microsoft.schemas.exchange.services._2006.types.SuggestionsViewOption
  *   &lt;complexContent>
  *     &lt;extension base="{http://schemas.microsoft.com/exchange/services/2006/messages}BaseRequestType">
  *       &lt;sequence>
- *         &lt;element ref="{http://schemas.microsoft.com/exchange/services/2006/types}TimeZone"/>
+ *         &lt;element ref="{http://schemas.microsoft.com/exchange/services/2006/types}TimeZone" minOccurs="0"/>
  *         &lt;element name="MailboxDataArray" type="{http://schemas.microsoft.com/exchange/services/2006/types}ArrayOfMailboxData"/>
  *         &lt;element ref="{http://schemas.microsoft.com/exchange/services/2006/types}FreeBusyViewOptions" minOccurs="0"/>
  *         &lt;element ref="{http://schemas.microsoft.com/exchange/services/2006/types}SuggestionsViewOptions" minOccurs="0"/>
@@ -44,7 +44,7 @@ public class GetUserAvailabilityRequestType
     extends BaseRequestType
 {
 
-    @XmlElement(name = "TimeZone", namespace = "http://schemas.microsoft.com/exchange/services/2006/types", required = true)
+    @XmlElement(name = "TimeZone", namespace = "http://schemas.microsoft.com/exchange/services/2006/types")
     protected SerializableTimeZone timeZone;
     @XmlElement(name = "MailboxDataArray", required = true)
     protected ArrayOfMailboxData mailboxDataArray;

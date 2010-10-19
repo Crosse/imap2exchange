@@ -1,10 +1,14 @@
 
 package com.microsoft.schemas.exchange.services._2006.types;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -22,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="RestrictedGroupSids" type="{http://schemas.microsoft.com/exchange/services/2006/types}NonEmptyArrayOfRestrictedGroupIdentifiersType" minOccurs="0"/>
  *         &lt;element name="PrimarySmtpAddress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;anyAttribute namespace='http://schemas.xmlsoap.org/soap/envelope/'/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -46,6 +51,8 @@ public class SerializedSecurityContextType {
     protected NonEmptyArrayOfRestrictedGroupIdentifiersType restrictedGroupSids;
     @XmlElement(name = "PrimarySmtpAddress")
     protected String primarySmtpAddress;
+    @XmlAnyAttribute
+    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the userSid property.
@@ -141,6 +148,24 @@ public class SerializedSecurityContextType {
      */
     public void setPrimarySmtpAddress(String value) {
         this.primarySmtpAddress = value;
+    }
+
+    /**
+     * Gets a map that contains attributes that aren't bound to any typed property on this class.
+     * 
+     * <p>
+     * the map is keyed by the name of the attribute and 
+     * the value is the string value of the attribute.
+     * 
+     * the map returned by this method is live, and you can add new attribute
+     * by updating the map directly. Because of this design, there's no setter.
+     * 
+     * 
+     * @return
+     *     always non-null
+     */
+    public Map<QName, String> getOtherAttributes() {
+        return otherAttributes;
     }
 
 }

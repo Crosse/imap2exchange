@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;simpleType name="MailboxTypeType">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="Unknown"/>
+ *     &lt;enumeration value="OneOff"/>
  *     &lt;enumeration value="Mailbox"/>
  *     &lt;enumeration value="PublicDL"/>
  *     &lt;enumeration value="PrivateDL"/>
@@ -28,6 +30,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum MailboxTypeType {
 
+    @XmlEnumValue("Unknown")
+    UNKNOWN("Unknown"),
+    @XmlEnumValue("OneOff")
+    ONE_OFF("OneOff"),
     @XmlEnumValue("Mailbox")
     MAILBOX("Mailbox"),
     @XmlEnumValue("PublicDL")

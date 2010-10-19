@@ -26,12 +26,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SearchExpressionType")
 @XmlSeeAlso({
-    ExcludesType.class,
     ContainsExpressionType.class,
+    ExcludesType.class,
     NotType.class,
     ExistsType.class,
-    TwoOperandExpressionType.class,
-    MultipleOperandBooleanExpressionType.class
+    MultipleOperandBooleanExpressionType.class,
+    TwoOperandExpressionType.class
 })
 public abstract class SearchExpressionType {
 

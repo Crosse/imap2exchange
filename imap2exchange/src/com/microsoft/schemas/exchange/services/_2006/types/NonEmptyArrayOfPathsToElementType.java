@@ -56,10 +56,10 @@ public class NonEmptyArrayOfPathsToElementType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link JAXBElement }{@code <}{@link PathToIndexedFieldType }{@code >}
+     * {@link JAXBElement }{@code <}{@link BasePathToElementType }{@code >}
      * {@link JAXBElement }{@code <}{@link PathToExtendedFieldType }{@code >}
      * {@link JAXBElement }{@code <}{@link PathToUnindexedFieldType }{@code >}
-     * {@link JAXBElement }{@code <}{@link BasePathToElementType }{@code >}
-     * {@link JAXBElement }{@code <}{@link PathToIndexedFieldType }{@code >}
      * 
      * 
      */

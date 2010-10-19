@@ -66,8 +66,8 @@ public class SyncFolderHierarchyChangesType {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
-     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
      * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyDeleteType }{@code >}
+     * {@link JAXBElement }{@code <}{@link SyncFolderHierarchyCreateOrUpdateType }{@code >}
      * 
      * 
      */

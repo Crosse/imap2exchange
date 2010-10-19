@@ -40,11 +40,11 @@ import javax.xml.bind.annotation.XmlType;
 public class ArrayOfFoldersType {
 
     @XmlElements({
-        @XmlElement(name = "CalendarFolder", type = CalendarFolderType.class),
         @XmlElement(name = "Folder", type = FolderType.class),
         @XmlElement(name = "ContactsFolder", type = ContactsFolderType.class),
         @XmlElement(name = "SearchFolder", type = SearchFolderType.class),
-        @XmlElement(name = "TasksFolder", type = TasksFolderType.class)
+        @XmlElement(name = "TasksFolder", type = TasksFolderType.class),
+        @XmlElement(name = "CalendarFolder", type = CalendarFolderType.class)
     })
     protected List<BaseFolderType> folderOrCalendarFolderOrContactsFolder;
 
@@ -66,11 +66,11 @@ public class ArrayOfFoldersType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CalendarFolderType }
      * {@link FolderType }
      * {@link ContactsFolderType }
      * {@link SearchFolderType }
      * {@link TasksFolderType }
+     * {@link CalendarFolderType }
      * 
      * 
      */
