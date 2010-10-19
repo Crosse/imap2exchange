@@ -44,6 +44,7 @@ public class ExchangeConversionFactory {
 	int maxMessageSize;
 	int maxMessageGrpSize;
 	int pageSize;
+	int backOffSeconds;
 	boolean isCleaner;
 	FolderAltNames altNames;
 	List<String> excludedImapFolders;
@@ -102,6 +103,7 @@ public class ExchangeConversionFactory {
 		conv.setMaxMessageSize(maxMessageSize);
 		conv.setMaxMessageGrpSize(maxMessageGrpSize);
 		conv.setPageSize(pageSize);
+		conv.setBackOffSeconds(backOffSeconds);
 		conv.setPluggableConversionActions(pluggableConversionActions);
 		conv.setExcludedImapFolders(excludedImapFolders);
 		conv.setIncludedImapFolders(this.includedImapFolders);
@@ -161,5 +163,13 @@ public class ExchangeConversionFactory {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public int getBackOffSeconds() {
+        return backOffSeconds;
+    }
+
+    public void setBackOffSeconds(int backOffSeconds) {
+        this.backOffSeconds = backOffSeconds;
     }
 }

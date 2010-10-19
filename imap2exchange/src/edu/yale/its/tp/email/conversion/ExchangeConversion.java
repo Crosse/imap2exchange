@@ -73,6 +73,7 @@ import com.sun.mail.imap.IMAPFolder;
 	int maxMessageSize;
 	int maxMessageGrpSize;
 	int pageSize;
+	int backOffSeconds;
 	boolean isCleaner = false;
 	long start = -1;
 	long end = -1;
@@ -670,7 +671,13 @@ import com.sun.mail.imap.IMAPFolder;
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
-	
-	
+
+    public int getBackOffSeconds() {
+        return backOffSeconds;
+    }
+
+    public void setBackOffSeconds(int backOffSeconds) {
+        this.backOffSeconds = backOffSeconds;
+    }
 	
 }
