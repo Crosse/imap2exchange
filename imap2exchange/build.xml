@@ -82,7 +82,7 @@
     <target name="jar" depends="dist">
         <mkdir dir="${dist}/lib"/>
         <jar 
-            destfile="${dist}/lib/imap2exchange-1.2.7.jar"
+            destfile="${dist}/lib/imap2exchange-1.2.8-jmu.jar"
             basedir="${app.build}"
         />
     </target>
