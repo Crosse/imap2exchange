@@ -12,7 +12,7 @@ echo "====================================================="
 
 # Name the main class
 #################################################
-CLASSNAME=edu.yale.its.tp.email.conversion.yale.YaleExchangeConversionCmdLineUtil
+CLASSNAME=edu.jmu.email.conversion.jmu.JmuExchangeConversionCmdLineUtil
 
 # Set the Classpath
 #################################################
@@ -35,5 +35,6 @@ OPTS="${OPTS} -XX:TargetSurvivorRatio=90"
 OPTS="${OPTS} -XX:MaxTenuringThreshold=31"
 OPTS="${OPTS} -DEXCHANGE_CONVERSION_HOME=${EXCHANGE_CONVERSION_HOME}"
 OPTS="${OPTS} -Dlog4j.configuration=file:${EXCHANGE_CONVERSION_HOME}/config/log4j.properties"
+OPTS="${OPTS} -Dhttp.auth.preference=basic "
 
 $JAVA_HOME/bin/java $OPTS -cp $CP $CLASSNAME $@
