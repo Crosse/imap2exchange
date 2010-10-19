@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -52,6 +53,7 @@ public class JmuPreConversionAction extends PluggableConversionAction {
     
     private static Log logger = LogFactory.getLog(JmuPreConversionAction.class);
     private String proxyDomain;
+    private List<String> ignoredDomains;
     private String ldapUserObject;
     private String netidAttribute;
     private String welcomeFile;
@@ -76,18 +78,23 @@ public class JmuPreConversionAction extends PluggableConversionAction {
     
     private boolean setForwardingInformation(ExchangeConversion conv) {
         User user = conv.getUser();
+        String forwardingAddress;
         
         logger.info("----------------");
         logger.info("Current forwarding information:");
-        if (!getCurrentForwardingValues(user)) {
+        if ((forwardingAddress = getCurrentForwardingValues(user)) == null) {
             return false;
         }
         logger.info("----------------");
         
-//        if (forwardAlreadySet) {
-//            logger.info("Forward already set appropriately; no need to update");
-//            return true;
-//        }
+        for (String domain : ignoredDomains) {
+            domain = domain.trim().toLowerCase();
+            if (forwardingAddress.trim().toLowerCase().contains(domain)) {
+                logger.info(String.format("Forward currently set to an ignored domain: %s", domain));
+                logger.info("Refusing to modify forwarding information.");
+                return true;
+            }
+        }
         
         if (modifyForwarding(user)) {
             // Print out the new values, in order to verify that everything
@@ -104,7 +111,7 @@ public class JmuPreConversionAction extends PluggableConversionAction {
         return true;
     }
 
-    private synchronized boolean getCurrentForwardingValues(User user) {
+    private synchronized String getCurrentForwardingValues(User user) {
         DirContext directory = JmuLdap.getInstance().getLdap();
         String filterExpr = String.format("(%s=%s)", netidAttribute, user.getUid());
         SearchControls cons = new SearchControls();
@@ -112,6 +119,7 @@ public class JmuPreConversionAction extends PluggableConversionAction {
         String[] attrs = { FORWARDING_ADDRESS, DELIVERY_OPTION };
         cons.setReturningAttributes(attrs);
         SearchResult result = null;
+        String forwardingAddress = "";
 
         try {
             NamingEnumeration<SearchResult> answer = directory.search(ldapUserObject, filterExpr, cons);
@@ -126,20 +134,19 @@ public class JmuPreConversionAction extends PluggableConversionAction {
                     Attribute attr = ne.next();
                     for (int i = 0; i < attr.size(); i++) {
                         logger.info(String.format("%s: %s", attr.getID(), attr.get(i)));
-//                        if (FORWARDING_ADDRESS.equalsIgnoreCase(attr.getID()) && 
-//                                String.format("%s@%s", user.getUid(), proxyDomain).equalsIgnoreCase((String) attr.get(i))) {
-//                            forwardAlreadySet = true;
-//                        }
+                        if (FORWARDING_ADDRESS.equalsIgnoreCase(attr.getID())) {
+                            forwardingAddress = attr.get(i).toString();
+                        }
                     }
                 }
-            } else { 
-                return false;
+            } else {
+                return null;
             }
         } catch (NamingException e) {
             logger.warn(String.format("Error getting current values:  %s", e.getMessage()));
-            return false;
+            return null;
         }
-        return true;
+        return forwardingAddress;
     }
 
     private synchronized boolean modifyForwarding(User user) {
@@ -236,5 +243,13 @@ public class JmuPreConversionAction extends PluggableConversionAction {
 
     public void setNetidAttribute(String netidAttribute) {
         this.netidAttribute = netidAttribute;
+    }
+
+    public void setIgnoredDomains(List<String> ignoredDomains) {
+        this.ignoredDomains = ignoredDomains;
+    }
+
+    public List<String> getIgnoredDomains() {
+        return ignoredDomains;
     }
 }
